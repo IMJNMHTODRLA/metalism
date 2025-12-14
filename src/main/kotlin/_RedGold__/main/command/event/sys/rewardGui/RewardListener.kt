@@ -39,7 +39,9 @@ class RewardListener(private val plugin: JavaPlugin) : Listener {
 
             event.isCancelled = true
 
-            fun c(t: Int, giveToken: Long, giveAdvancedToken: Long? = null) {
+            fun Int.c(giveLevel: Int?, ) {
+                val t = this
+
                 if (getList[t]) {
                     player.sendMessage(gc("&c이미 보상을 획득 하였습니다."))
                     player.playSound(player.location, Sound.ENTITY_ENDERMAN_TELEPORT, 1f, 0.5f)

@@ -46,7 +46,7 @@ class MenuListener(private val plugin: JavaPlugin) : Listener {
 
                 45 -> {
                     if (clickType == ClickType.LEFT) {
-                        if (holder.cashExc >= 20) {
+                        if (holder.cashExc >= 10) {
                             player.sendMessage(gc("&c더 이상 환전을 할 수 없습니다. 다음 주에 환전해주세요."))
                             player.playSound(player.location, Sound.ENTITY_ENDERMAN_TELEPORT, 1f, 0.5f)
                             return

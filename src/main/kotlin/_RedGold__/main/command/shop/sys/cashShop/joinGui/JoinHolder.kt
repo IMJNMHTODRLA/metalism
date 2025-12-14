@@ -6,6 +6,6 @@ import org.bukkit.inventory.InventoryHolder
 
 class JoinHolder : InventoryHolder {
     override fun getInventory(): Inventory {
-        return Bukkit.createInventory(this, 4 * 9, "킬 사운드 상점")
+        return Bukkit.createInventory(this, 4 * 9, "접속 메시지 상점")
     }
 }

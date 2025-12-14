@@ -183,13 +183,18 @@ class JoinQuit(private val plugin: JavaPlugin) : Listener {
         defDataUuid(plugin, uuid, "monthly_shop", 0)
 
         defDataUuid(plugin, uuid, "style/apply", -1)
-        for (i in 0..11) defDataUuid(plugin, uuid, "style/$i", 0)
+        for (i in 0..18) defDataUuid(plugin, uuid, "style/$i", 0)
         for (i in 0..13) defDataUuid(plugin, uuid, "plant_shop/$i", 0)
         for (i in 0..3) defDataUuid(plugin, uuid, "kit_shop/$i", 0)
+
+        defDataUuid(plugin, uuid, "ticket/buy", 0)
+        defDataUuid(plugin, uuid, "ticket/get", 0)
 
         defDataUuid(plugin, uuid, "death_sound", 0)
         defDataUuid(plugin, uuid, "kill_sound", 0)
         defDataUuid(plugin, uuid, "join_message", 0)
+
+        //총 치장품 갯수 29개
 
         //0: &a&l[시간의 연속]
         //1: &4&l[킬러]

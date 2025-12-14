@@ -140,8 +140,8 @@ class Scoreboard {
         val kill = PlayerDataCache.kill[uuid]?: 0L
         val death = PlayerDataCache.death[uuid]?: 0L
 
-        val token = PlayerDataCache.token[uuid]?: 0L
-        val advancedToken = PlayerDataCache.advancedToken[uuid]?: 0L
+        val token = PlayerDataCache.token[uuid]?.toFormat()?: "-"
+        val advancedToken = PlayerDataCache.advancedToken[uuid]?.toFormat()?: "-"
 
         val nextEventTime = nextEvent - (System.currentTimeMillis() / 1000)
 
@@ -150,8 +150,8 @@ class Scoreboard {
         sidebar.s("&f&l골드: &6&l${gold.toFormat()} 골드", 97)
         sidebar.s("&f&l캐시: &b&l${cash.toFormat()} 캐시", 96)
         sidebar.s(" ", 95)
-        sidebar.s("&f&l토큰: &2&l${token.toFormat()} 토큰", 94)
-        sidebar.s("&f&l고급 토큰: &a&l${advancedToken.toFormat()} 토큰", 93)
+        sidebar.s("&f&l토큰: &2&l$token 토큰", 94)
+        sidebar.s("&f&l고급 토큰: &a&l$advancedToken 토큰", 93)
         sidebar.s("  ", 92)
         sidebar.s("&f&l처치 수: &a&l${kill.toFormat()}", 91)
         sidebar.s("&f&l사망 수: &c&l${death.toFormat()}", 90)

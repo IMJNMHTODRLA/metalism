@@ -48,6 +48,7 @@ class CashGui(private val plugin: JavaPlugin) {
 
         gui.setItem(22, getItem("writable_book", "&e&l접속 메시지 상점").apply{addUnsafeEnchantment(Enchantment.EFFICIENCY, 1)})
 
+        gui.setItem(26, getItem("emerald", "&a&l치장품 뽑기권 구매 상점").apply{addUnsafeEnchantment(Enchantment.EFFICIENCY, 1)})
 
         val serverHoldGold = getHoldGold(plugin).toLong()
         val serverMakeGold = getMakeGold(plugin).toLong()

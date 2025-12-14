@@ -42,8 +42,6 @@ class Ban(private val plugin: JavaPlugin) : CommandExecutor, TabExecutor {
         ${rgb("8C8BFF")}§l]
     """.trimIndent().replace("\n", "")
 
-    private val secureRandom = SecureRandom()
-
     override fun onCommand(
         sender: CommandSender,
         command: Command,
