@@ -92,12 +92,15 @@ class AchievementListener(private val plugin: JavaPlugin) : Listener {
 
             when (slot) {
                 10 -> c(0, "일일 접속을 200회", 0, listOf(
-                    getItem("netherite_pickaxe", "&d&l네더라이트 곡괭이(효율 VII)", listOf("", "&8&l\"일일 접속을 200회\" 미션 보상에서 획득 가능"))
-                        .apply {addUnsafeEnchantment(Enchantment.EFFICIENCY, 7)}
+                    getItem("netherite_pickaxe", "&d&l네더라이트 곡괭이(효율 VI)", listOf("", "&8&l\"일일 접속을 200회\" 미션 보상에서 획득 가능"))
+                        .apply {addUnsafeEnchantment(Enchantment.EFFICIENCY, 6)}
                 ), 0, 0)
                 11 -> c(1, "플레이어 처치를 200회", 0, listOf(
-                    getItem("netherite_sword", "&d&l네더라이트 검(날카로움 VI)", listOf("", "&8&l\"플레이어 처치를 80회\" 미션 보상에서 획득 가능"))
-                        .apply {addUnsafeEnchantment(Enchantment.SHARPNESS, 6)}
+                    getItem("netherite_sword", "&d&l네더라이트 검(날카로움 V, 발화 III)", listOf("", "&8&l\"플레이어 처치를 200회\" 미션 보상에서 획득 가능"))
+                        .apply {
+                            addUnsafeEnchantment(Enchantment.SHARPNESS, 5)
+                            addUnsafeEnchantment(Enchantment.FIRE_ASPECT, 3)
+                        }
                 ), 0, 1)
                 12 -> c(2, "흑요석 설치를 300회", 0, listOf(getItem("end_crystal").apply {amount = 64}), 10)
                 13 -> c(3, "월간 상점 아이템 구매를 12회", 0, listOf(getItem("enchanted_golden_apple").apply {amount = 3}), 200)
@@ -118,15 +121,21 @@ class AchievementListener(private val plugin: JavaPlugin) : Listener {
                 22 -> c(10, "블록 파괴를 10,000회", 2_500_000, null, 550, 4)
                 23 -> c(11, "엔드 수정 폭팔을 400회", 0, listOf(getItem("creeper_spawn_egg").apply {amount = 18}), 20)
                 24 -> c(12, "불사의 토템 발동을 200회", 0, listOf(
-                    getItem("netherite_leggings", "&d&l네더라이트 레깅스(폭팔로부터 보호 V)", listOf("", "&8&l\"불사의 토템 발동을 200회\" 미션 보상에서 획득 가능"))
-                        .apply {addUnsafeEnchantment(Enchantment.BLAST_PROTECTION, 5)}
+                    getItem("netherite_leggings", "&d&l네더라이트 레깅스(폭팔로부터 보호 IV, 보호 II)", listOf("", "&8&l\"불사의 토템 발동을 200회\" 미션 보상에서 획득 가능"))
+                        .apply {
+                            addUnsafeEnchantment(Enchantment.BLAST_PROTECTION, 4)
+                            addUnsafeEnchantment(Enchantment.PROTECTION, 2)
+                        }
                 ))
                 25 -> c(13, "황금 사과 섭취를 300회", 0, listOf(getItem("enchanted_golden_apple")), 30)
 
 
                 28 -> c(14, "위더 처치를 20회", 300_000, listOf(
-                    getItem("netherite_sword", "&d&l네더라이트 검(강타 VI)", listOf("", "&8&l\"위더 처치를 20회\" 미션 보상에서 획득 가능"))
-                        .apply {addUnsafeEnchantment(Enchantment.SMITE, 6)}
+                    getItem("netherite_sword", "&d&l네더라이트 검(강타 V, 발화 III)", listOf("", "&8&l\"위더 처치를 20회\" 미션 보상에서 획득 가능"))
+                        .apply {
+                            addUnsafeEnchantment(Enchantment.SMITE, 5)
+                            addUnsafeEnchantment(Enchantment.FIRE_ASPECT, 3)
+                        }
                 ))
                 29 -> c(15, "위더 처치를 30회", 2_000_000)
 

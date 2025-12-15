@@ -20,7 +20,7 @@ class DailyReset(private val plugin: JavaPlugin) {
         val path = plugin.dataFolder.toPath().resolve("randomEffect").resolve("max")
 
         val nowKST = ZonedDateTime.now(ZoneId.of("Asia/Seoul"))
-        var nextDay = nowKST.withHour(12).withMinute(0).withSecond(0).withNano(0)
+        var nextDay = nowKST.withHour(11).withMinute(0).withSecond(0).withNano(0)
         if (!nextDay.isAfter(nowKST)) nextDay = nextDay.plusDays(1)
 
         Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, Runnable {

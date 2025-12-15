@@ -70,9 +70,9 @@ class System(private val plugin: JavaPlugin) : Listener {
     }
     private var min5times = 0
 
-    private val giveDonePoint = listOf(0L, 110_000L, 165_000L, 300_000L, 350_000L, 500_000L)
+    private val giveDonePoint = listOf(0L, 100_000L, 150_000L, 300_000L, 350_000L, 550_000L)
     private val difficultyMessage = listOf("&7&l선택안함(Nothing)", "&e&l보통(Normal)", "&c&l어려움(Hard)", "&4&l하드코어(HardCore)", "&b&l익스트림(Extreme)", "&d&l얼티밋(Ultimate)")
-    private val give5minute = listOf(0L, 10_000L, 15_000L, 30_000L, 35_000L, 50_000L)
+    private val give5minute = listOf(0L, 10_000L, 15_000L, 30_000L, 35_000L, 60_000L)
 
     private val giveDoneToken = listOf(0L, 50L, 85L, 100L, 125L, 150L)
     private val giveDoneAdvanced = listOf(0L, 0L, 0L, 10L, 20L, 30L)

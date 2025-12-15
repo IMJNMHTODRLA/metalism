@@ -24,6 +24,8 @@ import kotlin.math.floor
 @RequireListener
 @RequireJavaPlugin
 class DiceListener(private val plugin: JavaPlugin) : Listener {
+    private val random = SecureRandom()
+
     @EventHandler
     fun onInventoryClose(event: InventoryCloseEvent) {
         val holder = event.inventory.holder!!
@@ -76,10 +78,10 @@ class DiceListener(private val plugin: JavaPlugin) : Listener {
                         addHoldGold(plugin, holder.betGold)
 
                         var delayTime = 0L
-                        val result = SecureRandom().nextInt(6) //0~5사이
+                        val result = random.nextInt(6) //0~5사이
 
                         for (i in 0..50) {
-                            val randomNum = SecureRandom().nextInt(6) + 1
+                            val randomNum = random.nextInt(6) + 1
 
                             Bukkit.getScheduler().runTaskLater(plugin, Runnable {
                                 gui.setItem(22, getItem(
@@ -94,7 +96,7 @@ class DiceListener(private val plugin: JavaPlugin) : Listener {
 
                         for (i in 0..30) {
                             delayTime += 2
-                            val randomNum = SecureRandom().nextInt(6) + 1
+                            val randomNum = random.nextInt(6) + 1
 
                             Bukkit.getScheduler().runTaskLater(plugin, Runnable {
                                 gui.setItem(22, getItem(
@@ -107,7 +109,7 @@ class DiceListener(private val plugin: JavaPlugin) : Listener {
 
                         for (i in 0..10) {
                             delayTime += 3
-                            val randomNum = SecureRandom().nextInt(6) + 1
+                            val randomNum = random.nextInt(6) + 1
 
                             Bukkit.getScheduler().runTaskLater(plugin, Runnable {
                                 gui.setItem(22, getItem(
@@ -120,7 +122,7 @@ class DiceListener(private val plugin: JavaPlugin) : Listener {
 
                         for (i in 0..8) {
                             delayTime += 6
-                            val randomNum = SecureRandom().nextInt(6) + 1
+                            val randomNum = random.nextInt(6) + 1
 
                             Bukkit.getScheduler().runTaskLater(plugin, Runnable {
                                 gui.setItem(22, getItem(

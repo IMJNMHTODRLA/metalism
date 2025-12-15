@@ -1,6 +1,8 @@
 package _RedGold__.main.command.shop.sys.cashShop.ticketGui
 
+import _RedGold__.main.function.Color.fail
 import _RedGold__.main.function.Color.gc
+import _RedGold__.main.function.Color.good
 import _RedGold__.main.function.Color.rgb
 import _RedGold__.main.function.Data.getData
 import _RedGold__.main.function.Data.saveData
@@ -12,6 +14,7 @@ import _RedGold__.main.function.api.toFormat
 import _RedGold__.main.load.RequireJavaPlugin
 import _RedGold__.main.load.RequireListener
 import _RedGold__.main.sys.Chat.ChatApply.MAX_STYLE
+import _RedGold__.main.sys.Chat.ChatApply.symmetry
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.Sound
@@ -69,72 +72,129 @@ class TicketListener(private val plugin: JavaPlugin) : Listener {
             val clickType = event.click
             val slot = event.slot
             val isRoulette = holder.isRoulette
+            val isOpen = holder.isOpen
 
             val buyTimes = getData(plugin, player, "ticket/buy").toInt()
             val getTicket = getData(plugin, player, "ticket/get").toInt()
 
             event.isCancelled = true
 
-            if (slot != 13) return
-
-            if (clickType == ClickType.LEFT) {
-                if (isRoulette) return
-
-                if (buyTimes >= 10) {
-                    player.sendMessage(gc("&c더 이상 구매를 할 수 없습니다. 다음 주에 구매해주세요."))
-                    player.playSound(player.location, Sound.ENTITY_ENDERMAN_TELEPORT, 1f, 0.5f)
-                    return
-                }
-
-                val cash = getData(plugin, player, "cash").toLong()
-
-                if (cash < 100) {
-                    player.sendMessage(gc("&c캐시가 부족합니다. 필요 캐시: ${(100 - cash).toFormat()}캐시"))
-                    player.playSound(player.location, Sound.ENTITY_ENDERMAN_TELEPORT, 1f, 0.5f)
-                    return
-                }
-
-                saveData(plugin, player, "cash", cash - 100)
-                addHoldGold(plugin, 1_000_000)
-
-                saveData(plugin, player, "ticket/buy", buyTimes + 1)
-                saveData(plugin, player, "ticket/get", getTicket + 1)
-                TicketGui(plugin).openGui(player, 0f)
-            } else if (clickType == ClickType.RIGHT) {
-                if (isRoulette) return
-
-                if (getTicket <= 0) {
-                    player.sendMessage(gc("&c뽑기권이 부족합니다."))
-                    player.playSound(player.location, Sound.ENTITY_ENDERMAN_TELEPORT, 1f, 0.5f)
-                    return
-                }
-
-                saveData(plugin, player, "ticket/get", getTicket - 1)
-                holder.isRoulette = true
-
-                val background = getItem(
-                    "magenta_stained_glass_pane",
-                    prefix
-                )
-
-                for (i in 0 until gui.size) gui.setItem(i, background)
-
-                val resultValue: MutableList<String> = mutableListOf()
-                for (i in 0..4) {
-                    val successType = random.nextInt(2)
-                    //0 = fail, 1 = success
-                    val cosmeticType = random.nextInt(500)
-                    //00~49 = 칭호, 50~149 = 접속, 150~324, 킬, 325~499
-                    val cosmeticNum = when(cosmeticType) {
-                        in 0..49 -> random.nextInt(maxStyle)
-                        in 50..149 -> random.nextInt(maxJoin)
-                        in 150..324 -> random.nextInt(maxKill)
-                        in 325..499 -> random.nextInt(maxDeath)
-                        else -> 0
+            if (slot == 13 && !isRoulette) {
+                if (clickType == ClickType.LEFT) {
+                    if (buyTimes >= 10) {
+                        player.fail("&c더 이상 구매를 할 수 없습니다. 다음 주에 구매해주세요.")
+                        return
                     }
 
-                    val all = "$successType|$cosmeticType|$cosmeticNum"
-                    resultValue.add(all)
+                    val cash = getData(plugin, player, "cash").toLong()
+
+                    if (cash < 100) {
+                        player.fail("&c캐시가 부족합니다. 필요 캐시: ${(100 - cash).toFormat()}캐시")
+                        return
+                    }
+
+                    saveData(plugin, player, "cash", cash - 100)
+                    addHoldGold(plugin, 1_000_000)
+
+                    saveData(plugin, player, "ticket/buy", buyTimes + 1)
+                    saveData(plugin, player, "ticket/get", getTicket + 1)
+                    player.good("&a뽑기권 구매했습니다.")
+
+                    TicketGui(plugin).openGui(player, 0f)
+                } else if (clickType == ClickType.RIGHT) {
+                    if (getTicket <= 0) {
+                        player.fail("&c뽑기권이 부족합니다.")
+                        return
+                    }
+
+                    saveData(plugin, player, "ticket/get", getTicket - 1)
+                    holder.isRoulette = true
+
+                    val background = getItem(
+                        "magenta_stained_glass_pane",
+                        prefix
+                    )
+
+                    for (i in 0 until gui.size) gui.setItem(i, background)
+
+                    val resultValue: MutableList<String> = mutableListOf()
+                    for (i in 0..4) {
+                        val successType = random.nextInt(2)
+                        //0 = fail, 1 = success
+                        val cosmeticType = random.nextInt(500)
+                        //00~49 = 칭호, 50~149 = 접속, 150~324, 킬, 325~499
+                        val cosmeticNum = when(cosmeticType) {
+                            in 0..49 -> random.nextInt(maxStyle)
+                            in 50..149 -> random.nextInt(maxJoin)
+                            in 150..324 -> random.nextInt(maxKill)
+                            in 325..499 -> random.nextInt(maxDeath)
+                            else -> 0
+                        }
+
+                        val all = "$successType|$cosmeticType|$cosmeticNum"
+                        resultValue.add(all)
+
+                        gui.setItem(11 + i, getItem(
+                            "chest",
+                            "&e&l클릭하여 치장품 뽑기"
+                        ))
+                    }
+
+                    holder.resultValue = resultValue
+                }
+                return
+            }
+
+            if (slot in 11..15 && isRoulette) {
+                when(slot) {
+                    11 -> {
+                        if (isOpen[0]) return
+
+                        holder.isOpen[0] = true
+                        var delayTime = 0L
+                        val resultItem = holder.resultValue[0].split("|").toTypedArray()
+                        //0 = 성공 또는 실패
+                        //1 = 치장품 타입
+                        //2 = 치장품 번호
+                        //00~49 = 칭호, 50~149 = 접속, 150~324, 킬, 325~499
+                        val successType = resultItem[0].toInt()
+                        val cosmeticType = resultItem[1].toInt()
+                        val cosmeticNum = resultItem[2].toInt()
+
+                        for (i in 0..20) {
+                            Bukkit.getScheduler().runTaskLater(plugin, Runnable {
+                                gui.setItem(11, getItem(
+                                    "ender_chest",
+                                    "&7&l치장품 뽑는 중${".".repeat((i % 3) + 1)}"
+                                ))
+                                player.playSound(player.location, Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1f)
+                            }, delayTime)
+
+                            delayTime += 1
+                        }
+
+                        if (successType == 0) {
+                            gui.setItem(11, getItem(
+                                "coal",
+                                "&c&l뽑기에 실패 하였습니다....",
+                                listOf("&8${holder.resultValue[0]}")
+                            ))
+                            player.playSound(player.location, Sound.ENTITY_GENERIC_EXPLODE, 1f, 1f)
+                        } else {
+                            when(cosmeticType) {
+                                in 0..49 -> {
+                                    gui.setItem(11, getItem(
+                                        "name_tag",
+                                        "&a&l칭호 치장품을 획득 하였습니다!${symmetry[MAX_STYLE + cosmeticType]}",
+                                        listOf("&8${holder.resultValue[0]}")
+                                    ))
+
+                                    saveData(plugin, player, "style/${MAX_STYLE + cosmeticType}", 1)
+                                    player.playSound(player.location, Sound.ENTITY_GENERIC_EXPLODE, 1f, 1f)
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

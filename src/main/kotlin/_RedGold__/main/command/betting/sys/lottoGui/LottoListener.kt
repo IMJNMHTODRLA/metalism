@@ -25,6 +25,8 @@ import kotlin.math.floor
 @RequireListener
 @RequireJavaPlugin
 class LottoListener(private val plugin: JavaPlugin) : Listener {
+    private val random = SecureRandom()
+
     @EventHandler
     fun onInventoryClose(event: InventoryCloseEvent) {
         val holder = event.inventory.holder!!
@@ -60,19 +62,19 @@ class LottoListener(private val plugin: JavaPlugin) : Listener {
 
                         var delayTime = -1L
                         val result = listOf(
-                            SecureRandom().nextInt(10) + 1,
-                            SecureRandom().nextInt(10) + 1,
-                            SecureRandom().nextInt(10) + 1,
-                            SecureRandom().nextInt(10) + 1,
-                            SecureRandom().nextInt(10) + 1,
-                            SecureRandom().nextInt(10) + 1
+                            random.nextInt(10) + 1,
+                            random.nextInt(10) + 1,
+                            random.nextInt(10) + 1,
+                            random.nextInt(10) + 1,
+                            random.nextInt(10) + 1,
+                            random.nextInt(10) + 1
                         ) //1~10사이(6자리)
 
                         val itemNumList = listOf(19, 20, 21, 23, 24, 25)
 
                         for (i in 0..5) {
                             for (ii in 0..40) {
-                                val randomNum = SecureRandom().nextInt(10) + 1
+                                val randomNum = random.nextInt(10) + 1
                                 delayTime += 1
 
                                 Bukkit.getScheduler().runTaskLater(plugin, Runnable {

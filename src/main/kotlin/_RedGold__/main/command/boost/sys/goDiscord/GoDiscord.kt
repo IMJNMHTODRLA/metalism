@@ -10,7 +10,7 @@ class GoDiscord {
     //discord://-/invite/minecraft
 
     fun sendMsg(player: Player) {
-        player.sendMessage(Component.text("클릭하여 디스코드 서버에 접속하여 후원하기")
+        player.sendMessage(Component.text("클릭하여 디스코드 서버에 접속해 후원하기")
             .color(NamedTextColor.BLUE)
             .clickEvent(ClickEvent.openUrl("https://discord.gg/invite/minecraft"))
         )

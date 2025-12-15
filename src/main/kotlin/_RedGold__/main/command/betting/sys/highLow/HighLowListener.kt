@@ -24,6 +24,8 @@ import kotlin.math.floor
 @RequireListener
 @RequireJavaPlugin
 class HighLowListener(private val plugin: JavaPlugin) : Listener {
+    private val random = SecureRandom()
+
     @EventHandler
     fun onInventoryClose(event: InventoryCloseEvent) {
         val holder = event.inventory.holder!!
@@ -76,10 +78,10 @@ class HighLowListener(private val plugin: JavaPlugin) : Listener {
                         addHoldGold(plugin, holder.betGold)
 
                         var delayTime = 0L
-                        val result = SecureRandom().nextInt(100) + 1 //0~100사이
+                        val result = random.nextInt(100) + 1 //0~100사이
 
                         for (i in 0..50) {
-                            val randomNum = SecureRandom().nextInt(100) + 1
+                            val randomNum = random.nextInt(100) + 1
                             val numItemSet =
                                 if (randomNum < 50) "redstone"
                                 else if (randomNum == 50) "chiseled_stone_bricks"
@@ -99,7 +101,7 @@ class HighLowListener(private val plugin: JavaPlugin) : Listener {
 
                         for (i in 0..30) {
                             delayTime += 2
-                            val randomNum = SecureRandom().nextInt(100) + 1
+                            val randomNum = random.nextInt(100) + 1
                             val numItemSet =
                                 if (randomNum < 50) "redstone"
                                 else if (randomNum == 50) "chiseled_stone_bricks"
@@ -117,7 +119,7 @@ class HighLowListener(private val plugin: JavaPlugin) : Listener {
 
                         for (i in 0..10) {
                             delayTime += 3
-                            val randomNum = SecureRandom().nextInt(100) + 1
+                            val randomNum = random.nextInt(100) + 1
                             val numItemSet =
                                 if (randomNum < 50) "redstone"
                                 else if (randomNum == 50) "chiseled_stone_bricks"
@@ -135,7 +137,7 @@ class HighLowListener(private val plugin: JavaPlugin) : Listener {
 
                         for (i in 0..8) {
                             delayTime += 6
-                            val randomNum = SecureRandom().nextInt(100) + 1
+                            val randomNum = random.nextInt(100) + 1
                             val numItemSet =
                                 if (randomNum < 50) "redstone"
                                 else if (randomNum == 50) "chiseled_stone_bricks"
