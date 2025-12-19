@@ -42,9 +42,13 @@ class SelectGui {
         val uuid = player.uniqueId
 
         fun fi(n: Int, item: String, title: String, change: List<String>, isEnchant: Boolean = false) {
+            val isSelectTimeLast =
+                if (max[uuid] == 2) "&c&l오늘의 마지막 선택입니다."
+                else "&e&l선택 횟수가 ${3 - (max[uuid]!!)}번 남았습니다."
+
             gui.setItem(n, getItem(
                 item,
-                "$title 선택 횟수: (${max[uuid]}/3)",
+                "$title $isSelectTimeLast",
                 change
             ).apply {if (isEnchant) addUnsafeEnchantment(Enchantment.SHARPNESS, 8)})
         }
@@ -130,7 +134,7 @@ class SelectGui {
             "&f&l나약함 II",
             "&f&l5분 마다 스캘레톤 소환/체력 200칸/신속 I/화염 저항 I/5분 안에 못 죽일 시 5분 주기 점수 0.5배로 지급",
             "&c&l시듦 IV",
-            "&c&l5분 마다 좀비 소환/체력 350칸/신속 I/화염 저항 I/힘 II/5분 안에 못 죽일 시 체력 9칸 깎임",
+            "&c&l5분 마다 좀비 소환/체력 350칸/신속 I/화염 저항 I/힘 II/5분 안에 못 죽일 시 체력 9칸 깎임(스캘래톤 소환 후 10초 뒤에 나옴)",
             "",
             "&c&l2분 안에 선택 해야 합니다!",
             "&a&l빠르게 선택 할수록 추가 점수가 지급됩니다.(최대 60,000 점수)",

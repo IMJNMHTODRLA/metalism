@@ -33,6 +33,8 @@ class KillRespawn(private val plugin: JavaPlugin) : Listener {
     private val whoKill: MutableMap<Player, Long> = mutableMapOf()
     object ChatApply {
         var applyDeath: MutableMap<UUID, Int> = ConcurrentHashMap()
+
+        /** 얘가 death 임 */
         val soundType = listOf(
             Sound.AMBIENT_UNDERWATER_ENTER, Sound.AMBIENT_CAVE,
             Sound.WEATHER_RAIN, Sound.ENTITY_COW_DEATH, Sound.ENTITY_BAT_DEATH,
@@ -40,6 +42,7 @@ class KillRespawn(private val plugin: JavaPlugin) : Listener {
         )
 
         val soundPitch = listOf(1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 2.0f)
+        val deathSoundMessage = listOf("물에 빠진", "귀신", "비", "흑우", "박쥐", "돼지", "모루", "부숴진")
 
         var applyKill: MutableMap<UUID, Int> = ConcurrentHashMap()
         val soundTypeKill = listOf(
@@ -49,6 +52,7 @@ class KillRespawn(private val plugin: JavaPlugin) : Listener {
         )
 
         val soundPitchKill = listOf(1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f)
+        val killSoundMessage = listOf("철퇴", "꿀", "슬라임", "좀비", "철문 공격", "조글린", "모루", "발전 과제")
     }
 
     private val secureRandom = SecureRandom()

@@ -16,6 +16,7 @@ import _RedGold__.main.load.RequireJavaPlugin
 import _RedGold__.main.load.RequireListener
 import _RedGold__.main.sys.Chat.ChatApply.applyStyle
 import _RedGold__.main.sys.Chat.ChatApply.symmetry
+import _RedGold__.main.sys.JoinQuit.JoinMessage.messageType
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.Sound
@@ -53,15 +54,17 @@ class JoinQuit(private val plugin: JavaPlugin) : Listener {
         ${rgb("8C8BFF")}§l]
     """.trimIndent().replace("\n", "")
 
-    private val messageType = listOf(
-        "&8[&a+&8] %style%%rank% %name% &e님이 서버에 접속했습니다.",
-        "&8[&a+&8] %style%%rank% %name% &e님이 서버에 나타났습니다.",
-        "&8[&a+&8] %style%%rank% %name% &7&lJoined",
-        "&8[&b✦&8] %style%%rank% %name% &e님 환영합니다!",
-        "&8[&a»&8] %style%%rank% %name% &e님이 &a&l온라인&e으로 전환했습니다.",
-        "&8[&7»&8] &fJo&ki&fned with %style%%rank% %name%",
-        "&8[&b»&8] %style%%rank% %name% &b&l님이 서버에 등장 하였습니다.",
-    )
+    object JoinMessage {
+        val messageType = listOf(
+            "&8[&a+&8] %style%%rank% %name% &e님이 서버에 접속했습니다.",
+            "&8[&a+&8] %style%%rank% %name% &e님이 서버에 나타났습니다.",
+            "&8[&a+&8] %style%%rank% %name% &7&lJoined",
+            "&8[&b✦&8] %style%%rank% %name% &e님 환영합니다!",
+            "&8[&a»&8] %style%%rank% %name% &e님이 &a&l온라인&e으로 전환했습니다.",
+            "&8[&7»&8] &fJo&ki&fned with %style%%rank% %name%",
+            "&8[&b»&8] %style%%rank% %name% &b&l님이 서버에 등장 하였습니다.",
+        )
+    }
 
     @EventHandler
     fun onJoin(event: PlayerJoinEvent) {
