@@ -5,7 +5,7 @@ import _RedGold__.main.function.Color.gc
 import _RedGold__.main.function.Data.allFileName
 import _RedGold__.main.function.Data.getData
 import _RedGold__.main.function.Data.getDataUuid
-import _RedGold__.main.function.Data.getDataUuidOrNull
+//import _RedGold__.main.function.Data.getDataUuidOrNull
 import _RedGold__.main.function.Data.hasDataUuid
 import _RedGold__.main.function.Data.saveData
 import _RedGold__.main.load.RequireJavaPlugin
@@ -59,7 +59,7 @@ class View(private val plugin: JavaPlugin) {
     private fun isJoin() {
         Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, Runnable {
             for (uuid in Bukkit.getScheduler().callSyncMethod(plugin) { Bukkit.getOnlinePlayers().map { it.uniqueId }.toList() }.get()) {
-                hasTarget[uuid] = getDataUuidOrNull(plugin, uuid, "chase/tracking")
+                //hasTarget[uuid] = getDataUuidOrNull(plugin, uuid, "chase/tracking")
                 allPlayer = allFileName(plugin, "chase/join")
             }
         }, 0L, 100L)

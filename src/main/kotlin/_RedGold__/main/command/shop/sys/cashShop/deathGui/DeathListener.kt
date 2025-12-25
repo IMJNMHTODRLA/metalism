@@ -66,15 +66,20 @@ class DeathListener(private val plugin: JavaPlugin) : Listener {
             if (clickType == ClickType.LEFT) {
                 when (slot) {
                     10 -> buy(0, 0)
-                    11 -> buy(1, 200)
-                    12 -> buy(2, 200)
-                    13 -> buy(3, 200)
-                    14 -> buy(4, 250)
-                    15 -> buy(5, 250)
-                    16 -> buy(6, 250)
+                    11 -> buy(1, 400)
+                    12 -> buy(2, 400)
+                    13 -> buy(3, 400)
+                    14 -> buy(4, 450)
+                    15 -> buy(5, 450)
+                    16 -> buy(6, 450)
 
-                    19 -> buy(7, 250)
-                    20 -> buy(8, 300)
+                    19 -> buy(7, 450)
+                    20 -> buy(8, 500)
+                    21 -> buy(9, 550)
+                    22 -> buy(10, 400)
+                    23 -> buy(11, 400)
+                    24 -> buy(12, 500)
+                    25 -> buy(13, 800)
                 }
                 return
             }
@@ -91,6 +96,11 @@ class DeathListener(private val plugin: JavaPlugin) : Listener {
 
                     19 -> preview(Sound.BLOCK_ANVIL_LAND)
                     20 -> preview(Sound.ITEM_TOTEM_USE, 2.0f)
+                    21 -> preview(Sound.ENTITY_GENERIC_EXPLODE)
+                    22 -> preview(Sound.ENTITY_GENERIC_EAT)
+                    23 -> preview(Sound.ENTITY_GENERIC_EXTINGUISH_FIRE)
+                    24 -> preview(Sound.BLOCK_VAULT_BREAK)
+                    25 -> preview(Sound.MUSIC_CREDITS)
                 }
                 return
             }

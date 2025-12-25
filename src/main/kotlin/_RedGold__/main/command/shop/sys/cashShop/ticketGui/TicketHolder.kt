@@ -8,7 +8,8 @@ class TicketHolder(
     var isRoulette: Boolean = false,
     var resultValue: MutableList<String> = mutableListOf(),
     var isOpen: MutableList<Boolean> = mutableListOf(false, false, false, false, false),
-    var isChange: MutableList<String> = mutableListOf("", "", "", "", "")
+    var isEquip: MutableList<Boolean> = mutableListOf(false, false, false, false, false),
+    var isHas: MutableList<Boolean> = mutableListOf(false, false, false, false, false)
 ) : InventoryHolder {
     override fun getInventory(): Inventory {
         return Bukkit.createInventory(this, 3 * 9, "뽑기 상점")

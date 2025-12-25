@@ -17,9 +17,6 @@ class RunScoreboard(private val plugin: JavaPlugin) {
         val cash: MutableMap<UUID, Long> = ConcurrentHashMap()
         val kill: MutableMap<UUID, Long> = ConcurrentHashMap()
         val death: MutableMap<UUID, Long> = ConcurrentHashMap()
-
-        val token: MutableMap<UUID, Long> = ConcurrentHashMap()
-        val advancedToken: MutableMap<UUID, Long> = ConcurrentHashMap()
     }
 
     init {
@@ -38,9 +35,6 @@ class RunScoreboard(private val plugin: JavaPlugin) {
                 PlayerDataCache.cash[uuid] = getDataUuid(plugin, uuid, "cash").toLong()
                 PlayerDataCache.kill[uuid] = getDataUuid(plugin, uuid, "kill").toLong()
                 PlayerDataCache.death[uuid] = getDataUuid(plugin, uuid, "death").toLong()
-
-                PlayerDataCache.token[uuid] = getDataUuid(plugin, uuid, "token/normal").toLong()
-                PlayerDataCache.advancedToken[uuid] = getDataUuid(plugin, uuid, "token/advanced").toLong()
             }
         }, 0L, 20L)
     }

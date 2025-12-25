@@ -49,7 +49,8 @@ class MenuGui(private val plugin: JavaPlugin) {
         gui.setItem(20, getItem("cake", "&f&l이벤트").apply {addUnsafeEnchantment(Enchantment.SHARPNESS, 5)}) //event 완
         gui.setItem(21, getItem("book", "&f&l미션").apply {addUnsafeEnchantment(Enchantment.SHARPNESS, 5)}) //mission 완
         gui.setItem(22, getItem("writable_book", "&f&l칭호 선택")) //style 완
-        gui.setItem(23, getItem("paper", "&b&l디스코드 / 커뮤니티"))
+        gui.setItem(23, getItem("ender_chest", "&a&l엔더 상자", listOf("", "&c&lplus 랭크 이상만 사용 가능합니다.")))
+        gui.setItem(24, getItem("paper", "&b&l디스코드 / 커뮤니티"))
 
 
         val serverHoldGold = getHoldGold(plugin).toLong()

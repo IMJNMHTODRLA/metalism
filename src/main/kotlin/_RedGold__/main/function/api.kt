@@ -97,4 +97,12 @@ object api {
     fun Int.toFormat(): String {
         return NumberFormat.getInstance().format(this)
     }
+
+    fun String.toUuid(): UUID {
+        return try {
+            UUID.fromString(this)
+        } catch (e: IllegalArgumentException) {
+            UUID.randomUUID()
+        }
+    }
 }

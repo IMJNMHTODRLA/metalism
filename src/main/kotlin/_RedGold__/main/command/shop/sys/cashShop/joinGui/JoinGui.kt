@@ -10,25 +10,25 @@ import org.bukkit.plugin.java.JavaPlugin
 
 class JoinGui(private val plugin: JavaPlugin) {
     private val prefix = """
-                            ${rgb("2444FC")}§l§o[
-                            ${rgb("2948FC")}§l§oM
-                            ${rgb("2F4BFC")}§l§oE
-                            ${rgb("344FFC")}§l§oT
-                            ${rgb("3A53FD")}§l§oA
-                            ${rgb("3F57FD")}§l§oL
-                            ${rgb("455AFD")}§l§oI
-                            ${rgb("4A5EFD")}§l§oS
-                            ${rgb("5062FD")}§l§oM 
-                            ${rgb("5B69FE")}§l§oC
-                            ${rgb("606DFE")}§l§oA
-                            ${rgb("6671FE")}§l§oS
-                            ${rgb("6B75FE")}§l§oH 
-                            ${rgb("767CFE")}§l§oS
-                            ${rgb("7C80FF")}§l§oH
-                            ${rgb("8184FF")}§l§oO
-                            ${rgb("8787FF")}§l§oP
-                            ${rgb("8C8BFF")}§l§o]
-                        """.trimIndent().replace("\n", "")
+        ${rgb("2444FC")}§l§o[
+        ${rgb("2948FC")}§l§oM
+        ${rgb("2F4BFC")}§l§oE
+        ${rgb("344FFC")}§l§oT
+        ${rgb("3A53FD")}§l§oA
+        ${rgb("3F57FD")}§l§oL
+        ${rgb("455AFD")}§l§oI
+        ${rgb("4A5EFD")}§l§oS
+        ${rgb("5062FD")}§l§oM 
+        ${rgb("5B69FE")}§l§oC
+        ${rgb("606DFE")}§l§oA
+        ${rgb("6671FE")}§l§oS
+        ${rgb("6B75FE")}§l§oH 
+        ${rgb("767CFE")}§l§oS
+        ${rgb("7C80FF")}§l§oH
+        ${rgb("8184FF")}§l§oO
+        ${rgb("8787FF")}§l§oP
+        ${rgb("8C8BFF")}§l§o]
+    """.trimIndent().replace("\n", "")
 
     fun openGui(player: Player, sound: Float = 1f) {
         val gui = JoinHolder().inventory
@@ -86,16 +86,16 @@ class JoinGui(private val plugin: JavaPlugin) {
         ))
 
         10.fi("기본", 0, 0) //
-        11.fi("&8[&a+&8] &ePlayer 님이 서버에 나타났습니다.", 200, 1)
-        12.fi("&8[&a+&8] &f&lPlayer &7&lJoined", 200, 2)
-        13.fi("&8[&b✦&8] &ePlayer &e님 환영합니다!", 200, 3)
-        14.fi("&8[&a»&8] &ePlayer 님이 &a&l온라인&e으로 전환했습니다.", 250, 4)
-        15.fi("&8[&7»&8] &fJo&ki&fned with Player", 300, 5)
-        16.fi("&8[&b»&8] &f&lPlayer &b&l님이 서버에 등장 하였습니다.", 250, 6)
+        11.fi("&8[&a+&8] &ePlayer 님이 서버에 나타났습니다.", 400, 1)
+        12.fi("&8[&a+&8] &f&lPlayer &7&lJoined", 400, 2)
+        13.fi("&8[&b✦&8] &ePlayer &e님 환영합니다!", 400, 3)
+        14.fi("&8[&a»&8] &ePlayer 님이 &a&l온라인&e으로 전환했습니다.", 450, 4)
+        15.fi("&8[&7»&8] &fJo&ki&fned with Player", 400, 5)
+        16.fi("&8[&b»&8] &f&lPlayer &b&l님이 서버에 등장 하였습니다.", 450, 6)
 
-        19.none()
-        20.none()
-        21.none()
+        19.fi("&8[&a+&8] &ePlayer 님이 서버에 등장하였습니다.", 400, 7)
+        20.fi("&8[&7=&8] &ePlayer 님이 서버에 접속...했나요?", 500, 8)
+        21.fi("&8[&7=&8] &ePlayer 님이 서버에 접속...했나요?", 500, 9)
         22.none()
         23.none()
         24.none()

@@ -38,11 +38,16 @@ class KillRespawn(private val plugin: JavaPlugin) : Listener {
         val soundType = listOf(
             Sound.AMBIENT_UNDERWATER_ENTER, Sound.AMBIENT_CAVE,
             Sound.WEATHER_RAIN, Sound.ENTITY_COW_DEATH, Sound.ENTITY_BAT_DEATH,
-            Sound.ENTITY_PIG_DEATH, Sound.BLOCK_ANVIL_LAND, Sound.ITEM_TOTEM_USE
+            Sound.ENTITY_PIG_DEATH, Sound.BLOCK_ANVIL_LAND, Sound.ITEM_TOTEM_USE,
+            Sound.ENTITY_GENERIC_EXPLODE, Sound.ENTITY_GENERIC_EAT, Sound.ENTITY_GENERIC_EXTINGUISH_FIRE,
+            Sound.BLOCK_VAULT_BREAK, Sound.MUSIC_CREDITS
         )
 
-        val soundPitch = listOf(1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 2.0f)
-        val deathSoundMessage = listOf("물에 빠진", "귀신", "비", "흑우", "박쥐", "돼지", "모루", "부숴진")
+        val soundPitch = listOf(1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 2.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f)
+        val deathSoundMessage = listOf(
+            "물에 빠진", "귀신", "비", "흑우", "박쥐", "돼지",
+            "모루", "부숴진", "폭팔", "먹다", "타버림", "금고 부숨"
+        )
 
         var applyKill: MutableMap<UUID, Int> = ConcurrentHashMap()
         val soundTypeKill = listOf(

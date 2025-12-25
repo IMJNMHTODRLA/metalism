@@ -2,6 +2,7 @@ package _RedGold__.main.command.event.sys.eventGui
 
 import _RedGold__.main.Main.Event.EVENT_CODE
 import _RedGold__.main.Main.Event.EVENT_NAME
+import _RedGold__.main.command.event.sys.rewardGui.RewardGui
 import _RedGold__.main.event.randomEffect.System.RandomEffectEvent.difficulty
 import _RedGold__.main.event.randomEffect.System.RandomEffectEvent.max
 import _RedGold__.main.event.randomEffect.System.RandomEffectEvent.point
@@ -50,6 +51,8 @@ class EventListener(private val plugin: JavaPlugin) : Listener {
                         player.playSound(player.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f)
                         return
                     }
+
+                    23 -> RewardGui(plugin).openGui(player, 1)
                 }
                 return
             }

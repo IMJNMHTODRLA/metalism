@@ -2,7 +2,7 @@ package _RedGold__.main.event.randomEffect
 
 import _RedGold__.main.Main.Event.END_TIME
 import _RedGold__.main.Main.Event.START_TIME
-import _RedGold__.main.event.randomEffect.System.RandomEffectEvent.advancedToken
+import _RedGold__.main.command.shop.sys.cashShop.ticketGui.TicketListener.CosmeticType
 import _RedGold__.main.event.randomEffect.System.RandomEffectEvent.difficulty
 import _RedGold__.main.event.randomEffect.System.RandomEffectEvent.difficultyEffect
 import _RedGold__.main.event.randomEffect.System.RandomEffectEvent.killEvent1
@@ -10,16 +10,17 @@ import _RedGold__.main.event.randomEffect.System.RandomEffectEvent.killEvent2
 import _RedGold__.main.event.randomEffect.System.RandomEffectEvent.max
 import _RedGold__.main.event.randomEffect.System.RandomEffectEvent.nextEvent
 import _RedGold__.main.event.randomEffect.System.RandomEffectEvent.point
-import _RedGold__.main.event.randomEffect.System.RandomEffectEvent.token
 import _RedGold__.main.event.randomEffect.selectGui.SelectGui
 import _RedGold__.main.function.Color.gc
 import _RedGold__.main.function.Data.defDataUuid
+import _RedGold__.main.function.Data.getData
 import _RedGold__.main.function.Data.getDataUuid
 import _RedGold__.main.function.Data.hasDataUuid
 import _RedGold__.main.function.Data.saveData
 import _RedGold__.main.function.Data.saveDataUuid
 import _RedGold__.main.function.Gui.getItem
 import _RedGold__.main.function.api.toFormat
+import _RedGold__.main.function.api.toUuid
 import _RedGold__.main.load.RequireJavaPlugin
 import _RedGold__.main.load.RequireListener
 import com.comphenix.protocol.PacketType
@@ -28,20 +29,21 @@ import com.comphenix.protocol.events.PacketAdapter
 import com.comphenix.protocol.events.PacketEvent
 import org.bukkit.Bukkit
 import org.bukkit.Sound
+import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Entity
+import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
-import org.bukkit.event.entity.EntityDeathEvent
-import org.bukkit.event.entity.EntityPotionEffectEvent
-import org.bukkit.event.entity.EntityTargetLivingEntityEvent
-import org.bukkit.event.entity.PlayerDeathEvent
+import org.bukkit.event.entity.*
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.metadata.FixedMetadataValue
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
+import org.bukkit.scheduler.BukkitRunnable
+import org.bukkit.scheduler.BukkitTask
 import java.lang.System
 import java.time.LocalDateTime
 import java.util.*
@@ -54,8 +56,6 @@ class System(private val plugin: JavaPlugin) : Listener {
         val difficulty: MutableMap<UUID, Int> = ConcurrentHashMap()
         val point: MutableMap<UUID, Long> = ConcurrentHashMap()
         val max: MutableMap<UUID, Int> = ConcurrentHashMap()
-        val token: MutableMap<UUID, Long> = ConcurrentHashMap()
-        val advancedToken: MutableMap<UUID, Long> = ConcurrentHashMap()
         val difficultyEffect = listOf(
             PotionEffect(PotionEffectType.HUNGER, Int.MAX_VALUE, 4, true, false),
             PotionEffect(PotionEffectType.SLOWNESS, Int.MAX_VALUE, 1, true, false),
@@ -70,19 +70,33 @@ class System(private val plugin: JavaPlugin) : Listener {
     }
     private var min5times = 0
 
-    private val giveDonePoint = listOf(0L, 100_000L, 150_000L, 300_000L, 350_000L, 550_000L)
+    private val giveDonePoint = listOf(0L, 100_000L, 150_000L, 300_000L, 400_000L, 550_000L)
     private val difficultyMessage = listOf("&7&l선택안함(Nothing)", "&e&l보통(Normal)", "&c&l어려움(Hard)", "&4&l하드코어(HardCore)", "&b&l익스트림(Extreme)", "&d&l얼티밋(Ultimate)")
-    private val give5minute = listOf(0L, 10_000L, 15_000L, 30_000L, 35_000L, 60_000L)
+    private val give5minute = listOf(0L, 10_000L, 15_000L, 30_000L, 50_000L, 60_000L)
 
-    private val giveDoneToken = listOf(0L, 50L, 85L, 100L, 125L, 150L)
-    private val giveDoneAdvanced = listOf(0L, 0L, 0L, 10L, 20L, 30L)
+    private val giveDoneCash = listOf(0L, 0L, 0L, 3L, 4L, 6L)
 
     private val eventMonsterHandel = "randomEffectSkeletonMob"
     private val eventMonsterHandelSuper = "randomEffectZombieMob"
 
     private val activeBossEntity = mutableListOf<Entity>()
+    private val giveBonusPoint: MutableMap<UUID, Long> = ConcurrentHashMap()
+    private val giveBonusPoint2nd: MutableMap<UUID, Long> = ConcurrentHashMap()
 
     init {
+        val delayTick = run{
+            val now = LocalDateTime.now()
+            val minute = now.minute
+            val second = now.second
+
+            val targetMinute = if (minute < 30) 30 else 60
+            val remainingMinutes = targetMinute - minute - 1
+            val remainingSeconds = 60 - second
+
+            (remainingMinutes * 60 + remainingSeconds).toLong() * 20L
+        }
+        nextEvent = (System.currentTimeMillis() / 1000) + (delayTick / 20)
+
         Bukkit.getScheduler().runTaskTimer(plugin, Runnable {
             val now = LocalDateTime.now()
             if (now.isBefore(START_TIME) || !now.isBefore(END_TIME)) {
@@ -91,6 +105,8 @@ class System(private val plugin: JavaPlugin) : Listener {
             }
 
             nextEvent = (System.currentTimeMillis() / 1000) + 1800L
+
+            val saveCash = mutableListOf<Pair<Player, Long>>()
 
             for (player in Bukkit.getOnlinePlayers()) {
                 val uuid = player.uniqueId
@@ -101,21 +117,39 @@ class System(private val plugin: JavaPlugin) : Listener {
 
                 if (getDifficulty != 0) {
                     val givePoint = giveDonePoint[getDifficulty]
-                    val giveToken = giveDoneToken[getDifficulty]
-                    val giveAdvancedToken = giveDoneAdvanced[getDifficulty]
+                    val giveCash = giveDoneCash[getDifficulty]
 
                     point[uuid] = point[uuid]!! + givePoint
-                    token[uuid] = token[uuid]!! + giveToken
-                    advancedToken[uuid] = advancedToken[uuid]!! + giveAdvancedToken
 
                     player.clearActivePotionEffects()
 
                     player.sendMessage(gc("${difficultyMessage[getDifficulty]} &f&l난이도에서 생존을 하여 &d&l${givePoint.toFormat()} 점수&f&l를 획득하였습니다."))
-                    player.sendMessage(gc("${difficultyMessage[getDifficulty]} &f&l난이도에서 생존을 하여 &2&l${giveToken.toFormat()} 토큰&f&l을 획득하였습니다."))
-                    if (giveAdvancedToken != 0L) player.sendMessage(gc("${difficultyMessage[getDifficulty]} &f&l난이도에서 생존을 하여 &a&l${giveAdvancedToken.toFormat()} 고급 토큰&f&l을 획득하였습니다."))
+                    if (giveCash > 0) {
+                        saveCash.add(Pair(player, giveCash))
+                        player.sendMessage(gc("${difficultyMessage[getDifficulty]} &f&l난이도에서 생존을 하여 &b&l${giveCash.toFormat()} 캐시&f&l을 획득하였습니다."))
+                    }
                 }
             }
-        }, 0L, 36000L)
+
+            if (saveCash.isNotEmpty()) {
+                var index = 0
+
+                object : BukkitRunnable() {
+                    override fun run() {
+                        val end = (index + 3).coerceAtMost(saveCash.size)
+                        val batchList = saveCash.subList(index, end)
+
+                        for ((player, cash) in batchList) saveData(plugin, player, "cash", getData(plugin, player, "cash") + cash)
+
+                        index += 3
+                        if (index >= saveCash.size) {
+                            this.cancel()
+                            plugin.logger.info("이벤트 캐시 저장 전체 완료 (${saveCash.size}명)")
+                        }
+                    }
+                }.runTaskTimer(plugin, 3L, 3L)
+            }
+        }, delayTick, 36000L)
 
         registerPacketListener()
 
@@ -134,11 +168,13 @@ class System(private val plugin: JavaPlugin) : Listener {
             }
 
             min5times++
-            if (min5times % 6 == 0 || min5times == 1) return@Runnable
+            if (min5times == 1) return@Runnable
 
             for (player in Bukkit.getOnlinePlayers()) {
                 val uuid = player.uniqueId
                 val difficulty = difficulty[uuid]?: continue
+                giveBonusPoint.remove(uuid)
+                giveBonusPoint2nd.remove(uuid)
 
                 if (difficulty != 0) {
                     val givePoint = give5minute[difficulty]
@@ -146,10 +182,8 @@ class System(private val plugin: JavaPlugin) : Listener {
                     if (difficulty in 1..2) {
                         player.sendMessage(gc("${difficultyMessage[difficulty]} &f&l난이도에서 5분간 생존을 하여 &d&l${givePoint.toFormat()} 점수&f&l를 획득하였습니다."))
                         point[uuid] = (point[uuid] ?: 0L) + givePoint
-                    }
-
-                    if (difficulty in 3..5) {
-                        if (killEvent1[uuid] != false) {
+                    } else if (difficulty in 3..5) {
+                        if (killEvent1[uuid] != false) { //!= false는 null과 true 둘다 통과임
                             point[uuid] = (point[uuid] ?: 0L) + givePoint
                             player.sendMessage(gc("${difficultyMessage[difficulty]} &f&l난이도에서 5분간 생존을 하여 &d&l${givePoint.toFormat()} 점수&f&l를 획득하였습니다."))
                         } else {
@@ -157,26 +191,35 @@ class System(private val plugin: JavaPlugin) : Listener {
                             player.sendMessage(gc("${difficultyMessage[difficulty]} &f&l난이도에서 5분 안에 이벤트 몬스터를 못 죽여 &d&l${(givePoint / 2).toFormat()} 점수&f&l를 획득하였습니다."))
                         }
 
+                        if (min5times % 7 != 0) continue
+
                         val location = player.location
                         val monster = location.world.spawnEntity(location, org.bukkit.entity.EntityType.SKELETON) as org.bukkit.entity.Skeleton
 
                         monster.setGravity(true)
-                        (monster as org.bukkit.entity.LivingEntity).maxHealth = 400.0
+                        monster.maxHealth = 400.0
                         monster.health = 400.0
                         monster.customName = gc("&b&l${player.name}&f&l의 &c&l난이도 챌린지 &f&l이벤트 몬스터")
                         monster.isCustomNameVisible = true
 
                         val equipment = monster.equipment
 
-                        equipment.setItemInMainHand(getItem("bow"))
+                        equipment.setItemInMainHand(getItem("bow").apply {
+                            addEnchantment(Enchantment.POWER, 3)
+                            addEnchantment(Enchantment.PUNCH, 2)
+                        })
                         equipment.setItemInOffHand(null)
                         equipment.itemInMainHandDropChance = 0.0f
                         equipment.itemInOffHandDropChance = 0.0f
 
-                        equipment.helmet = null
-                        equipment.chestplate = null
-                        equipment.leggings = null
-                        equipment.boots = null
+                        equipment.helmet = getItem("diamond_helmet").apply {addUnsafeEnchantment(Enchantment.PROTECTION, 3)}
+                        equipment.chestplate = getItem("diamond_chestplate").apply {addUnsafeEnchantment(Enchantment.PROTECTION, 3)}
+                        equipment.leggings = getItem("diamond_leggings").apply {addUnsafeEnchantment(Enchantment.PROTECTION, 3)}
+                        equipment.boots = getItem("diamond_boots").apply {
+                            addUnsafeEnchantment(Enchantment.PROTECTION, 3)
+                            addUnsafeEnchantment(Enchantment.FEATHER_FALLING, 1)
+                            addUnsafeEnchantment(Enchantment.FROST_WALKER, 1)
+                        }
                         equipment.helmetDropChance = 0.0f
                         equipment.chestplateDropChance = 0.0f
                         equipment.leggingsDropChance = 0.0f
@@ -202,12 +245,15 @@ class System(private val plugin: JavaPlugin) : Listener {
                             eventMonsterHandel,
                             FixedMetadataValue(plugin, uuid.toString())
                         )
+                        monster.setMetadata(
+                            "spawnTime",
+                            FixedMetadataValue(plugin, System.currentTimeMillis() / 1000)
+                        )
 
                         killEvent1[uuid] = false
+                        giveBonusPoint[uuid] = 120_000
                         activeBossEntity.add(monster)
-                    }
-
-                    if (difficulty == 5) {
+                    } else {
                         if (killEvent2[uuid] == false) {
                             player.sendMessage(gc("${difficultyMessage[difficulty]} &f&l난이도에서 5분 안에 이벤트 몬스터를 못 죽여 &c&l채력 9칸&f&l이 깎였습니다."))
                             val newHealth = player.health - 18.0
@@ -218,26 +264,32 @@ class System(private val plugin: JavaPlugin) : Listener {
                             else player.health -= 18.0
                         }
 
+                        if (min5times % 7 != 0) continue
+
                         val location = player.location
-                        val monster = location.world.spawnEntity(location, org.bukkit.entity.EntityType.ZOMBIE) as org.bukkit.entity.Zombie
+                        val monster = player.world.spawnEntity(location, org.bukkit.entity.EntityType.ZOMBIE) as org.bukkit.entity.Zombie
 
                         monster.setGravity(true)
                         monster.isBaby = false
-                        (monster as org.bukkit.entity.LivingEntity).maxHealth = 500.0
-                        monster.health = 500.0
+                        monster.maxHealth = 800.0
+                        monster.health = 800.0
                         monster.customName = gc("&b&l${player.name}&f&l의 &c&l난이도 챌린지 &f&l이벤트 몬스터")
                         monster.isCustomNameVisible = true
                         val equipment = monster.equipment
 
-                        equipment.setItemInMainHand(null)
+                        equipment.setItemInMainHand(getItem("diamond_sword").apply {addUnsafeEnchantment(Enchantment.SHARPNESS, 3)})
                         equipment.setItemInOffHand(null)
                         equipment.itemInMainHandDropChance = 0.0f
                         equipment.itemInOffHandDropChance = 0.0f
 
-                        equipment.helmet = null
-                        equipment.chestplate = null
-                        equipment.leggings = null
-                        equipment.boots = null
+                        equipment.helmet = getItem("diamond_helmet").apply {addUnsafeEnchantment(Enchantment.PROTECTION, 3)}
+                        equipment.chestplate = getItem("diamond_chestplate").apply {addUnsafeEnchantment(Enchantment.PROTECTION, 3)}
+                        equipment.leggings = getItem("diamond_leggings").apply {addUnsafeEnchantment(Enchantment.PROTECTION, 3)}
+                        equipment.boots = getItem("diamond_boots").apply {
+                            addUnsafeEnchantment(Enchantment.PROTECTION, 3)
+                            addUnsafeEnchantment(Enchantment.FEATHER_FALLING, 1)
+                            addUnsafeEnchantment(Enchantment.FROST_WALKER, 1)
+                        }
                         equipment.helmetDropChance = 0.0f
                         equipment.chestplateDropChance = 0.0f
                         equipment.leggingsDropChance = 0.0f
@@ -260,27 +312,32 @@ class System(private val plugin: JavaPlugin) : Listener {
                         monster.addPotionEffect(PotionEffect(
                             PotionEffectType.STRENGTH,
                             Int.MAX_VALUE,
-                            1,
+                            0,
                             true, false
                         ))
-                        (monster as org.bukkit.entity.Creature).target = player
+                        monster.target = player
 
                         monster.setMetadata(
                             eventMonsterHandelSuper,
                             FixedMetadataValue(plugin, uuid.toString())
                         )
+                        monster.setMetadata(
+                            "spawnTime",
+                            FixedMetadataValue(plugin, System.currentTimeMillis() / 1000)
+                        )
 
                         killEvent2[uuid] = false
+                        giveBonusPoint2nd[uuid] = 240_000
                         activeBossEntity.add(monster)
                     }
                 }
             }
-        }, 0L, 6000L)
+        }, delayTick, 6000L)
 
         Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, Runnable {
             point.forEach {(uuid, value) -> saveDataUuid(plugin, uuid, "randomEffect/point", value)}
             max.forEach {(uuid, value) -> saveDataUuid(plugin, uuid, "randomEffect/max", value)}
-        },0L, 7000L)
+        }, delayTick + 20L, 7000L)
     }
 
     private fun registerPacketListener() {
@@ -344,6 +401,17 @@ class System(private val plugin: JavaPlugin) : Listener {
             event.drops.clear()
             event.droppedExp = 200
             activeBossEntity.remove(entity)
+
+            val spawnTime = entity.getMetadata("spawnTime").first().asLong()
+            val nowTime = System.currentTimeMillis() / 1000
+            val elapsedTime = nowTime - spawnTime
+            if (nowTime - spawnTime < 300) {
+                val giveBonusPoint = giveBonusPoint[ownerUUID]!! - (400L * elapsedTime)
+                ownerPlayer.sendMessage(gc(
+                    "&f&l이벤트 몹(스캘레톤)을 240초 안에 처치해 &d&l${giveBonusPoint.toFormat()} 점수를 추가로 획득하였습니다."
+                ))
+                point[ownerUUID] = (point[ownerUUID] ?: 0L) + giveBonusPoint
+            }
             return
         }
 
@@ -358,7 +426,42 @@ class System(private val plugin: JavaPlugin) : Listener {
             event.drops.clear()
             event.droppedExp = 300
             activeBossEntity.remove(entity)
+
+            val spawnTime = entity.getMetadata("spawnTime").first().asLong()
+            val nowTime = System.currentTimeMillis() / 1000
+            val elapsedTime = nowTime - spawnTime
+            if (nowTime - spawnTime < 300) {
+                val giveBonusPoint = giveBonusPoint2nd[ownerUUID]!! - (800L * elapsedTime)
+                ownerPlayer.sendMessage(gc(
+                    "&f&l이벤트 몹(좀비)을 240초 안에 처치해 &d&l${giveBonusPoint.toFormat()} 점수를 추가로 획득하였습니다."
+                ))
+                point[ownerUUID] = (point[ownerUUID] ?: 0L) + giveBonusPoint
+            }
             return
+        }
+    }
+
+    @EventHandler
+    fun onEntityDamage(event: EntityDamageByEntityEvent) {
+        val player = event.damager as? Player?: return
+        val entity = event.entity as? LivingEntity?: return
+        val uuid = player.uniqueId
+        val item = player.inventory.itemInMainHand
+
+        if (entity.hasMetadata(eventMonsterHandel) || entity.hasMetadata(eventMonsterHandelSuper)) return
+        val monsterHandler = if (entity.hasMetadata(eventMonsterHandel)) eventMonsterHandel else eventMonsterHandelSuper
+
+        if (entity.getMetadata(monsterHandler).first().asString().toUuid() != uuid) {
+            event.damage = 0.0
+            return
+        }
+        if (item.type.isAir) return
+        val meta = item.itemMeta ?: return
+
+        when {
+            meta.hasEnchant(Enchantment.SHARPNESS) -> point[uuid] = (point[uuid] ?: 0L) + 500L
+            meta.hasEnchant(Enchantment.SMITE) -> return
+            meta.hasEnchant(Enchantment.BANE_OF_ARTHROPODS) -> return
         }
     }
 
@@ -405,13 +508,11 @@ class System(private val plugin: JavaPlugin) : Listener {
         if (hasDataUuid(plugin, uuid, "randomEffect/join")) {
             saveData(plugin, player, "randomEffect/point", point[uuid]!!)
             saveData(plugin, player, "randomEffect/max", max[uuid]!!)
-            saveData(plugin, player, "token/normal", token[uuid]!!)
-            saveData(plugin, player, "token/advanced", advancedToken[uuid]!!)
             point.remove(uuid)
             max.remove(uuid)
             difficulty.remove(uuid)
-            token.remove(uuid)
-            advancedToken.remove(uuid)
+            giveBonusPoint.remove(uuid)
+            giveBonusPoint2nd.remove(uuid)
 
             for (effect in player.activePotionEffects) player.removePotionEffect(effect.type)
         }
@@ -423,8 +524,6 @@ class System(private val plugin: JavaPlugin) : Listener {
         if (hasDataUuid(plugin, uuid, "randomEffect/join")) {
             point[uuid] = getDataUuid(plugin, uuid, "randomEffect/point").toLong()
             max[uuid] = getDataUuid(plugin, uuid, "randomEffect/max").toInt()
-            token[uuid] = getDataUuid(plugin, uuid, "token/normal").toLong()
-            advancedToken[uuid] = getDataUuid(plugin, uuid, "token/advanced").toLong()
             difficulty[uuid] = 0
         }
         for (i in 0..38) defDataUuid(plugin, uuid, "randomEffect/get/$i", 0)

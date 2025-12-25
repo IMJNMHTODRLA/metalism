@@ -87,20 +87,20 @@ class DeathGui(private val plugin: JavaPlugin) {
         ))
 
         10.fi("선택 안함", 0, 0) //
-        11.fi("물에 빠진", 200, 1) //minecraft:entity.player.splash 1.0
-        12.fi("귀신", 200, 2) //minecraft:ambient.cave 1.0
-        13.fi("비", 200, 3) //minecraft:weather.rain 1.0
-        14.fi("흑우", 250, 4) //minecraft:entity.cow.death 1.0
-        15.fi("박쥐", 250, 5) //minecraft:entity.bat.death 1.0
-        16.fi("돼지", 250, 6) //minecraft:entity.pig.death 1.0
+        11.fi("물에 빠진", 400, 1) //minecraft:entity.player.splash 1.0
+        12.fi("귀신", 400, 2) //minecraft:ambient.cave 1.0
+        13.fi("비", 400, 3) //minecraft:weather.rain 1.0
+        14.fi("흑우", 450, 4) //minecraft:entity.cow.death 1.0
+        15.fi("박쥐", 450, 5) //minecraft:entity.bat.death 1.0
+        16.fi("돼지", 450, 6) //minecraft:entity.pig.death 1.0
 
-        19.fi("모루", 250, 7) //minecraft:block.anvil.land 1.0
-        20.fi("부숴진", 300, 8) //minecraft:item.totem.use 2.0
-        21.none()
-        22.none()
-        23.none()
-        24.none()
-        25.none()
+        19.fi("모루", 450, 7) //minecraft:block.anvil.land 1.0
+        20.fi("부숴진", 500, 8) //minecraft:item.totem.use 2.0
+        21.fi("폭팔", 550, 9) //minecraft:entity.generic.explode
+        22.fi("먹다", 400, 10) //minecraft:entity.generic.eat
+        23.fi("타버림", 400, 11) //minecraft:entity.generic.extinguish_fire
+        24.fi("금고 부숨", 500, 12) //minecraft:block.vault.break
+        25.fi("웅장한 브금(김)", 800, 13) //minecraft:music.credits
 
         player.openInventory(gui)
         player.playSound(player.location, Sound.UI_BUTTON_CLICK, sound, 1f)

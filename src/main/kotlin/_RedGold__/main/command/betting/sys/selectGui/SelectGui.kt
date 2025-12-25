@@ -55,7 +55,7 @@ class SelectGui {
 
         gui.setItem(14, getItem(
             "experience_bottle",
-            "&b&lHIGH&c&lLOW"
+            "&b&lHIGH&8&l\\&&c&lLOW"
         ))
 
         gui.setItem(16, getItem(

@@ -1,13 +1,16 @@
 package _RedGold__.main.event.randomEffect.selectGui
 
+import _RedGold__.main.Main.Event.END_TIME
 import _RedGold__.main.Main.Event.EVENT_CODE
 import _RedGold__.main.Main.Event.EVENT_NAME
+import _RedGold__.main.Main.Event.START_TIME
 import _RedGold__.main.event.randomEffect.System.RandomEffectEvent.difficulty
 import _RedGold__.main.event.randomEffect.System.RandomEffectEvent.difficultyEffect
 import _RedGold__.main.event.randomEffect.System.RandomEffectEvent.killEvent1
 import _RedGold__.main.event.randomEffect.System.RandomEffectEvent.killEvent2
 import _RedGold__.main.event.randomEffect.System.RandomEffectEvent.max
 import _RedGold__.main.event.randomEffect.System.RandomEffectEvent.point
+import _RedGold__.main.function.Color.fail
 import _RedGold__.main.function.Color.gc
 import _RedGold__.main.function.Data.hasData
 import _RedGold__.main.function.Data.saveData
@@ -22,6 +25,8 @@ import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.plugin.java.JavaPlugin
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @RequireListener
 class SelectListener : Listener {
@@ -59,6 +64,17 @@ class SelectListener : Listener {
 
             fun difficultySelect(type: Int) {
                 holder.isClose = true
+
+                val now = LocalDateTime.now()
+                if (now.isBefore(START_TIME) || !now.isBefore(END_TIME)) {
+                    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                    val startTimeFormat = START_TIME.format(formatter)
+                    val endTimeFormat = END_TIME.format(formatter)
+
+                    player.fail("&c이벤트가 종료 되었습니다: $startTimeFormat - $endTimeFormat")
+                    player.closeInventory()
+                    return
+                }
 
                 val elapsedTime = (System.currentTimeMillis() / 1000) - openTime
                 max[uuid] = max[uuid]!! + 1

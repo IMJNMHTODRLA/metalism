@@ -8,34 +8,32 @@ import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
 
 class HighLowGui {
+    private val prefix = """
+        ${rgb("2444FC")}§l[
+        ${rgb("2A48FC")}§lM
+        ${rgb("304CFC")}§lE
+        ${rgb("3651FD")}§lT
+        ${rgb("3C55FD")}§lA
+        ${rgb("4359FD")}§lL
+        ${rgb("495DFD")}§lI
+        ${rgb("4F61FD")}§lS
+        ${rgb("5565FD")}§lM 
+        ${rgb("616EFE")}§lB
+        ${rgb("6772FE")}§lE
+        ${rgb("6D76FE")}§lT
+        ${rgb("747AFE")}§lT
+        ${rgb("7A7EFE")}§lI
+        ${rgb("8083FF")}§lN
+        ${rgb("8687FF")}§lG
+        ${rgb("8C8BFF")}§l]
+    """.trimIndent().replace("\n", "")
+
     fun openGui(player: Player) {
         val gui = HighLowHolder().inventory
 
         val background = getItem(
             "magenta_stained_glass_pane",
-            """
-                ${rgb("2444FC")}§l§o[
-                ${rgb("2947FC")}§l§oM
-                ${rgb("2D4AFC")}§l§oE
-                ${rgb("324EFC")}§l§oT
-                ${rgb("3751FD")}§l§oA
-                ${rgb("3C54FD")}§l§oL
-                ${rgb("4057FD")}§l§oI
-                ${rgb("455BFD")}§l§oS
-                ${rgb("4A5EFD")}§l§oM 
-                ${rgb("5364FD")}§l§oD
-                ${rgb("5868FE")}§l§oI
-                ${rgb("5D6BFE")}§l§oC
-                ${rgb("616EFE")}§l§oE 
-                ${rgb("6B74FE")}§l§oB
-                ${rgb("7078FE")}§l§oE
-                ${rgb("747BFE")}§l§oT
-                ${rgb("797EFE")}§l§oT
-                ${rgb("7E81FF")}§l§oI
-                ${rgb("8385FF")}§l§oN
-                ${rgb("8788FF")}§l§oG
-                ${rgb("8C8BFF")}§l§o]
-            """.trimIndent().replace("\n", "")
+            prefix
         )
 
         for (i in 0 until gui.size) gui.setItem(i, background)

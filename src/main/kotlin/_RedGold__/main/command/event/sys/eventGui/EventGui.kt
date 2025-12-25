@@ -61,7 +61,7 @@ class EventGui {
 
         gui.setItem(23, getItem(
             "experience_bottle",
-            "$EVENT_NAME &f&l이벤트 보상 받기"
+            "$EVENT_NAME &f&l이벤트 점수 보상 받기"
         ))
 
         gui.setItem(40, getPlayerSkull(

@@ -1,7 +1,5 @@
 package _RedGold__.main.command.verify
 
-import _RedGold__.main.command.boost.sys.goDiscord.GoDiscord
-import _RedGold__.main.command.verify.Verify.Website.client
 import com.google.gson.Gson
 import _RedGold__.main.function.Color.gc
 import _RedGold__.main.load.RequireCommandExecutor
@@ -24,11 +22,9 @@ import java.util.concurrent.TimeUnit
 @RequireJavaPlugin
 class Verify(private val plugin: JavaPlugin) : CommandExecutor, TabExecutor {
     private var waitTime: MutableMap<String, Long> = mutableMapOf()
-    object Website {
-        val client = OkHttpClient.Builder()
-            .connectTimeout(3, TimeUnit.SECONDS)
-            .build()
-    }
+    private val client = OkHttpClient.Builder()
+        .connectTimeout(3, TimeUnit.SECONDS)
+        .build()
 
     override fun onCommand(
         sender: CommandSender,

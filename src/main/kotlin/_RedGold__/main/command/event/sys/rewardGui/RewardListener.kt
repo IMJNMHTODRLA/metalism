@@ -3,6 +3,7 @@ package _RedGold__.main.command.event.sys.rewardGui
 import _RedGold__.main.command.mission.sys.dailyGui.DailyGui
 import _RedGold__.main.command.mission.sys.weeklyGui.WeeklyGui
 import _RedGold__.main.event.randomEffect.System.RandomEffectEvent.point
+import _RedGold__.main.function.Color.fail
 import _RedGold__.main.function.Color.gc
 import _RedGold__.main.function.Data.getData
 import _RedGold__.main.function.Data.saveData
@@ -11,6 +12,7 @@ import _RedGold__.main.function.ServerGold.addMakeGold
 import _RedGold__.main.function.api.toFormat
 import _RedGold__.main.load.RequireJavaPlugin
 import _RedGold__.main.load.RequireListener
+import com.google.gson.JsonObject
 import org.bukkit.Bukkit
 import org.bukkit.Sound
 import org.bukkit.enchantments.Enchantment
@@ -39,34 +41,45 @@ class RewardListener(private val plugin: JavaPlugin) : Listener {
 
             event.isCancelled = true
 
-            fun Int.c(giveLevel: Int?, ) {
-                val t = this
-
+            /**
+            * @param props <-
+            *   골드 지급할 때는 gold 키/Long
+            *   캐시는 cash 키/Long
+            *   아이템은 item 키(listOf에 아이템 넣기)
+            *   레벨은 level 키/Long
+            * */
+            fun reward(t: Int, needPoint: Long, props: Map<String, Any>) {
                 if (getList[t]) {
-                    player.sendMessage(gc("&c이미 보상을 획득 하였습니다."))
-                    player.playSound(player.location, Sound.ENTITY_ENDERMAN_TELEPORT, 1f, 0.5f)
+                    player.fail("&c이미 보상을 획득 하였습니다.")
                     return
                 }
 
-                val max = (t + 1) * 10_000_000
-
-                if (point < max) {
-                    player.sendMessage(gc("&c${(max - point).toFormat()}점수가 부족합니다."))
-                    player.playSound(player.location, Sound.ENTITY_ENDERMAN_TELEPORT, 1f, 0.5f)
+                if (point < needPoint) {
+                    player.fail("&c${(needPoint - point).toFormat()}점수가 부족합니다.")
                     return
                 }
 
-                saveData(plugin, player, "gold", getData(plugin, player, "gold").toLong() + 100000)
-                saveData(plugin, player, "cash", getData(plugin, player, "cash").toLong() + 10)
-                addMakeGold(plugin, 200000)
+                val gold = props["gold"] as? Long
+                val cash = props["cash"] as? Long
+                val item = props["item"] as? ItemStack
+                val level = props["level"] as? Int
 
-                saveData(plugin, player, "token/normal", getData(plugin, player, "token/normal").toLong() + giveToken)
-                addMakeGold(plugin, giveToken * 10000L)
-
-                if (giveAdvancedToken != null) {
-                    saveData(plugin, player, "token/advanced", getData(plugin, player, "token/advanced").toLong() + giveAdvancedToken)
-                    addMakeGold(plugin, giveAdvancedToken * 50_000)
+                var makeAll = 0L
+                if (gold != null) {
+                    saveData(plugin, player, "gold", getData(plugin, player, "gold").toLong() + gold)
+                    makeAll += gold
                 }
+
+                if (cash != null) {
+                    saveData(plugin, player, "cash", getData(plugin, player, "cash").toLong() + cash)
+                    makeAll += cash * 10_000
+                }
+
+                if (item != null) player.inventory.addItem(item)
+
+                if (level != null) player.giveExpLevels(level)
+
+                if (makeAll != 0L) addMakeGold(plugin, 200000)
 
                 saveData(plugin, player, "randomEffect/get/$t", 1)
 
@@ -79,59 +92,37 @@ class RewardListener(private val plugin: JavaPlugin) : Listener {
 
             if (page == 1) {
                 when (slot) {
-                    10 -> c(0, 10)
-                    11 -> c(1, 10)
-                    12 -> c(2, 10)
-                    13 -> c(3, 10)
-                    14 -> c(4, 10)
-                    15 -> c(5, 10)
-                    16 -> c(6, 20)
+                    10 -> reward(0, 100_000, mapOf("level" to 1))
+                    11 -> reward(1, 200_000, mapOf("gold" to 300_000))
+                    12 -> reward(2, 300_000, mapOf("item" to getItem("end_crystal", t = 16)))
+                    13 -> reward(3, 400_000, mapOf("item" to getItem("respawn_anchor", t = 16)))
+                    14 -> reward(4, 500_000, mapOf("item" to getItem("ender_pearl", t = 16)))
+                    15 -> reward(5, 600_000, mapOf("item" to getItem("experience_bottle", t = 16)))
+                    16 -> reward(6, 700_000, mapOf("cash" to 30))
 
-                    19 -> c(7, 30)
-                    20 -> c(8, 40)
-                    21 -> c(9, 50)
-                    22 -> c(10, 60)
-                    23 -> c(11, 70)
-                    24 -> c(12, 80)
-                    25 -> c(13, 90)
+                    19 -> reward(0, 800_000, mapOf("level" to 1))
+                    20 -> reward(1, 900_000, mapOf("gold" to 500_000))
+                    21 -> reward(2, 1_000_000, mapOf("item" to getItem("end_crystal", t = 24)))
+                    22 -> reward(3, 1_500_000, mapOf("item" to getItem("respawn_anchor", t = 24)))
+                    23 -> reward(4, 2_000_000, mapOf("item" to getItem("golden_carrot", t = 24)))
+                    24 -> reward(5, 2_500_000, mapOf("item" to getItem("experience_bottle", t = 24)))
+                    25 -> reward(6, 3_000_000, mapOf("cash" to 40))
 
-                    28 -> c(14, 100)
-                    29 -> c(15, 110)
-                    30 -> c(16, 120)
-                    31 -> c(17, 130)
-                    32 -> c(18, 140, 10)
-                    33 -> c(19, 150, 20)
-                    34 -> c(20, 160, 30)
+                    28 -> reward(0, 3_500_000, mapOf("level" to 2))
+                    29 -> reward(1, 4_000_000, mapOf("gold" to 1_000_000))
+                    30 -> reward(2, 4_500_000, mapOf("item" to getItem("end_crystal", t = 48)))
+                    31 -> reward(3, 5_000_000, mapOf("item" to getItem("totem_of_undying", t = 8)))
+                    32 -> reward(4, 6_000_000, mapOf("item" to getItem("golden_carrot", t = 48)))
+                    33 -> reward(5, 7_000_000, mapOf("item" to getItem("experience_bottle", t = 48)))
+                    34 -> reward(6, 8_000_000, mapOf("cash" to 50))
 
-                    37 -> c(21, 160, 40)
-                    38 -> c(22, 170, 50)
-                    39 -> c(23, 180, 60)
-                    40 -> c(24, 190, 70)
-                    41 -> c(25, 200, 80)
-                    42 -> c(26, 20, 90)
-                    43 -> c(27, 20, 100)
-
-                    53 -> RewardGui(plugin).openGui(player, 2)
-                }
-                return
-            }
-
-            if (page == 2) {
-                when (slot) {
-                    10 -> c(28, 20, 10)
-                    11 -> c(29, 20, 10)
-                    12 -> c(30, 20, 10)
-                    13 -> c(31, 20, 10)
-                    14 -> c(32, 20, 10)
-                    15 -> c(33, 20, 10)
-                    16 -> c(34, 20, 10)
-
-                    19 -> c(35, 20, 10)
-                    20 -> c(36, 20, 10)
-                    21 -> c(37, 20, 10)
-                    22 -> c(38, 20, 10)
-
-                    45 -> RewardGui(plugin).openGui(player, 1)
+                    37 -> reward(0, 9_000_000, mapOf("level" to 3))
+                    38 -> reward(1, 10_000_000, mapOf("gold" to 1_500_000))
+                    39 -> reward(2, 12_000_000, mapOf("item" to getItem("end_crystal", t = 64)))
+                    40 -> reward(3, 14_000_000, mapOf("item" to getItem("totem_of_undying", t = 12)))
+                    41 -> reward(4, 16_000_000, mapOf("item" to getItem("golden_carrot", t = 64)))
+                    42 -> reward(5, 18_000_000, mapOf("item" to getItem("experience_bottle", t = 64)))
+                    43 -> reward(6, 20_000_000, mapOf("cash" to 60))
                 }
                 return
             }

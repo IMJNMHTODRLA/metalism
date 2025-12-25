@@ -1,5 +1,6 @@
 package _RedGold__.main.function
 
+import _RedGold__.main.function.Color.gc
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
@@ -32,20 +33,23 @@ object Gui {
         return skull
     }
 
-    fun getItem(itemID: String, title: String? = null, description: List<String>? = null): ItemStack {
+    fun getItem(itemID: String, title: String? = null, description: List<String>? = null, t: Int? = null): ItemStack {
         val material = Material.valueOf(itemID.replace("minecraft:", "").uppercase(Locale.getDefault()))
 
         val item = ItemStack(material)
         val meta = item.itemMeta
-        if (title != null) meta.setDisplayName(title.replace("&", "§"))
+        if (title != null) meta.setDisplayName(gc(title))
 
         if (description != null) {
             meta.lore = description.stream()
-                .map { line: String -> line.replace("&", "§") }
+                .map {
+                    line: String -> gc(line)
+                }
                 .collect(Collectors.toList())
         }
 
         item.setItemMeta(meta)
+        if (t != null) item.amount = t
 
         return item
     }

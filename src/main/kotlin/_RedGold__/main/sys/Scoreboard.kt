@@ -140,9 +140,6 @@ class Scoreboard {
         val kill = PlayerDataCache.kill[uuid]?: 0L
         val death = PlayerDataCache.death[uuid]?: 0L
 
-        val token = PlayerDataCache.token[uuid]?.toFormat()?: "-"
-        val advancedToken = PlayerDataCache.advancedToken[uuid]?.toFormat()?: "-"
-
         val nextEventTime = nextEvent - (System.currentTimeMillis() / 1000)
 
         sidebar.s("&f&l플레이어: $playerStylePrefix$rankPrefix$playerName", 99)
@@ -150,17 +147,15 @@ class Scoreboard {
         sidebar.s("&f&l골드: &6&l${gold.toFormat()} 골드", 97)
         sidebar.s("&f&l캐시: &b&l${cash.toFormat()} 캐시", 96)
         sidebar.s(" ", 95)
-        sidebar.s("&f&l토큰: &2&l$token 토큰", 94)
-        sidebar.s("&f&l고급 토큰: &a&l$advancedToken 토큰", 93)
-        sidebar.s("  ", 92)
-        sidebar.s("&f&l처치 수: &a&l${kill.toFormat()}", 91)
-        sidebar.s("&f&l사망 수: &c&l${death.toFormat()}", 90)
-        sidebar.s("   ", 89)
-        sidebar.s("&f&l추천: &c&lX", 88)
-        sidebar.s("    ", 87)
-        if (nextEvent != -1L) sidebar.s("&8다음 난이도 선택까지 ${nextEventTime}초", 86)
-        else sidebar.s("&8이벤트가 종료 되었습니다.", 86)
-        sidebar.s("&8metalism.kro.kr | ${player.ping} ms", 85)
+        sidebar.s("  ", 94)
+        sidebar.s("&f&l처치 수: &a&l${kill.toFormat()}", 93)
+        sidebar.s("&f&l사망 수: &c&l${death.toFormat()}", 92)
+        sidebar.s("   ", 91)
+        sidebar.s("&f&l추천: &c&lX", 90)
+        sidebar.s("    ", 89)
+        if (nextEvent != -1L) sidebar.s("&8다음 난이도 선택까지 ${nextEventTime}초", 88)
+        else sidebar.s("&8이벤트가 종료 되었습니다.", 87)
+        sidebar.s("&8metalism.kro.kr | ${player.ping} ms", 86)
 
         player.scoreboard = personalBoard
         syncAllTeamTags(player)

@@ -125,9 +125,16 @@ class StyleGui(private val plugin: JavaPlugin) {
         gui.fi(22, 9, "칭호 상점")
         gui.fi(23, 10, "칭호 상점")
         gui.fi(24, 11, "칭호 상점")
-        gui.none(25)
+        gui.fi(25, 12, "칭호 상점")
 
-        for (i in 28..34) gui.none(i)
+        gui.fi(28, 13, "칭호 상점")
+        gui.fi(29, 14, "칭호 상점")
+        gui.fi(30, 15, "칭호 상점")
+        gui.fi(31, 16, "칭호 상점")
+        gui.fi(32, 17, "칭호 상점")
+        gui.fi(33, 18, "칭호 상점")
+        gui.none(34)
+
         for (i in 37..43) gui.none(i)
 
         player.openInventory(gui)

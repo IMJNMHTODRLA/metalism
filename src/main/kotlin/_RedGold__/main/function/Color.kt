@@ -16,7 +16,7 @@ object Color {
     }
 
     fun gc(msg: String): String {
-        return msg.replace("&", "§")
+        return msg.replace(Regex("(?<!\\\\)&"), "§").replace("\\&", "&")
     }
 
     fun Player.fail(msg: String) {

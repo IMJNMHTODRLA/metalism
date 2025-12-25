@@ -12,7 +12,7 @@ class Main : JavaPlugin() {
         const val EVENT_CODE = "randomEffect"
         const val EVENT_ITEM = "potion"
         val START_TIME: LocalDateTime = LocalDateTime.of(2025, 12, 7, 12, 0, 0)
-        val END_TIME: LocalDateTime = LocalDateTime.of(3025, 12, 13, 10, 0, 0)
+        val END_TIME: LocalDateTime = LocalDateTime.of(3025, 12, 13, 10, 0, 1)
     }
 
     override fun onEnable() {
