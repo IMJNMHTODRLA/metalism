@@ -65,12 +65,20 @@ class JoinListener(private val plugin: JavaPlugin) : Listener {
             if (clickType == ClickType.LEFT) {
                 when (slot) {
                     10 -> buy(0, 0)
-                    11 -> buy(1, 200)
-                    12 -> buy(2, 200)
-                    13 -> buy(3, 200)
-                    14 -> buy(4, 250)
-                    15 -> buy(5, 300)
-                    16 -> buy(6, 250)
+                    11 -> buy(1, 600)
+                    12 -> buy(2, 600)
+                    13 -> buy(3, 600)
+                    14 -> buy(4, 650)
+                    15 -> buy(5, 600)
+                    16 -> buy(6, 650)
+
+                    19 -> buy(7, 600)
+                    20 -> buy(8, 700)
+                    21 -> buy(9, 800)
+                    22 -> buy(10, 750)
+                    23 -> buy(11, 800)
+                    24 -> buy(12, 600)
+                    25 -> buy(13, 600)
                 }
                 return
             }
@@ -84,6 +92,14 @@ class JoinListener(private val plugin: JavaPlugin) : Listener {
                     14 -> preview("&8[&a»&8] %style%%rank% %name% &e님이 &a&l온라인&e으로 전환했습니다.")
                     15 -> preview("&8[&7»&8] &fJo&ki&fned with %style%%rank% %name%")
                     16 -> preview("&8[&b»&8] %style%%rank% %name% &b&l님이 서버에 등장 하였습니다.")
+
+                    19 -> preview("&8[&a+&8] %style%%rank% %name% 님이 서버에 &a&l생성되었습니다.")
+                    20 -> preview("&8[&7?&8] %style%%rank% %name% 님이 서버에 &8&l접속...했나요?")
+                    21 -> preview("&8[&a!&8] %style%%rank% %name% 님이 게임에 참여하였습니다!")
+                    22 -> preview("&8[&a+&8] %style%%rank% %name% 님이 &2&l마인크래프트 세상에 들어왔습니다.")
+                    23 -> preview("&8[&a+&8] %style%%rank% %name% 님이 서버에 접속하였습니다. &a&l환영해주세요!")
+                    24 -> preview("&8[&a+&8] %style%%rank% %name%")
+                    25 -> preview("&8+ %name%")
                 }
                 return
             }

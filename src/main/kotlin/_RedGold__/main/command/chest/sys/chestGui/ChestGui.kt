@@ -29,8 +29,8 @@ class ChestGui(private val plugin: JavaPlugin) {
 
                 val gzipRead = readGzipByte(plugin, pathStr, "$i.dat.gz")
 
-                val item = BukkitObjectInputStream(ByteArrayInputStream(gzipRead)).use { iiiiii ->
-                    iiiiii.readObject() as ItemStack
+                val item = BukkitObjectInputStream(ByteArrayInputStream(gzipRead)).use { ii ->
+                    ii.readObject() as ItemStack
                 }
 
                 itemList.add(i, item)

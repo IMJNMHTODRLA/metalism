@@ -2,11 +2,13 @@ package _RedGold__.main.command.event.sys.eventGui
 
 import _RedGold__.main.Main.Event.EVENT_CODE
 import _RedGold__.main.Main.Event.EVENT_NAME
+import _RedGold__.main.command.event.sys.rankRewardGui.RankRewardGui
 import _RedGold__.main.command.event.sys.rewardGui.RewardGui
 import _RedGold__.main.event.randomEffect.System.RandomEffectEvent.difficulty
 import _RedGold__.main.event.randomEffect.System.RandomEffectEvent.max
 import _RedGold__.main.event.randomEffect.System.RandomEffectEvent.point
 import _RedGold__.main.function.Color.gc
+import _RedGold__.main.function.Data.getData
 import _RedGold__.main.function.Data.hasData
 import _RedGold__.main.function.Data.saveData
 import _RedGold__.main.load.RequireJavaPlugin
@@ -43,6 +45,8 @@ class EventListener(private val plugin: JavaPlugin) : Listener {
                         saveData(plugin, player, "$EVENT_CODE/join", "")
                         saveData(plugin, player, "$EVENT_CODE/point", 0)
                         saveData(plugin, player, "$EVENT_CODE/max", 0)
+                        saveData(plugin, player, "$EVENT_CODE/rank_reward", 0)
+                        for (i in 0..38) saveData(plugin, player, "$EVENT_CODE/get/$i", 0)
                         difficulty[uuid] = 0
                         point[uuid] = 0L
                         max[uuid] = 0
@@ -51,7 +55,7 @@ class EventListener(private val plugin: JavaPlugin) : Listener {
                         player.playSound(player.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f)
                         return
                     }
-
+                    22 -> RankRewardGui().openGui(player, 1)
                     23 -> RewardGui(plugin).openGui(player, 1)
                 }
                 return

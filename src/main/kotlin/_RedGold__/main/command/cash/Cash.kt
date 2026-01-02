@@ -6,6 +6,7 @@ import _RedGold__.main.command.boost.sys.infoGui.InfoGui
 import _RedGold__.main.command.boost.sys.selectGui.SelectGui
 import _RedGold__.main.function.Data.getDataUuid
 import _RedGold__.main.function.Data.saveDataUuid
+import _RedGold__.main.function.api.toUuid
 import _RedGold__.main.load.RequireCommandExecutor
 import _RedGold__.main.load.RequireJavaPlugin
 import _RedGold__.main.load.RequireTabExecutor
@@ -36,7 +37,7 @@ class Cash(private val plugin: JavaPlugin) : CommandExecutor, TabExecutor {
         val player = sender as? Player
         if (args.size != 3) return false
 
-        val uuid = UUID.fromString(args[0])
+        val uuid = args[0].toUuid()
         val amount = args[2].toLongOrNull()?: 0L
 
         if (player == null) {

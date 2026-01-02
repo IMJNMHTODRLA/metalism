@@ -55,13 +55,13 @@ class MenuListener(private val plugin: JavaPlugin) : Listener {
                         val gold = getData(plugin, player, "gold").toLong()
 
                         if (gold < 100_000) {
-                            player.sendMessage(gc("&c골드가 부족합니다. 필요 골드: ${(100_000 - gold).toFormat()}골드"))
+                            player.sendMessage(gc("&c골드가 부족합니다. 필요 골드: ${(50_000 - gold).toFormat()}골드"))
                             player.playSound(player.location, Sound.ENTITY_ENDERMAN_TELEPORT, 1f, 0.5f)
                             return
                         }
                         val cash = getData(plugin, player, "cash").toLong()
 
-                        player.sendMessage(gc("&a10 캐시로 환전하였습니다."))
+                        player.sendMessage(gc("&a5 캐시로 환전하였습니다."))
 
                         saveData(plugin, player, "cash", cash + 10)
                         saveData(plugin, player, "gold", gold - 100_000)
@@ -86,8 +86,8 @@ class MenuListener(private val plugin: JavaPlugin) : Listener {
                         player.sendMessage(gc("&a9,500 골드로 환전하였습니다."))
 
                         saveData(plugin, player, "cash", cash - 1)
-                        saveData(plugin, player, "gold", gold + 9500)
-                        addHoldGold(plugin, 500)
+                        saveData(plugin, player, "gold", gold + 9800)
+                        addHoldGold(plugin, 200)
 
                         player.playSound(player.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 2f)
                         MenuGui(plugin).openGui(player, 0f)

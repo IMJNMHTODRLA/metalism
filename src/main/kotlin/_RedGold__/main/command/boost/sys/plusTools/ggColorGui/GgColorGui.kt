@@ -20,7 +20,7 @@ class GgColorGui(private val plugin: JavaPlugin) {
                 "&a&l[좌클릭]: &f&l장착",
                 "&a&l[우클릭]: &f&l미리보기",
                 "",
-                "&8적용 되는 단어: GG, Easy, LL, gl, ㅋ",
+                "&8적용 되는 메시지: GG",
                 "",
                 if (isVipRank) "" else "&cVIP 전용 설정입니다."
             )

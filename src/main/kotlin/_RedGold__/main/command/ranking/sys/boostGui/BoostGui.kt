@@ -13,6 +13,31 @@ import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
 
 class BoostGui {
+    private val prefix = """
+        ${rgb("2444FC")}§l§o[
+        ${rgb("2947FC")}§l§oM
+        ${rgb("2D4AFC")}§l§oE
+        ${rgb("324DFC")}§l§oT
+        ${rgb("3650FD")}§l§oA
+        ${rgb("3B53FD")}§l§oL
+        ${rgb("3F57FD")}§l§oI
+        ${rgb("445AFD")}§l§oS
+        ${rgb("485DFD")}§l§oM 
+        ${rgb("5163FD")}§l§oB
+        ${rgb("5666FD")}§l§oO
+        ${rgb("5A69FE")}§l§oO
+        ${rgb("5F6CFE")}§l§oS
+        ${rgb("636FFE")}§l§oT 
+        ${rgb("6C75FE")}§l§oR
+        ${rgb("7178FE")}§l§oA
+        ${rgb("757CFE")}§l§oN
+        ${rgb("7A7FFE")}§l§oK
+        ${rgb("7E82FF")}§l§oI
+        ${rgb("8385FF")}§l§oN
+        ${rgb("8788FF")}§l§oG
+        ${rgb("8C8BFF")}§l§o]
+    """.trimIndent().replace("\n", "")
+
     fun openGui(player: Player, page: Int) {
         if (isLoading) {
             player.sendMessage("&c현재 순위를 새로고침하고 있습니다.")
@@ -23,58 +48,12 @@ class BoostGui {
 
         val background = getItem(
             "magenta_stained_glass_pane",
-            """
-                ${rgb("2444FC")}§l§o[
-                ${rgb("2947FC")}§l§oM
-                ${rgb("2D4AFC")}§l§oE
-                ${rgb("324DFC")}§l§oT
-                ${rgb("3650FD")}§l§oA
-                ${rgb("3B53FD")}§l§oL
-                ${rgb("3F57FD")}§l§oI
-                ${rgb("445AFD")}§l§oS
-                ${rgb("485DFD")}§l§oM 
-                ${rgb("5163FD")}§l§oB
-                ${rgb("5666FD")}§l§oO
-                ${rgb("5A69FE")}§l§oO
-                ${rgb("5F6CFE")}§l§oS
-                ${rgb("636FFE")}§l§oT 
-                ${rgb("6C75FE")}§l§oR
-                ${rgb("7178FE")}§l§oA
-                ${rgb("757CFE")}§l§oN
-                ${rgb("7A7FFE")}§l§oK
-                ${rgb("7E82FF")}§l§oI
-                ${rgb("8385FF")}§l§oN
-                ${rgb("8788FF")}§l§oG
-                ${rgb("8C8BFF")}§l§o]
-            """.trimIndent().replace("\n", "")
+            prefix
         )
 
         val background2 = getItem(
             "black_stained_glass_pane",
-            """
-                ${rgb("2444FC")}§l§o[
-                ${rgb("2947FC")}§l§oM
-                ${rgb("2D4AFC")}§l§oE
-                ${rgb("324DFC")}§l§oT
-                ${rgb("3650FD")}§l§oA
-                ${rgb("3B53FD")}§l§oL
-                ${rgb("3F57FD")}§l§oI
-                ${rgb("445AFD")}§l§oS
-                ${rgb("485DFD")}§l§oM 
-                ${rgb("5163FD")}§l§oB
-                ${rgb("5666FD")}§l§oO
-                ${rgb("5A69FE")}§l§oO
-                ${rgb("5F6CFE")}§l§oS
-                ${rgb("636FFE")}§l§oT 
-                ${rgb("6C75FE")}§l§oR
-                ${rgb("7178FE")}§l§oA
-                ${rgb("757CFE")}§l§oN
-                ${rgb("7A7FFE")}§l§oK
-                ${rgb("7E82FF")}§l§oI
-                ${rgb("8385FF")}§l§oN
-                ${rgb("8788FF")}§l§oG
-                ${rgb("8C8BFF")}§l§o]
-            """.trimIndent().replace("\n", "")
+            prefix
         )
 
         for (i in 0 until gui.size) gui.setItem(i, background)

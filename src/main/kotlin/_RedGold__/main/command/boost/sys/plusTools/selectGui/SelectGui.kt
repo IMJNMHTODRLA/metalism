@@ -33,57 +33,29 @@ class SelectGui {
 
         for (i in 0 until gui.size) gui.setItem(i, background)
 
-        gui.setItem(3, getItem(
+        gui.setItem(4, getItem(
             "paper",
             "&6&lGG 색깔 바꾸기"
         ).apply {addUnsafeEnchantment(Enchantment.SHARPNESS, 5)})
 
-        gui.setItem(4, getItem(
+        gui.setItem(12, getItem(
             "netherite_sword",
             "&c&l킬 메시지 변경"
         ).apply {addUnsafeEnchantment(Enchantment.SHARPNESS, 5)})
 
-        gui.setItem(5, getItem(
-            "note_block",
-            "&c&l킬 사운드 변경"
-        ).apply {addUnsafeEnchantment(Enchantment.SHARPNESS, 5)})
-
-
-
-
-
-        gui.setItem(12, getItem(
+        gui.setItem(13, getItem(
             "redstone",
             "&4&l사망 메시지 변경"
         ))
 
-        gui.setItem(13, getItem(
-            "player_head",
-            "&4&l사망 사운드 변경"
-        ))
-
         gui.setItem(14, getItem(
-            "barrier",
-            "&c&l미정"
-        ))
-
-
-
-
-
-        gui.setItem(21, getItem(
-            "barrier",
-            "&c&l미정"
+            "gunpowder",
+            "&c&l퇴장 메시지 변경"
         ))
 
         gui.setItem(22, getItem(
             "barrier",
-            "&c&l미정"
-        ))
-
-        gui.setItem(23, getItem(
-            "barrier",
-            "&c&l미정"
+            "&7&l기타 기능\\&설정"
         ))
 
         player.openInventory(gui)

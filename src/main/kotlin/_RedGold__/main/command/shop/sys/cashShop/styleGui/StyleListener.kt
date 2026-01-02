@@ -34,8 +34,8 @@ class StyleListener(private val plugin: JavaPlugin) : Listener {
             event.isCancelled = true
 
             val purVal: List<Long> = listOf(
-                1200, 2000, 1000, 1200, 600, 600, 800,
-                1000, 600, 1000, 1000, 1100, 1100, 1100
+                1400, 2200, 1200, 1400, 800, 800, 1000,
+                1200, 800, 1200, 1200, 1300, 1300, 1300
             )
 
             fun buy(id: Int) {

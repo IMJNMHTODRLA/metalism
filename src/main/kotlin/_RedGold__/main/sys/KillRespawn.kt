@@ -53,11 +53,16 @@ class KillRespawn(private val plugin: JavaPlugin) : Listener {
         val soundTypeKill = listOf(
             Sound.ITEM_MACE_SMASH_GROUND_HEAVY, Sound.BLOCK_HONEY_BLOCK_FALL,
             Sound.BLOCK_SLIME_BLOCK_BREAK, Sound.ENTITY_ZOMBIE_DEATH, Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR,
-            Sound.ENTITY_ZOGLIN_DEATH, Sound.BLOCK_ANVIL_USE, Sound.UI_TOAST_CHALLENGE_COMPLETE
+            Sound.ENTITY_ZOGLIN_DEATH, Sound.BLOCK_ANVIL_USE, Sound.UI_TOAST_CHALLENGE_COMPLETE,
+            Sound.ENTITY_SHEEP_AMBIENT, Sound.ITEM_GOAT_HORN_SOUND_1, Sound.ITEM_TRIDENT_RIPTIDE_1,
+            Sound.ITEM_TRIDENT_THUNDER, Sound.ENTITY_GENERIC_DRINK
         )
 
-        val soundPitchKill = listOf(1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f)
-        val killSoundMessage = listOf("철퇴", "꿀", "슬라임", "좀비", "철문 공격", "조글린", "모루", "발전 과제")
+        val soundPitchKill = listOf(1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f)
+        val killSoundMessage = listOf(
+            "철퇴", "꿀", "슬라임", "좀비", "철문 공격", "조글린",
+            "모루", "발전 과제", "셜커", "염소뿔", "삼지창", "웅장한 삼지창", "마심"
+        )
     }
 
     private val secureRandom = SecureRandom()
@@ -116,11 +121,11 @@ class KillRespawn(private val plugin: JavaPlugin) : Listener {
         saveData(plugin, victim, "gold", victimGold - removeGold)
 
         attacker.sendMessage(gc("&f&l+&6&l${getGold.toFormat()} 골드"))
-        attacker.sendMessage(gc("&f&l+&6&l${getCash.toFormat()} 캐시"))
-        attacker.sendMessage(gc("&f&l+&b&l${giveLevel.toFormat()} 경험치"))
+        attacker.sendMessage(gc("&f&l+&b&l${getCash.toFormat()} 캐시"))
+        attacker.sendMessage(gc("&f&l+&a&l${giveLevel.toFormat()} 경험치"))
 
         attacker.sendActionBar(gc(
-            "&f&l+&6&l${getGold.toFormat()} 골드&8, &f&l+&b&l${getCash.toFormat()} 캐시&8, &f&l+&b&l${giveLevel.toFormat()} 경험치"
+            "&f&l+&6&l${getGold.toFormat()} 골드&8, &f&l+&b&l${getCash.toFormat()} 캐시&8, &f&l+&a&l${giveLevel.toFormat()} 경험치"
         ))
 
         victim.sendMessage(gc(

@@ -10,25 +10,25 @@ import org.bukkit.plugin.java.JavaPlugin
 
 class KillGui(private val plugin: JavaPlugin) {
     private val prefix = """
-                            ${rgb("2444FC")}§l§o[
-                            ${rgb("2948FC")}§l§oM
-                            ${rgb("2F4BFC")}§l§oE
-                            ${rgb("344FFC")}§l§oT
-                            ${rgb("3A53FD")}§l§oA
-                            ${rgb("3F57FD")}§l§oL
-                            ${rgb("455AFD")}§l§oI
-                            ${rgb("4A5EFD")}§l§oS
-                            ${rgb("5062FD")}§l§oM 
-                            ${rgb("5B69FE")}§l§oC
-                            ${rgb("606DFE")}§l§oA
-                            ${rgb("6671FE")}§l§oS
-                            ${rgb("6B75FE")}§l§oH 
-                            ${rgb("767CFE")}§l§oS
-                            ${rgb("7C80FF")}§l§oH
-                            ${rgb("8184FF")}§l§oO
-                            ${rgb("8787FF")}§l§oP
-                            ${rgb("8C8BFF")}§l§o]
-                        """.trimIndent().replace("\n", "")
+        ${rgb("2444FC")}§l§o[
+        ${rgb("2948FC")}§l§oM
+        ${rgb("2F4BFC")}§l§oE
+        ${rgb("344FFC")}§l§oT
+        ${rgb("3A53FD")}§l§oA
+        ${rgb("3F57FD")}§l§oL
+        ${rgb("455AFD")}§l§oI
+        ${rgb("4A5EFD")}§l§oS
+        ${rgb("5062FD")}§l§oM 
+        ${rgb("5B69FE")}§l§oC
+        ${rgb("606DFE")}§l§oA
+        ${rgb("6671FE")}§l§oS
+        ${rgb("6B75FE")}§l§oH 
+        ${rgb("767CFE")}§l§oS
+        ${rgb("7C80FF")}§l§oH
+        ${rgb("8184FF")}§l§oO
+        ${rgb("8787FF")}§l§oP
+        ${rgb("8C8BFF")}§l§o]
+    """.trimIndent().replace("\n", "")
 
     fun openGui(player: Player, sound: Float = 1f) {
         val gui = KillHolder().inventory
@@ -86,20 +86,20 @@ class KillGui(private val plugin: JavaPlugin) {
         ))
 
         10.fi("선택 안함", 0, 0) //
-        11.fi("철퇴", 250, 1) //item.mace.smash_ground_heavy 1.0
-        12.fi("꿀", 200, 2) //minecraft:block.honey_block.fall 1.0
-        13.fi("슬라임", 200, 3) //minecraft:block.slime_block.break 1.0
-        14.fi("좀비", 200, 4) //minecraft:entity.zombie.death 1.0
-        15.fi("철문 공격", 250, 5) //minecraft:entity.zombie.attack_iron_door 1.0
-        16.fi("조글린", 250, 6) //minecraft:entity.zoglin.death 1.0
+        11.fi("철퇴", 650, 1) //item.mace.smash_ground_heavy 1.0
+        12.fi("꿀", 600, 2) //minecraft:block.honey_block.fall 1.0
+        13.fi("슬라임", 600, 3) //minecraft:block.slime_block.break 1.0
+        14.fi("좀비", 600, 4) //minecraft:entity.zombie.death 1.0
+        15.fi("철문 공격", 650, 5) //minecraft:entity.zombie.attack_iron_door 1.0
+        16.fi("조글린", 650, 6) //minecraft:entity.zoglin.death 1.0
 
-        19.fi("모루", 250, 7) //minecraft:block.anvil.use 1.0
-        20.fi("발전 과제", 300, 8) //minecraft:ui.toast.challenge_complete 1.0
-        21.none()
-        22.none()
-        23.none()
-        24.none()
-        25.none()
+        19.fi("모루", 650, 7) //minecraft:block.anvil.use 1.0
+        20.fi("발전 과제", 700, 8) //minecraft:ui.toast.challenge_complete 1.0
+        21.fi("셜커", 650, 9) //minecraft:entity.shulker.ambient
+        22.fi("염소뿔", 950, 10) //minecraft:item.goat_horn.sound.1
+        23.fi("삼지창", 800, 11) //minecraft:item.trident.riptide_1
+        24.fi("웅장한 삼지창", 900, 12) //minecraft:item.trident.thunder
+        25.fi("마심", 700, 13) //minecraft:entity.generic.drink
 
         player.openInventory(gui)
         player.playSound(player.location, Sound.UI_BUTTON_CLICK, sound, 1f)

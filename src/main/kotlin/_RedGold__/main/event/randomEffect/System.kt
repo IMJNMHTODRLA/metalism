@@ -84,7 +84,7 @@ class System(private val plugin: JavaPlugin) : Listener {
     private val giveBonusPoint2nd: MutableMap<UUID, Long> = ConcurrentHashMap()
 
     init {
-        val delayTick = run{
+        val delayTick = run {
             val now = LocalDateTime.now()
             val minute = now.minute
             val second = now.second
@@ -337,7 +337,7 @@ class System(private val plugin: JavaPlugin) : Listener {
         Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, Runnable {
             point.forEach {(uuid, value) -> saveDataUuid(plugin, uuid, "randomEffect/point", value)}
             max.forEach {(uuid, value) -> saveDataUuid(plugin, uuid, "randomEffect/max", value)}
-        }, delayTick + 20L, 7000L)
+        }, 0L, 7000L)
     }
 
     private fun registerPacketListener() {

@@ -68,10 +68,10 @@ class TicketListener(private val plugin: JavaPlugin) : Listener {
         val min: Int,
         val max: Int
     ) {
-        KILL(0, 874),
-        DEATH(875, 1749),
-        JOIN(1750, 2249),
-        STYLE(2250, 2499);
+        KILL(0, 144),
+        DEATH(145, 289),
+        JOIN(290, 419),
+        STYLE(420, 499);
         //0~2499
 
         companion object {
@@ -98,20 +98,15 @@ class TicketListener(private val plugin: JavaPlugin) : Listener {
 
             if (slot == 13 && !isRoulette) {
                 if (clickType == ClickType.LEFT) {
-                    if (buyTimes >= 4) {
-                        player.fail("&c더 이상 구매를 할 수 없습니다. 다음 주에 구매해주세요.")
-                        return
-                    }
-
                     val cash = getData(plugin, player, "cash").toLong()
 
-                    if (cash < 150) {
-                        player.fail("&c캐시가 부족합니다. 필요 캐시: ${(150 - cash).toFormat()}캐시")
+                    if (cash < 100) {
+                        player.fail("&c캐시가 부족합니다. 필요 캐시: ${(100 - cash).toFormat()}캐시")
                         return
                     }
 
-                    saveData(plugin, player, "cash", cash - 150)
-                    addHoldGold(plugin, 1_500_000)
+                    saveData(plugin, player, "cash", cash - 100)
+                    addHoldGold(plugin, 1_000_000)
 
                     saveData(plugin, player, "ticket/buy", buyTimes + 1)
                     saveData(plugin, player, "ticket/get", getTicket + 1)
@@ -138,7 +133,7 @@ class TicketListener(private val plugin: JavaPlugin) : Listener {
                     for (i in 0..4) {
                         val successType = random.nextInt(100)
                         //0~74 = fail, 75~99 = success
-                        val cosmeticType = CosmeticType.fromRandom(random.nextInt(2500))
+                        val cosmeticType = CosmeticType.fromRandom(random.nextInt(500))
                         //00~49 = 칭호, 50~149 = 접속, 150~324, 킬, 325~499
                         val cosmeticNum = when(cosmeticType) {
                             CosmeticType.STYLE -> random.nextInt(maxStyle)
@@ -191,8 +186,8 @@ class TicketListener(private val plugin: JavaPlugin) : Listener {
                     val isEquip = holder.isEquip[i]
                     val isHas = holder.isHas[i]
 
-                    if (successType < 75 || isHas || !isEquip) {
-                        giveGold += 100_000
+                    if (successType < 95 || isHas || !isEquip) {
+                        giveGold += 10_000
                         continue
                     }
 
@@ -207,6 +202,7 @@ class TicketListener(private val plugin: JavaPlugin) : Listener {
                 }
 
                 player.good("&a&l$giveGold 골드, 총 얻은 치장품: ${getCosmetic}개")
+                saveData(plugin, player, "gold", getData(plugin, player, "gold").toLong() + giveGold)
             }
 
             if (slot in 11..15 && isRoulette) {
@@ -223,10 +219,11 @@ class TicketListener(private val plugin: JavaPlugin) : Listener {
                     val resultItem = holder.resultValue[id].split("|").toTypedArray()
                     val successType = resultItem[0].toInt()
 
-                    if (successType < 75) return
+                    if (successType < 95) return
 
                     if (clickType == ClickType.LEFT) hasEquip(id, slot, player, gui, holder)
                     else if (clickType == ClickType.RIGHT) playMusic(id, player, holder)
+
                     return
                 }
 
@@ -312,7 +309,7 @@ class TicketListener(private val plugin: JavaPlugin) : Listener {
             player.playSound(player.location, Sound.BLOCK_CHEST_OPEN, 1f, 2f)
         }
 
-        if (successType < 75) {
+        if (successType < 95) {
             gui.setItem(slot, getItem(
                 "coal",
                 "&c&l뽑기에 실패 하였습니다....",

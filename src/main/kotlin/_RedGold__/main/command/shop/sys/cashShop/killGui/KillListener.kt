@@ -56,15 +56,20 @@ class KillListener(private val plugin: JavaPlugin) : Listener {
             if (clickType == ClickType.LEFT) {
                 when (slot) {
                     10 -> buy(0, 0)
-                    11 -> buy(1, 200)
-                    12 -> buy(2, 200)
-                    13 -> buy(3, 200)
-                    14 -> buy(4, 250)
-                    15 -> buy(5, 250)
-                    16 -> buy(6, 250)
+                    11 -> buy(1, 650)
+                    12 -> buy(2, 600)
+                    13 -> buy(3, 600)
+                    14 -> buy(4, 600)
+                    15 -> buy(5, 650)
+                    16 -> buy(6, 650)
 
-                    19 -> buy(7, 250)
-                    20 -> buy(8, 300)
+                    19 -> buy(7, 650)
+                    20 -> buy(8, 700)
+                    21 -> buy(9, 650)
+                    22 -> buy(10, 950)
+                    23 -> buy(11, 800)
+                    24 -> buy(12, 900)
+                    25 -> buy(13, 700)
                 }
                 return
             }
@@ -81,6 +86,11 @@ class KillListener(private val plugin: JavaPlugin) : Listener {
 
                     19 -> preview(Sound.BLOCK_ANVIL_USE)
                     20 -> preview(Sound.UI_TOAST_CHALLENGE_COMPLETE)
+                    21 -> preview(Sound.ENTITY_SHEEP_AMBIENT)
+                    22 -> preview(Sound.ITEM_GOAT_HORN_SOUND_1)
+                    23 -> preview(Sound.ITEM_TRIDENT_RIPTIDE_1)
+                    24 -> preview(Sound.ITEM_TRIDENT_THUNDER)
+                    25 -> preview(Sound.ENTITY_GENERIC_DRINK)
                 }
                 return
             }

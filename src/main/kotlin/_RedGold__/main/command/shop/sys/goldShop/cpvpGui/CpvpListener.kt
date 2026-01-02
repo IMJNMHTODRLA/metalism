@@ -29,7 +29,7 @@ class CpvpListener(private val plugin: JavaPlugin) : Listener {
             val slot = event.slot
             event.isCancelled = true
 
-            val purVal: List<Long> = listOf(4000, 2000, 6000, 3000, 2500, 3500, 1500, 2500, 1500)
+            val purVal: List<Long> = listOf(7000, 4000, 10000, 6000, 5000, 6000, 4000, 1500, 1000)
 
             if (clickType == ClickType.LEFT || clickType == ClickType.SHIFT_LEFT) {
                 val itemNumber = if (clickType == ClickType.SHIFT_LEFT) 64L else 1L

@@ -13,7 +13,7 @@ class HomeGui(private val plugin: JavaPlugin) {
     fun openGui(player: Player, ) {
         val buyHome = mutableListOf<Int>()
         val saveHome = mutableListOf<String>()
-        val homePrice = mutableListOf(20_000, 50_000, 100_000)
+        val homePrice = mutableListOf(50_000, 500_000, 750_000)
 
         for (i in 0..2) {
             buyHome.add(getData(plugin, player, "home/buy/$i").toInt())

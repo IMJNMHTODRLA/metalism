@@ -8,10 +8,7 @@ import org.bukkit.entity.Player
 object Color {
     fun rgb(rgb: String): String {
         val result = StringBuilder("§x")
-        for (c in rgb.toCharArray()) {
-            result.append("§").append(c)
-        }
-
+        for (c in rgb.toCharArray()) result.append("§").append(c)
         return result.toString()
     }
 

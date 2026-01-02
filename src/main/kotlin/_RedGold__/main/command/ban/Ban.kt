@@ -4,6 +4,7 @@ import _RedGold__.main.function.Color.gc
 import _RedGold__.main.function.Color.rgb
 import _RedGold__.main.function.Data.saveDataUuid
 import _RedGold__.main.function.api.WriteSave
+import _RedGold__.main.function.api.toUuid
 import _RedGold__.main.load.RequireCommandExecutor
 import _RedGold__.main.load.RequireJavaPlugin
 import _RedGold__.main.load.RequireTabExecutor
@@ -65,12 +66,7 @@ class Ban(private val plugin: JavaPlugin) : CommandExecutor, TabExecutor {
         if (label.contains("ban")) {
             if (args.size < 3) return false
 
-            val uuid = try {
-                UUID.fromString(args[0])
-            } catch (e: IllegalArgumentException) {
-                sender.sendMessage(gc("&cuuid 반환 실패"))
-                return false
-            }
+            val uuid = args[0].toUuid()
 
             val now = System.currentTimeMillis() / 1000
             val tomorrow = Instant.now().atZone(ZoneId.systemDefault()).plusMonths(1).toInstant().epochSecond

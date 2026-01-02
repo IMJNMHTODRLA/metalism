@@ -13,25 +13,25 @@ import org.bukkit.plugin.java.JavaPlugin
 
 class KitGui(private val plugin: JavaPlugin) {
     private val prefix = """
-                            ${rgb("2444FC")}§l§o[
-                            ${rgb("2948FC")}§l§oM
-                            ${rgb("2F4BFC")}§l§oE
-                            ${rgb("344FFC")}§l§oT
-                            ${rgb("3A53FD")}§l§oA
-                            ${rgb("3F57FD")}§l§oL
-                            ${rgb("455AFD")}§l§oI
-                            ${rgb("4A5EFD")}§l§oS
-                            ${rgb("5062FD")}§l§oM 
-                            ${rgb("5B69FE")}§l§oC
-                            ${rgb("606DFE")}§l§oA
-                            ${rgb("6671FE")}§l§oS
-                            ${rgb("6B75FE")}§l§oH 
-                            ${rgb("767CFE")}§l§oS
-                            ${rgb("7C80FF")}§l§oH
-                            ${rgb("8184FF")}§l§oO
-                            ${rgb("8787FF")}§l§oP
-                            ${rgb("8C8BFF")}§l§o]
-                        """.trimIndent().replace("\n", "")
+        ${rgb("2444FC")}§l§o[
+        ${rgb("2948FC")}§l§oM
+        ${rgb("2F4BFC")}§l§oE
+        ${rgb("344FFC")}§l§oT
+        ${rgb("3A53FD")}§l§oA
+        ${rgb("3F57FD")}§l§oL
+        ${rgb("455AFD")}§l§oI
+        ${rgb("4A5EFD")}§l§oS
+        ${rgb("5062FD")}§l§oM 
+        ${rgb("5B69FE")}§l§oC
+        ${rgb("606DFE")}§l§oA
+        ${rgb("6671FE")}§l§oS
+        ${rgb("6B75FE")}§l§oH 
+        ${rgb("767CFE")}§l§oS
+        ${rgb("7C80FF")}§l§oH
+        ${rgb("8184FF")}§l§oO
+        ${rgb("8787FF")}§l§oP
+        ${rgb("8C8BFF")}§l§o]
+    """.trimIndent().replace("\n", "")
 
     fun openGui(player: Player, sound: Float = 1f) {
         val buyTimes = mutableListOf<Int>()
@@ -86,8 +86,8 @@ class KitGui(private val plugin: JavaPlugin) {
             "&8&l현재 페이지: (1/1)",
         ))
 
-        10.fi(0, 250)
-        12.fi(1, 250)
+        10.fi(0, 200)
+        12.fi(1, 200)
         14.fi(2, 150)
         16.fi(3, 200)
 

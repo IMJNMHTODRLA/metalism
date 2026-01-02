@@ -100,7 +100,11 @@ object api {
 
     fun String.toUuid(): UUID {
         return try {
-            UUID.fromString(this)
+            if (this.contains("-")) UUID.fromString(this)
+            else UUID.fromString(this.replaceFirst(
+                "(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})".toRegex(),
+                "$1-$2-$3-$4-$5"
+            ))
         } catch (e: IllegalArgumentException) {
             UUID.randomUUID()
         }

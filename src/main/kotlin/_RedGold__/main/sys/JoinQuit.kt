@@ -63,6 +63,13 @@ class JoinQuit(private val plugin: JavaPlugin) : Listener {
             "&8[&a»&8] %style%%rank% %name% &e님이 &a&l온라인&e으로 전환했습니다.",
             "&8[&7»&8] &fJo&ki&fned with %style%%rank% %name%",
             "&8[&b»&8] %style%%rank% %name% &b&l님이 서버에 등장 하였습니다.",
+            "&8[&a+&8] %style%%rank% %name% 님이 서버에 &a&l생성되었습니다.",
+            "&8[&7?&8] %style%%rank% %name% 님이 서버에 &8&l접속...했나요?",
+            "&8[&a!&8] %style%%rank% %name% 님이 게임에 참여하였습니다!",
+            "&8[&a+&8] %style%%rank% %name% 님이 &2&l마인크래프트 세상에 들어왔습니다.",
+            "&8[&a+&8] %style%%rank% %name% 님이 서버에 접속하였습니다. &a&l환영해주세요!",
+            "&8[&a+&8] %style%%rank% %name%",
+            "&8+ %name%"
         )
     }
 
@@ -190,7 +197,6 @@ class JoinQuit(private val plugin: JavaPlugin) : Listener {
         for (i in 0..13) defDataUuid(plugin, uuid, "plant_shop/$i", 0)
         for (i in 0..3) defDataUuid(plugin, uuid, "kit_shop/$i", 0)
 
-        defDataUuid(plugin, uuid, "ticket/buy", 0)
         defDataUuid(plugin, uuid, "ticket/get", 0)
 
         defDataUuid(plugin, uuid, "death_sound", 0)

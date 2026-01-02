@@ -66,20 +66,20 @@ class DeathListener(private val plugin: JavaPlugin) : Listener {
             if (clickType == ClickType.LEFT) {
                 when (slot) {
                     10 -> buy(0, 0)
-                    11 -> buy(1, 400)
-                    12 -> buy(2, 400)
-                    13 -> buy(3, 400)
-                    14 -> buy(4, 450)
-                    15 -> buy(5, 450)
-                    16 -> buy(6, 450)
+                    11 -> buy(1, 600)
+                    12 -> buy(2, 600)
+                    13 -> buy(3, 600)
+                    14 -> buy(4, 650)
+                    15 -> buy(5, 650)
+                    16 -> buy(6, 650)
 
-                    19 -> buy(7, 450)
-                    20 -> buy(8, 500)
-                    21 -> buy(9, 550)
-                    22 -> buy(10, 400)
-                    23 -> buy(11, 400)
-                    24 -> buy(12, 500)
-                    25 -> buy(13, 800)
+                    19 -> buy(7, 650)
+                    20 -> buy(8, 700)
+                    21 -> buy(9, 750)
+                    22 -> buy(10, 600)
+                    23 -> buy(11, 600)
+                    24 -> buy(12, 700)
+                    25 -> buy(13, 1000)
                 }
                 return
             }

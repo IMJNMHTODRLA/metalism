@@ -49,7 +49,7 @@ class CpvpGui {
             "&8&l현재 페이지: (1/1)",
         ))
 
-        val purVal = listOf(4000, 2000, 6000, 3000, 2500, 3500, 1500, 2500, 1500)
+        val purVal = listOf(7000, 4000, 10000, 6000, 5000, 6000, 4000, 1500, 1000)
 
         fun fi(n: Int, id: String, title: String, valId: Int = -1) {
             val pur = purVal.getOrNull(valId)?: 0
