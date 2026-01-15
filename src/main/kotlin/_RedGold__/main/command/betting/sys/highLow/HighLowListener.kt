@@ -4,6 +4,7 @@ import _RedGold__.main.function.Color.gc
 import _RedGold__.main.function.Data.getData
 import _RedGold__.main.function.Data.saveData
 import _RedGold__.main.function.Gui.getItem
+import _RedGold__.main.function.Scheduler.task
 import _RedGold__.main.function.ServerGold.addHoldGold
 import _RedGold__.main.function.ServerGold.addMakeGold
 import _RedGold__.main.function.api.toFormat
@@ -29,9 +30,9 @@ class HighLowListener(private val plugin: JavaPlugin) : Listener {
     @EventHandler
     fun onInventoryClose(event: InventoryCloseEvent) {
         val holder = event.inventory.holder!!
-        if (holder is HighLowHolder && holder.isStart) Bukkit.getScheduler().runTask(plugin, Runnable {
+        if (holder is HighLowHolder && holder.isStart) plugin.task(1) {
             event.player.openInventory(event.inventory)
-        })
+        }
     }
 
     @EventHandler
@@ -66,7 +67,7 @@ class HighLowListener(private val plugin: JavaPlugin) : Listener {
                             return
                         }
 
-                        if (holder.betGold > 1_000_000) {
+                        if (holder.betGold > 1_500_000) {
                             player.sendMessage(gc("&c베팅 금액이 너무 높습니다."))
                             player.playSound(player.location, Sound.ENTITY_ENDERMAN_TELEPORT, 1f, 0.5f)
                             return
@@ -87,14 +88,14 @@ class HighLowListener(private val plugin: JavaPlugin) : Listener {
                                 else if (randomNum == 50) "chiseled_stone_bricks"
                                 else "emerald"
 
-                            Bukkit.getScheduler().runTaskLater(plugin, Runnable {
+                            plugin.task(delayTime) {
                                 gui.setItem(22, getItem(
                                     numItemSet,
                                     "&7&l숫자 돌리는 중${".".repeat((i % 3) + 1)}",
                                     listOf("", "&7&l숫자: $randomNum")
                                 ))
                                 player.playSound(player.location, Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1f)
-                            }, delayTime)
+                            }
 
                             delayTime += 1
                         }
@@ -107,14 +108,14 @@ class HighLowListener(private val plugin: JavaPlugin) : Listener {
                                 else if (randomNum == 50) "chiseled_stone_bricks"
                                 else "emerald"
 
-                            Bukkit.getScheduler().runTaskLater(plugin, Runnable {
+                            plugin.task(delayTime) {
                                 gui.setItem(22, getItem(
                                     numItemSet,
                                     "&7&l숫자 돌리는 중${".".repeat((i % 3) + 1)}",
                                     listOf("", "&7&l숫자: $randomNum")
                                 ))
                                 player.playSound(player.location, Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1f)
-                            }, delayTime)
+                            }
                         }
 
                         for (i in 0..10) {
@@ -125,14 +126,14 @@ class HighLowListener(private val plugin: JavaPlugin) : Listener {
                                 else if (randomNum == 50) "chiseled_stone_bricks"
                                 else "emerald"
 
-                            Bukkit.getScheduler().runTaskLater(plugin, Runnable {
+                            plugin.task(delayTime) {
                                 gui.setItem(22, getItem(
                                     numItemSet,
                                     "&7&l숫자 돌리는 중${".".repeat((i % 3) + 1)}",
                                     listOf("", "&7&l숫자: $randomNum")
                                 ))
                                 player.playSound(player.location, Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1f)
-                            }, delayTime)
+                            }
                         }
 
                         for (i in 0..8) {
@@ -143,18 +144,18 @@ class HighLowListener(private val plugin: JavaPlugin) : Listener {
                                 else if (randomNum == 50) "chiseled_stone_bricks"
                                 else "emerald"
 
-                            Bukkit.getScheduler().runTaskLater(plugin, Runnable {
+                            plugin.task(delayTime) {
                                 gui.setItem(22, getItem(
                                     numItemSet,
                                     "&7&l숫자 돌리는 중${".".repeat((i % 3) + 1)}",
                                     listOf("", "&7&l숫자: $randomNum")
                                 ))
                                 player.playSound(player.location, Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1f)
-                            }, delayTime)
+                            }
                         }
 
                         delayTime += 30
-                        Bukkit.getScheduler().runTaskLater(plugin, Runnable {
+                        plugin.task(delayTime) {
                             val numItemSet =
                                 if (result < 50) "redstone"
                                 else if (result == 50) "chiseled_stone_bricks"
@@ -173,7 +174,7 @@ class HighLowListener(private val plugin: JavaPlugin) : Listener {
 
                             player.playSound(player.location, Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1.5f)
 
-                            Bukkit.getScheduler().runTaskLater(plugin, Runnable {
+                            plugin.task(20) {
                                 holder.isStart = false
                                 player.closeInventory()
 
@@ -208,8 +209,8 @@ class HighLowListener(private val plugin: JavaPlugin) : Listener {
                                     player.sendMessage(gc("&cHIGHLOW 도박에 실패하였습니다. 잃은 골드: ${holder.betGold.toFormat()} 골드"))
                                     player.playSound(player.location, Sound.ENTITY_ENDER_DRAGON_HURT, 1f, 1.5f)
                                 }
-                            }, 20)
-                        }, delayTime)
+                            }
+                        }
                     }
 
 
@@ -283,7 +284,7 @@ class HighLowListener(private val plugin: JavaPlugin) : Listener {
                             else -> 0
                         }
 
-                        if (holder.betGold + addGold > 1_000_000) {
+                        if (holder.betGold + addGold > 1_500_000) {
                             player.sendMessage(gc("&c베팅 금액을 더 이상 높힐 수 없습니다."))
                             player.playSound(player.location, Sound.ENTITY_ENDERMAN_TELEPORT, 1f, 0.5f)
                             return

@@ -3,6 +3,7 @@ package _RedGold__.main.command.home.sys.home
 import _RedGold__.main.function.Color.rgb
 import _RedGold__.main.function.Data.getData
 import _RedGold__.main.function.Gui.getItem
+import _RedGold__.main.function.api.toFormat
 import org.bukkit.Sound
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
@@ -53,12 +54,21 @@ class HomeGui(private val plugin: JavaPlugin) {
                 else if (saveHome[i] == "n;n;n") 1
                 else 2
 
+            val part1st = homePart[i][0].toDoubleOrNull()?: 0.0
+            val part2nd = homePart[i][1].toDoubleOrNull()?: 0.0
+            val part3rd = homePart[i][2].toDoubleOrNull()?: 0.0
+
             val bed = listOf("black_bed", "light_gray_bed", "red_bed")
             val title = listOf("&c&l${i + 1}&f&l번 홈", "&7&l${i + 1}&f&l번 홈", "&e&l${i + 1}&f&l번 홈")
             val description = listOf(
                 listOf("", "&c&l현재 홈을 구매하지 않아, 홈을 지정할 수 없습니다.", "", "&f&l구매가: &a&l${homePrice[i]}원", "&7&l클릭 시 구매가 됩니다."),
                 listOf("", "&f&l지정된 홈 위치: &7&l현재 홈이 지정되지 않았습니다.", "&7&l클릭 시 현 위치에 홈이 지정됩니다."),
-                listOf("", "&f&l지정된 홈 위치: &a&lx${String.format("%.2f", homePart[i][0].toDoubleOrNull()?: 0.0)}, y${String.format("%.2f", homePart[i][1].toDoubleOrNull()?: 0.0)}, z${String.format("%.2f", homePart[i][2].toDoubleOrNull()?: 0.0)}", "&7&l버리기 키를 누를 시 현 위치에 홈이 지정됩니다.", "&7&l좌클릭(또는 우클릭) 시 지정된 홈으로 이동됩니다.")
+                listOf(
+                    "",
+                    "&f&l지정된 홈 위치: &a&lx${part1st.toFormat(2)}, y${part2nd.toFormat(2)}, z${part3rd.toFormat(2)}",
+                    "&7&l버리기 키를 누를 시 현 위치에 홈이 지정됩니다.",
+                    "&7&l좌클릭(또는 우클릭) 시 지정된 홈으로 이동됩니다."
+                )
             )
 
             gui.setItem(itemNumList[i], getItem(

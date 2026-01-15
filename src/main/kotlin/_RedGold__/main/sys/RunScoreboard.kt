@@ -2,6 +2,7 @@ package _RedGold__.main.sys
 
 import _RedGold__.main.function.Data.getData
 import _RedGold__.main.function.Data.getDataUuid
+import _RedGold__.main.function.Scheduler.taskAsync
 import _RedGold__.main.load.RequireJavaPlugin
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
@@ -29,13 +30,20 @@ class RunScoreboard(private val plugin: JavaPlugin) {
             count--
         }, 0L, 3L)
 
-        Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, Runnable {
+        plugin.taskAsync(0, 20) {
             for (uuid in Bukkit.getScheduler().callSyncMethod(plugin) { Bukkit.getOnlinePlayers().map { it.uniqueId }.toList() }.get()) {
                 PlayerDataCache.gold[uuid] = getDataUuid(plugin, uuid, "gold").toLong()
+            }
+        }
+
+        plugin.taskAsync(0, 100) {
+            for (uuid in Bukkit.getScheduler().callSyncMethod(plugin) { Bukkit.getOnlinePlayers().map { it.uniqueId }.toList() }.get()) {
                 PlayerDataCache.cash[uuid] = getDataUuid(plugin, uuid, "cash").toLong()
+                Thread.sleep(500)
                 PlayerDataCache.kill[uuid] = getDataUuid(plugin, uuid, "kill").toLong()
+                Thread.sleep(500)
                 PlayerDataCache.death[uuid] = getDataUuid(plugin, uuid, "death").toLong()
             }
-        }, 0L, 20L)
+        }
     }
 }

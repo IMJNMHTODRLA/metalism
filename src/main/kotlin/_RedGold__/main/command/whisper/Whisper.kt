@@ -1,13 +1,8 @@
 package _RedGold__.main.command.whisper
 
-import _RedGold__.main.command.boost.sys.admin.Admin
-import _RedGold__.main.command.boost.sys.goDiscord.GoDiscord
-import _RedGold__.main.command.boost.sys.infoGui.InfoGui
-import _RedGold__.main.command.boost.sys.selectGui.SelectGui
 import _RedGold__.main.function.Color.gc
 import _RedGold__.main.function.Rank.getPlayerRankPrefix
 import _RedGold__.main.load.RequireCommandExecutor
-import _RedGold__.main.load.RequireJavaPlugin
 import _RedGold__.main.load.RequireTabExecutor
 import _RedGold__.main.sys.Chat.ChatApply.applyStyle
 import _RedGold__.main.sys.Chat.ChatApply.symmetry

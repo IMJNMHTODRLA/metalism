@@ -5,6 +5,7 @@ import _RedGold__.main.function.Data.getData
 import _RedGold__.main.function.Gui.getItem
 import _RedGold__.main.function.api.toFormat
 import org.bukkit.Sound
+import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory
 import org.bukkit.plugin.java.JavaPlugin
@@ -44,12 +45,12 @@ class DeathGui(private val plugin: JavaPlugin) {
                 listOf(
                     "&f",
                     prefix,
-                    "&a&l[구매(좌클릭)] &f&l구매가: ${pur.toFormat()}캐시",
+                    "&a&l[구매(좌클릭)] &f&l구매가: ${pur.toFormat()} 뽑기 포인트",
                     "&a&l[미리듣기(우클릭)] &7&l우클릭 시 소리를 들을 수 있습니다.",
                     "&f",
                     "&c&l새 사망 사운드를 구매하면 기존 사망 사운드를 재구매 해야 합니다."
                 )
-            ))
+            ).apply {if (deathSound == type) addUnsafeEnchantment(Enchantment.PROTECTION, 1)})
         }
 
         fun Int.none() {
@@ -86,21 +87,22 @@ class DeathGui(private val plugin: JavaPlugin) {
             "&8&l현재 페이지: (1/1)",
         ))
 
+        //50 캐시 = 1 뽑기 포인트
         10.fi("선택 안함", 0, 0) //
-        11.fi("물에 빠진", 600, 1) //minecraft:entity.player.splash 1.0
-        12.fi("귀신", 600, 2) //minecraft:ambient.cave 1.0
-        13.fi("비", 600, 3) //minecraft:weather.rain 1.0
-        14.fi("흑우", 650, 4) //minecraft:entity.cow.death 1.0
-        15.fi("박쥐", 650, 5) //minecraft:entity.bat.death 1.0
-        16.fi("돼지", 650, 6) //minecraft:entity.pig.death 1.0
+        11.fi("물에 빠진", 13, 1) //minecraft:entity.player.splash 1.0
+        12.fi("귀신", 13, 2) //minecraft:ambient.cave 1.0
+        13.fi("비", 13, 3) //minecraft:weather.rain 1.0
+        14.fi("흑우", 14, 4) //minecraft:entity.cow.death 1.0
+        15.fi("박쥐", 14, 5) //minecraft:entity.bat.death 1.0
+        16.fi("돼지", 14, 6) //minecraft:entity.pig.death 1.0
 
-        19.fi("모루", 650, 7) //minecraft:block.anvil.land 1.0
-        20.fi("부숴진", 700, 8) //minecraft:item.totem.use 2.0
-        21.fi("폭팔", 750, 9) //minecraft:entity.generic.explode
-        22.fi("먹다", 600, 10) //minecraft:entity.generic.eat
-        23.fi("타버림", 600, 11) //minecraft:entity.generic.extinguish_fire
-        24.fi("금고 부숨", 700, 12) //minecraft:block.vault.break
-        25.fi("웅장한 브금(김)", 1000, 13) //minecraft:music.credits
+        19.fi("모루", 14, 7) //minecraft:block.anvil.land 1.0
+        20.fi("부숴진", 15, 8) //minecraft:item.totem.use 2.0
+        21.fi("폭팔", 16, 9) //minecraft:entity.generic.explode
+        22.fi("먹다", 13, 10) //minecraft:entity.generic.eat
+        23.fi("타버림", 13, 11) //minecraft:entity.generic.extinguish_fire
+        24.fi("금고 부숨", 14, 12) //minecraft:block.vault.break
+        25.fi("웅장한 브금(김)", 20, 13) //minecraft:music.credits
 
         player.openInventory(gui)
         player.playSound(player.location, Sound.UI_BUTTON_CLICK, sound, 1f)

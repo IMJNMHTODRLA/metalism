@@ -14,22 +14,21 @@ import java.util.*
 import java.util.stream.Collectors
 
 object Gui {
-    fun getPlayerSkull(playerName: String, title: String, description: List<String>?): ItemStack {
+    fun getPlayerSkull(playerUuid: UUID, title: String, description: List<String>?): ItemStack {
         val skull = ItemStack(Material.PLAYER_HEAD)
         val skullMeta = skull.itemMeta as SkullMeta
 
-        val offlinePlayer = Bukkit.getOfflinePlayer(playerName)
+        val offlinePlayer = Bukkit.getOfflinePlayer(playerUuid)
         skullMeta.setOwningPlayer(offlinePlayer) // 스킨 적용
         skullMeta.setDisplayName(title.replace("&", "§")) // 아이템 이름 설정
 
         if (description != null) {
             skullMeta.lore = description.stream()
-                .map { line: String -> line.replace("&", "§") }
+                .map {line: String -> gc(line)}
                 .collect(Collectors.toList())
         }
 
         skull.setItemMeta(skullMeta)
-
         return skull
     }
 
@@ -42,9 +41,7 @@ object Gui {
 
         if (description != null) {
             meta.lore = description.stream()
-                .map {
-                    line: String -> gc(line)
-                }
+                .map {line: String -> gc(line)}
                 .collect(Collectors.toList())
         }
 

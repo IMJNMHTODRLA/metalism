@@ -7,6 +7,7 @@ import _RedGold__.main.function.Color.rgb
 import _RedGold__.main.function.Data.getData
 import _RedGold__.main.function.Data.saveData
 import _RedGold__.main.function.Gui.getItem
+import _RedGold__.main.function.Scheduler.task
 import _RedGold__.main.function.ServerGold.addHoldGold
 import _RedGold__.main.function.api.toFormat
 import _RedGold__.main.load.RequireJavaPlugin
@@ -20,6 +21,7 @@ import _RedGold__.main.sys.KillRespawn.ChatApply.soundPitch
 import _RedGold__.main.sys.KillRespawn.ChatApply.soundPitchKill
 import _RedGold__.main.sys.KillRespawn.ChatApply.soundType
 import _RedGold__.main.sys.KillRespawn.ChatApply.soundTypeKill
+import io.papermc.paper.util.Tick
 import org.bukkit.Bukkit
 import org.bukkit.Sound
 import org.bukkit.enchantments.Enchantment
@@ -30,6 +32,7 @@ import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.inventory.Inventory
+import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin
 import java.security.SecureRandom
 
@@ -82,6 +85,19 @@ class TicketListener(private val plugin: JavaPlugin) : Listener {
     }
 
     @EventHandler
+    fun onInventoryClose(event: InventoryCloseEvent) {
+        if (event.inventory.holder is TicketHolder) {
+            val player = event.player as Player
+            val gui = event.inventory
+            val holder = gui.holder as TicketHolder
+
+            if (holder.isRoulette) plugin.task(1) {
+                player.openInventory(gui)
+            }
+        }
+    }
+
+    @EventHandler
     fun onInventoryClick(event: InventoryClickEvent) {
         if (event.inventory.holder is TicketHolder) {
             val player = event.whoClicked as Player
@@ -91,7 +107,6 @@ class TicketListener(private val plugin: JavaPlugin) : Listener {
             val slot = event.slot
             val isRoulette = holder.isRoulette
 
-            val buyTimes = getData(plugin, player, "ticket/buy").toInt()
             val getTicket = getData(plugin, player, "ticket/get").toInt()
 
             event.isCancelled = true
@@ -100,15 +115,14 @@ class TicketListener(private val plugin: JavaPlugin) : Listener {
                 if (clickType == ClickType.LEFT) {
                     val cash = getData(plugin, player, "cash").toLong()
 
-                    if (cash < 100) {
-                        player.fail("&c캐시가 부족합니다. 필요 캐시: ${(100 - cash).toFormat()}캐시")
+                    if (cash < 50) {
+                        player.fail("&c캐시가 부족합니다. 필요 캐시: ${(50 - cash).toFormat()}캐시")
                         return
                     }
 
-                    saveData(plugin, player, "cash", cash - 100)
-                    addHoldGold(plugin, 1_000_000)
+                    saveData(plugin, player, "cash", cash - 50)
+                    addHoldGold(plugin, 500_000)
 
-                    saveData(plugin, player, "ticket/buy", buyTimes + 1)
                     saveData(plugin, player, "ticket/get", getTicket + 1)
                     player.good("&a뽑기권 구매했습니다.")
 
@@ -137,9 +151,9 @@ class TicketListener(private val plugin: JavaPlugin) : Listener {
                         //00~49 = 칭호, 50~149 = 접속, 150~324, 킬, 325~499
                         val cosmeticNum = when(cosmeticType) {
                             CosmeticType.STYLE -> random.nextInt(maxStyle)
-                            CosmeticType.JOIN -> random.nextInt(1, maxJoin)
-                            CosmeticType.KILL -> random.nextInt(1, maxKill)
-                            CosmeticType.DEATH -> random.nextInt(1, maxDeath)
+                            CosmeticType.JOIN -> random.nextInt(maxJoin)
+                            CosmeticType.KILL -> random.nextInt(maxKill)
+                            CosmeticType.DEATH -> random.nextInt(maxDeath)
                         }
 
                         val all = "$successType|${cosmeticType.name}|$cosmeticNum"
@@ -163,15 +177,14 @@ class TicketListener(private val plugin: JavaPlugin) : Listener {
 
             if (slot == 22 && isRoulette) {
                 if (false in holder.isOpen) {
-                    player.fail("모든 치장품을 뽑아주세요.")
+                    player.fail("&c모든 치장품을 뽑아주세요.")
                     return
                 }
                 holder.isRoulette = false
 
-                player.closeInventory()
-
                 var giveGold = 0L
                 var getCosmetic = 0
+                var giveItem = 0
 
                 for (i in 0..4) {
                     val result = holder.resultValue[i].split("|").toTypedArray()
@@ -186,23 +199,37 @@ class TicketListener(private val plugin: JavaPlugin) : Listener {
                     val isEquip = holder.isEquip[i]
                     val isHas = holder.isHas[i]
 
-                    if (successType < 95 || isHas || !isEquip) {
+                    if (!isEquip || isHas) return
+
+                    if (successType < 55) {
                         giveGold += 10_000
                         continue
                     }
 
+                    if (successType in 56..94) {
+                        player.inventory.addItem(getItem(
+                            returnItemType(holder.giveRandom[i]!!)[0], null, null, 2
+                        ))
+                        giveItem++
+                        continue
+                    }
+
+                    //val test = 1.7976931348E308
+
                     getCosmetic++
 
                     when(cosmeticType) {
-                        CosmeticType.STYLE -> saveData(plugin, player, "style/$cosmeticNum", 1)
-                        CosmeticType.JOIN -> saveData(plugin, player, "join_message", cosmeticNum)
-                        CosmeticType.DEATH -> saveData(plugin, player, "death_sound", cosmeticNum)
-                        CosmeticType.KILL -> saveData(plugin, player, "kill_sound", cosmeticNum)
+                        CosmeticType.STYLE -> saveData(plugin, player, "style/${MAX_STYLE + cosmeticNum}", 1)
+                        CosmeticType.JOIN -> saveData(plugin, player, "join_message", cosmeticNum + 1)
+                        CosmeticType.DEATH -> saveData(plugin, player, "death_sound", cosmeticNum + 1)
+                        CosmeticType.KILL -> saveData(plugin, player, "kill_sound", cosmeticNum + 1)
                     }
                 }
 
-                player.good("&a&l$giveGold 골드, 총 얻은 치장품: ${getCosmetic}개")
+                player.good("&a&l$giveGold 골드, 얻은 아이템: ${giveItem}개, 총 얻은 치장품: ${getCosmetic}개")
                 saveData(plugin, player, "gold", getData(plugin, player, "gold").toLong() + giveGold)
+
+                TicketGui(plugin).openGui(player)
             }
 
             if (slot in 11..15 && isRoulette) {
@@ -258,15 +285,24 @@ class TicketListener(private val plugin: JavaPlugin) : Listener {
     ) {
         holder.isEquip[id] = !holder.isEquip[id]
 
-        val cosmeticType = CosmeticType.valueOf(holder.resultValue[id].split("|").toTypedArray()[1])
-        if (cosmeticType == CosmeticType.STYLE) return
-
         gui.setItem(slot, gui.getItem(slot)!!.apply {
-            if (holder.isEquip[id]) addUnsafeEnchantment(Enchantment.PROTECTION, 0)
+            if (holder.isEquip[id]) addUnsafeEnchantment(Enchantment.PROTECTION, 1)
             else removeEnchantment(Enchantment.PROTECTION)
         })
 
         player.playSound(player.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f)
+    }
+
+    private fun returnItemType(type: Byte): List<String> {
+        return when(type) {
+            0.toByte() -> listOf("end_crystal", "엔드 크리스탈")
+            1.toByte() -> listOf("obsidian", "흑요석")
+            2.toByte() -> listOf("respawn_anchor", "리스폰 정박기")
+            3.toByte() -> listOf("glowstone", "발광석")
+            4.toByte() -> listOf("golden_apple", "황금 사과")
+
+            else -> listOf("", "")
+        }
     }
 
     private fun openRoulette(
@@ -296,31 +332,48 @@ class TicketListener(private val plugin: JavaPlugin) : Listener {
         ) {
             gui.setItem(slot, getItem(
                 item,
-                "$prefix &a&l$equalMessage 치장품을 획득 하였습니다!",
+                "&f&l$prefix &a&l$equalMessage 치장품을 획득 하였습니다!",
                 setDescription
-            ))
+            ).apply {addUnsafeEnchantment(Enchantment.PROTECTION, 1)})
 
             if (getData(plugin, player, path).toInt() == equalVal) {
                 holder.isHas[id] = true
-                player.sendMessage(gc("&e&l위 $equalMessage 치장품을 보유를 하고 있어 100,000 골드로 변경됩니다."))
+                player.sendMessage(gc("&e&l위 $equalMessage 치장품을 보유를 하고 있어 획득이 불가능 합니다."))
                 player.playSound(player.location, Sound.ENTITY_PLAYER_ATTACK_NODAMAGE, 1f, 1f)
                 return
             }
+
+            holder.isEquip[id] = true
             player.playSound(player.location, Sound.BLOCK_CHEST_OPEN, 1f, 2f)
         }
 
-        if (successType < 95) {
+        if (successType < 55) {
             gui.setItem(slot, getItem(
                 "coal",
                 "&c&l뽑기에 실패 하였습니다....",
                 listOf("&8${resultList}")
             ))
             player.playSound(player.location, Sound.ENTITY_GENERIC_EXPLODE, 1f, 1f)
+        } else if (successType in 56..94) {
+            val itemType = random.nextInt(5).toByte()
+            val itemName = returnItemType(itemType)
+            holder.giveRandom[id] = itemType
+
+            gui.setItem(slot, getItem(
+                itemName[0],
+                "&7&l${itemName[1]}을(를) 뽑았습니다.",
+                listOf("&8${resultList}, $itemType"), 2
+            ))
+            player.playSound(player.location, Sound.ENTITY_GENERIC_EXPLODE, 1f, 1f)
         } else {
             when(cosmeticType) {
                 CosmeticType.STYLE -> {
                     val getStyle = MAX_STYLE + cosmeticNum
-                    checkCosmetic("name_tag", symmetry[getStyle], "칭호", "style/$getStyle", 1)
+                    checkCosmetic("name_tag", symmetry[getStyle], "칭호", "style/$getStyle", 1, listOf(
+                        "&e&l좌클릭 시 장착을 할 지 말지 선택이 가능합니다.",
+                        "",
+                        "&8${resultList}"
+                    ))
                 }
                 CosmeticType.JOIN -> {
                     checkCosmetic(

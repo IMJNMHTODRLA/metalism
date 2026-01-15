@@ -109,4 +109,22 @@ object api {
             UUID.randomUUID()
         }
     }
+
+    fun Float.toFormat(number: Int): String {
+        val formatter = NumberFormat.getInstance()
+
+        formatter.minimumFractionDigits = number
+        formatter.maximumFractionDigits = number
+
+        return formatter.format(this)
+    }
+
+    fun Double.toFormat(number: Int): String {
+        val formatter = NumberFormat.getInstance()
+
+        formatter.minimumFractionDigits = number
+        formatter.maximumFractionDigits = number
+
+        return formatter.format(this)
+    }
 }

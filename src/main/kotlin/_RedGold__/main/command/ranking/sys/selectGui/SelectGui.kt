@@ -44,24 +44,40 @@ class SelectGui {
 
         for (i in 0 until gui.size) gui.setItem(i, background)
 
-        gui.setItem(10, getItem(
+        gui.setItem(3, getItem(
             "gold_ingot",
             "&6&l골드 순위"
         ))
 
-        gui.setItem(12, getItem(
-            "netherite_sword",
-            "&c&l킬 순위"
+        gui.setItem(4, getItem(
+            "emerald",
+            "&b&l캐시 순위"
         ).apply {addUnsafeEnchantment(Enchantment.SHARPNESS, 5)})
 
-        gui.setItem(14, getItem(
+        gui.setItem(5, getItem(
+            "experience_bottle",
+            "&2&l플레이 타임 순위"
+        ).apply {addUnsafeEnchantment(Enchantment.LUCK_OF_THE_SEA, 5)})
+
+        gui.setItem(13, getItem(
+            "emerald_block",
+            "&a&l후원 순위"
+        ).apply {addUnsafeEnchantment(Enchantment.SHARPNESS, 5)})
+
+        gui.setItem(21, getItem(
+            "end_crystal",
+            "&d&l킬 순위"
+        ).apply {addUnsafeEnchantment(Enchantment.SHARPNESS, 5)})
+
+        gui.setItem(22, getItem(
             "redstone",
             "&4&l사망 순위"
         ).apply {addUnsafeEnchantment(Enchantment.LUCK_OF_THE_SEA, 5)})
 
-        gui.setItem(16, getItem(
-            "emerald",
-            "&a&l후원 순위"
+        gui.setItem(23, getItem(
+            "diamond_sword",
+            "&c&l연킬 순위",
+            listOf("", "&8&l연킬 보상 획득이 가능합니다.")
         ).apply {addUnsafeEnchantment(Enchantment.SHARPNESS, 5)})
 
         player.openInventory(gui)

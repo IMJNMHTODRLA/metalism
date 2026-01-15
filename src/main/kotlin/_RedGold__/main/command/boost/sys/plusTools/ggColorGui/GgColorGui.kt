@@ -40,6 +40,24 @@ class GgColorGui(private val plugin: JavaPlugin) {
         ))
     }
 
+    private val prefix = """
+        ${rgb("2444FC")}§l§o[
+        ${rgb("2B49FC")}§l§oM
+        ${rgb("324DFC")}§l§oE
+        ${rgb("3952FD")}§l§oT
+        ${rgb("4057FD")}§l§oA
+        ${rgb("475CFD")}§l§oL
+        ${rgb("4E60FD")}§l§oI
+        ${rgb("5565FD")}§l§oS
+        ${rgb("5B6AFE")}§l§oM 
+        ${rgb("6973FE")}§l§oB
+        ${rgb("7078FE")}§l§oO
+        ${rgb("777DFE")}§l§oO
+        ${rgb("7E82FF")}§l§oS
+        ${rgb("8586FF")}§l§oT
+        ${rgb("8C8BFF")}§l§o]
+    """.trimIndent().replace("\n", "")
+
     fun openGui(player: Player, page: Int) {
         val isPlusRank = player.hasPermission("Main.plus")
         val ggColor = getData(plugin, player, "gg_color").toLong()
@@ -48,44 +66,12 @@ class GgColorGui(private val plugin: JavaPlugin) {
 
         val background = getItem(
             "magenta_stained_glass_pane",
-            """
-                ${rgb("2444FC")}§l§o[
-                ${rgb("2B49FC")}§l§oM
-                ${rgb("324DFC")}§l§oE
-                ${rgb("3952FD")}§l§oT
-                ${rgb("4057FD")}§l§oA
-                ${rgb("475CFD")}§l§oL
-                ${rgb("4E60FD")}§l§oI
-                ${rgb("5565FD")}§l§oS
-                ${rgb("5B6AFE")}§l§oM 
-                ${rgb("6973FE")}§l§oB
-                ${rgb("7078FE")}§l§oO
-                ${rgb("777DFE")}§l§oO
-                ${rgb("7E82FF")}§l§oS
-                ${rgb("8586FF")}§l§oT
-                ${rgb("8C8BFF")}§l§o]
-            """.trimIndent().replace("\n", "")
+            prefix
         )
 
         val background2 = getItem(
             "black_stained_glass_pane",
-            """
-                ${rgb("2444FC")}§l§o[
-                ${rgb("2B49FC")}§l§oM
-                ${rgb("324DFC")}§l§oE
-                ${rgb("3952FD")}§l§oT
-                ${rgb("4057FD")}§l§oA
-                ${rgb("475CFD")}§l§oL
-                ${rgb("4E60FD")}§l§oI
-                ${rgb("5565FD")}§l§oS
-                ${rgb("5B6AFE")}§l§oM 
-                ${rgb("6973FE")}§l§oB
-                ${rgb("7078FE")}§l§oO
-                ${rgb("777DFE")}§l§oO
-                ${rgb("7E82FF")}§l§oS
-                ${rgb("8586FF")}§l§oT
-                ${rgb("8C8BFF")}§l§o]
-            """.trimIndent().replace("\n", "")
+            prefix
         )
 
         gui.setItem(31, getItem(

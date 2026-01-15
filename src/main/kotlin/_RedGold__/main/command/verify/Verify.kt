@@ -36,7 +36,7 @@ class Verify(private val plugin: JavaPlugin) : CommandExecutor, TabExecutor {
         val now = System.currentTimeMillis() / 1000
         val name = player.name
 
-        if (waitTime[name] != null && waitTime[name]!! > now) {
+        if ((waitTime[name]?: 0L) > now) {
             player.sendMessage(gc(
                 "&c&l${waitTime[name]!! - now}초 후에 다시 시도할 수 있습니다."
             ))

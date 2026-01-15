@@ -94,41 +94,40 @@ class DeathGui {
 
             val targetPlayer = deathRank[ranking]
             val targetInfo = Bukkit.getOfflinePlayer(targetPlayer.key)
-            val name = targetInfo.name?: "steve"
             val displayName = targetInfo.name?: "알 수 없음"
 
             when (ranking) {
                 0 -> {
                     gui.setItem(itemLocation[i], getPlayerSkull(
-                        name,
+                        targetPlayer.key,
                         "&f&l플레이어: &e&l$displayName",
                         listOf("", "&f&l순위: &4&l1위!", "&f&l사망 수: &4&l${targetPlayer.value.toFormat()}")
                     ).apply {addUnsafeEnchantment(Enchantment.LUCK_OF_THE_SEA, 1)})
                 }
                 1 -> {
                     gui.setItem(itemLocation[i], getPlayerSkull(
-                        name,
+                        targetPlayer.key,
                         "&f&l플레이어: &e&l$displayName",
                         listOf("", "&f&l순위: &c&l2위", "&f&l사망 수: &c&l${targetPlayer.value.toFormat()}")
                     ).apply {addUnsafeEnchantment(Enchantment.LUCK_OF_THE_SEA, 2)})
                 }
                 2 -> {
                     gui.setItem(itemLocation[i], getPlayerSkull(
-                        name,
+                        targetPlayer.key,
                         "&f&l플레이어: &e&l$displayName",
                         listOf("", "&f&l순위: &e&l3위", "&f&l사망 수: &e&l${targetPlayer.value.toFormat()}")
                     ).apply {addUnsafeEnchantment(Enchantment.LUCK_OF_THE_SEA, 3)})
                 }
                 in 3..100 -> {
                     gui.setItem(itemLocation[i], getPlayerSkull(
-                        name,
+                        targetPlayer.key,
                         "&f&l플레이어: &e&l$displayName",
                         listOf("", "&f&l순위: &f&l${ranking + 1}위", "&f&l사망 수: &f&l${targetPlayer.value.toFormat()}")
                     ))
                 }
                 else -> {
                     gui.setItem(itemLocation[i], getPlayerSkull(
-                        name,
+                        targetPlayer.key,
                         "&f&l플레이어: &e&l$displayName",
                         listOf("", "&f&l순위: &7&l${ranking + 1}위", "&f&l사망 수: &7&l${targetPlayer.value.toFormat()}")
                     ))

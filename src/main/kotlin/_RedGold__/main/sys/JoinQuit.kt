@@ -1,21 +1,28 @@
 package _RedGold__.main.sys
 
+import _RedGold__.main.Main.Boost.monthlySubData
 import _RedGold__.main.function.Color.gc
+import _RedGold__.main.function.Color.good
 import _RedGold__.main.function.Color.rgb
 import _RedGold__.main.function.Data.defDataUuid
 import _RedGold__.main.function.Data.getData
 import _RedGold__.main.function.Data.getDataUuid
 import _RedGold__.main.function.Data.hasDataUuid
+import _RedGold__.main.function.Data.saveData
+import _RedGold__.main.function.Data.saveDataUuid
 import _RedGold__.main.function.Gui.getItem
 import _RedGold__.main.function.Rank.getPlayerRankPrefix
 import _RedGold__.main.function.ServerGold.addMakeGold
 import _RedGold__.main.function.api.WriteSave
 import _RedGold__.main.function.api.byteSave
 import _RedGold__.main.function.api.isFileExists
+import _RedGold__.main.function.api.toFormat
 import _RedGold__.main.load.RequireJavaPlugin
 import _RedGold__.main.load.RequireListener
 import _RedGold__.main.sys.Chat.ChatApply.applyStyle
 import _RedGold__.main.sys.Chat.ChatApply.symmetry
+import _RedGold__.main.sys.ExpMultiple.ExpMultipleData.normalPlayer
+import _RedGold__.main.sys.ExpMultiple.ExpMultipleData.subPlayer
 import _RedGold__.main.sys.JoinQuit.JoinMessage.messageType
 import org.bukkit.Bukkit
 import org.bukkit.Material
@@ -30,6 +37,8 @@ import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin
 import java.nio.ByteBuffer
+import java.time.DayOfWeek
+import java.time.LocalDate
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
@@ -73,10 +82,18 @@ class JoinQuit(private val plugin: JavaPlugin) : Listener {
         )
     }
 
+    private val isGiveSub: MutableList<UUID> = mutableListOf()
+    private val isSendSub: MutableList<UUID> = mutableListOf()
+
     @EventHandler
     fun onJoin(event: PlayerJoinEvent) {
         val player = event.player
         val playerName = player.name
+        val uuid = player.uniqueId
+
+        val now = System.currentTimeMillis() / 1000
+        val exp = monthlySubData[uuid]?: 0
+        val isSub = exp <= now
 
         if (!player.hasPlayedBefore()) {
             addMakeGold(plugin, 10000L)
@@ -117,8 +134,44 @@ class JoinQuit(private val plugin: JavaPlugin) : Listener {
             .replace("%rank%", " ${getPlayerRankPrefix(player)}")
             .replace("%name%", playerName))
 
-        applyStyle[player.uniqueId] = style
+        applyStyle[uuid] = style
+
         player.playSound(player.location, Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f)
+        if (isSub) return
+
+        if (isGiveSub.contains(uuid)) return
+        isGiveSub.add(uuid)
+
+        val giveCash = if (LocalDate.now().dayOfWeek == DayOfWeek.MONDAY) 105L else 5L
+
+        saveDataUuid(plugin, uuid, "cash", getDataUuid(plugin, uuid, "cash") + giveCash)
+        saveDataUuid(plugin, uuid, "gold", getDataUuid(plugin, uuid, "gold") + 50000L)
+        player.level += 1
+
+        var allGiveGold = 0L
+
+        for (online in Bukkit.getOnlinePlayers()) {
+            if (online.uniqueId == uuid) continue
+
+            val giveGold = if (online.hasPermission("Main.plus")) 5000L else 4000L
+            saveDataUuid(plugin, uuid, "gold", getDataUuid(plugin, uuid, "gold") + giveGold)
+            allGiveGold += giveGold
+
+            player.good("&a&l월정액 플레이어가 들어와 ${giveGold.toFormat()} 골드를 받았습니다.")
+        }
+
+        addMakeGold(plugin, 50_000 + (giveCash * 10000) + allGiveGold)
+
+        subPlayer += 0.25f
+        normalPlayer += 0.1f
+
+        if (exp - now <= 172800 && !isSendSub.contains(uuid)) {
+            val remainingDays = "%.1f".format((exp - now).toDouble() / 86400.0)
+
+            player.sendMessage(gc("&c&l월정액 혜택이 종료되기 까지 &4&l${remainingDays}일&c&l남았습니다!"))
+            player.sendMessage(gc("&c&l월정액 혜택 유지를 원할 시 ${remainingDays}일 이내 후원을 해주시면 됩니다!"))
+            isSendSub.add(uuid)
+        }
     }
 
     @EventHandler
@@ -197,7 +250,7 @@ class JoinQuit(private val plugin: JavaPlugin) : Listener {
         for (i in 0..13) defDataUuid(plugin, uuid, "plant_shop/$i", 0)
         for (i in 0..3) defDataUuid(plugin, uuid, "kit_shop/$i", 0)
 
-        defDataUuid(plugin, uuid, "ticket/get", 0)
+        defDataUuid(plugin, uuid, "ticket/point", 0)
 
         defDataUuid(plugin, uuid, "death_sound", 0)
         defDataUuid(plugin, uuid, "kill_sound", 0)

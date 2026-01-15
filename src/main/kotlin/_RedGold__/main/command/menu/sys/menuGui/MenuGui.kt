@@ -18,6 +18,7 @@ class MenuGui(private val plugin: JavaPlugin) {
     fun openGui(player: Player, sound: Float = 1f) {
         val cashExc = getData(plugin, player, "cash_exc").toInt()
         val gui = MenuHolder(cashExc).inventory
+        val uuid = player.uniqueId
 
         val background = getItem(
             "magenta_stained_glass_pane",
@@ -73,22 +74,22 @@ class MenuGui(private val plugin: JavaPlugin) {
                 //"&8서버 경제 상태: $serverEconomy"
                 "&7",
                 "&7좌클릭 시 100,000 골드를 소비하여 10 캐시를 얻습니다.($cashExc/10)",
-                "&7&l최대 100 캐시 까지 획득 가능합니다.",
+                "&7&l최대 50 캐시 까지 획득 가능합니다.",
                 "",
-                "&7우클릭 시 1 캐시를 소비하여 9,800 골드를 얻습니다.(최대치 없음)",
-                "&7",
+                "&7우클릭 시 1 캐시를 소비하여 9,500 골드를 얻습니다.(최대치 없음)",
+                "",
                 "&c&l매 주마다 환전 횟수가 초기화 됩니다."
             )
         ).apply {addUnsafeEnchantment(Enchantment.SHARPNESS, 5)})
 
         gui.setItem(49, getPlayerSkull(
-            player.name,
+            uuid,
             "&b&l${player.name}&f&l님",
             listOf(
                 "&f",
                 "&f&l랭크: ${getPlayerRankPrefix(player)}",
-                "&f&l보유 골드: &6&l${(RunScoreboard.PlayerDataCache.gold[player.uniqueId]?: 0L).toFormat()} 골드",
-                "&f&l보유 캐시: &b&l${(RunScoreboard.PlayerDataCache.cash[player.uniqueId]?: 0L).toFormat()} 캐시",
+                "&f&l보유 골드: &6&l${(RunScoreboard.PlayerDataCache.gold[uuid]?: 0L).toFormat()} 골드",
+                "&f&l보유 캐시: &b&l${(RunScoreboard.PlayerDataCache.cash[uuid]?: 0L).toFormat()} 캐시",
                 "&f",
                 "&f&l지연 시간: &a&l${player.ping} ms"
             )

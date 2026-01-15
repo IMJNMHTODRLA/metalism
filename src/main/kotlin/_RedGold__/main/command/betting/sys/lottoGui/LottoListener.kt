@@ -5,6 +5,7 @@ import _RedGold__.main.function.Color.rgb
 import _RedGold__.main.function.Data.getData
 import _RedGold__.main.function.Data.saveData
 import _RedGold__.main.function.Gui.getItem
+import _RedGold__.main.function.Scheduler.task
 import _RedGold__.main.function.ServerGold.addHoldGold
 import _RedGold__.main.function.ServerGold.addMakeGold
 import _RedGold__.main.function.api.toFormat
@@ -30,9 +31,9 @@ class LottoListener(private val plugin: JavaPlugin) : Listener {
     @EventHandler
     fun onInventoryClose(event: InventoryCloseEvent) {
         val holder = event.inventory.holder!!
-        if (holder is LottoHolder && holder.isStart) Bukkit.getScheduler().runTask(plugin, Runnable {
+        if (holder is LottoHolder && holder.isStart) plugin.task(1) {
             event.player.openInventory(event.inventory)
-        })
+        }
     }
 
     @EventHandler
@@ -49,16 +50,13 @@ class LottoListener(private val plugin: JavaPlugin) : Listener {
                     22 -> {
                         val gold = getData(plugin, player, "gold").toLong()
 
-                        if (gold - 1000 < 0) {
-                            player.sendMessage(gc("&c골드가 부족합니다. 필요 골드: ${(1000 - gold).toFormat()}"))
+                        if (gold - 5000 < 0) {
+                            player.sendMessage(gc("&c골드가 부족합니다. 필요 골드: ${(5000 - gold).toFormat()}"))
                             player.playSound(player.location, Sound.ENTITY_ENDERMAN_TELEPORT, 1f, 0.5f)
                             return
                         }
 
                         holder.isStart = true
-
-                        saveData(plugin, player, "gold", gold - 1000)
-                        addHoldGold(plugin, 1000)
 
                         var delayTime = -1L
                         val result = listOf(
@@ -77,18 +75,18 @@ class LottoListener(private val plugin: JavaPlugin) : Listener {
                                 val randomNum = random.nextInt(10) + 1
                                 delayTime += 1
 
-                                Bukkit.getScheduler().runTaskLater(plugin, Runnable {
+                                plugin.task(delayTime) {
                                     gui.setItem(itemNumList[i], getItem(
                                         "gold_nugget",
                                         "&8&l[ &7&l${randomNum} &8&l]",
                                         listOf("", "&7&l추첨 중...: $randomNum")
                                     ).apply {amount = randomNum})
                                     player.playSound(player.location, Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1f)
-                                }, delayTime)
+                                }
                             }
 
                             delayTime += 1
-                            Bukkit.getScheduler().runTaskLater(plugin, Runnable {
+                            plugin.task(delayTime) {
                                 if (result[i] == holder.select[i]) {
                                     gui.setItem(itemNumList[i], getItem(
                                         "gold_ingot",
@@ -110,18 +108,16 @@ class LottoListener(private val plugin: JavaPlugin) : Listener {
                                     player.playSound(player.location, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 1f, 2f)
                                 }
 
-                            }, delayTime)
+                            }
 
                             delayTime += 20
                         }
 
                         delayTime += 10
-                        Bukkit.getScheduler().runTaskLater(plugin, Runnable {
+                        plugin.task(delayTime) {
                             var rightNumTimes = 0
 
-                            for (i in 0..5) {
-                                if (result[i] == holder.select[i]) rightNumTimes++
-                            }
+                            for (i in 0..5) if (result[i] == holder.select[i]) rightNumTimes++
 
                             val winMessage = listOf(
                                 "&8&l추첨에서 낙첨되었습니다...(0자리 일치)", // 7등
@@ -145,7 +141,7 @@ class LottoListener(private val plugin: JavaPlugin) : Listener {
 
                             val winPrize = listOf(
                                 0L, // 7등
-                                1_000L, // 6등
+                                5_000L, // 6등
                                 10_000L, // 5등
                                 1_000_000L, // 4등
                                 10_000_000L, // 3등
@@ -159,11 +155,12 @@ class LottoListener(private val plugin: JavaPlugin) : Listener {
                             player.sendMessage(gc(winMessage[rightNumTimes]))
                             player.sendMessage(gc("&6&l획득 골드: ${winPrize[rightNumTimes].toFormat()} 골드"))
 
-                            saveData(plugin, player, "gold", gold - 1000 + winPrize[rightNumTimes])
+                            saveData(plugin, player, "gold", gold - 5000 + winPrize[rightNumTimes])
                             addMakeGold(plugin, winPrize[rightNumTimes])
+                            addHoldGold(plugin, 5000)
 
                             player.playSound(player.location, winSound[rightNumTimes], 1f, 1f)
-                        }, delayTime)
+                        }
                     }
 
 

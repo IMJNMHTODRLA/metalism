@@ -15,7 +15,6 @@ import java.sql.DriverManager
 import java.util.*
 import kotlin.io.path.exists
 
-@RequireJavaPlugin
 object Data {
     fun getData(plugin: JavaPlugin, player: Player, rootName: String): String {
         return getDataUuid(plugin, player.uniqueId, rootName)

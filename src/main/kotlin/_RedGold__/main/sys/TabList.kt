@@ -2,6 +2,7 @@ package _RedGold__.main.sys
 
 import _RedGold__.main.function.Color.gc
 import _RedGold__.main.function.Color.rgb
+import _RedGold__.main.function.api.toFormat
 import _RedGold__.main.load.RequireJavaPlugin
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
@@ -31,8 +32,7 @@ class TabList {
             ${rgb(colorList[(count + 7) % 8]!!)}§l§oM
         """.trimIndent().replace("\n", "")
 
-        val footer = gc("&f&lTPS: &a&l${String.format("%.2f", Bukkit.getTPS()[0])} &8&l| &f&l플레이어: &e&l${Bukkit.getOnlinePlayers().size}/100")
-
+        val footer = gc("&f&lTPS: &a&l${Bukkit.getTPS()[0].toFormat(2)} &8&l| &f&l플레이어: &e&l${Bukkit.getOnlinePlayers().size}/100")
         player.setPlayerListHeaderFooter(gc("$header &8&l| &7&l시즌 1\n"), "\n$footer")
     }
 }

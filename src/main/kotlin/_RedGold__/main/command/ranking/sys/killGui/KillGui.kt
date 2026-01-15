@@ -92,41 +92,40 @@ class KillGui {
 
             val targetPlayer = killRank[ranking]
             val targetInfo = Bukkit.getOfflinePlayer(targetPlayer.key)
-            val name = targetInfo.name?: "steve"
             val displayName = targetInfo.name?: "알 수 없음"
 
             when (ranking) {
                 0 -> {
                     gui.setItem(itemLocation[i], getPlayerSkull(
-                        name,
+                        targetPlayer.key,
                         "&f&l플레이어: &e&l$displayName",
                         listOf("", "&f&l순위: ${rgb("C40300")}&l1위!", "&f&l킬 수: ${rgb("C40300")}&l${targetPlayer.value.toFormat()}")
                     ).apply {addUnsafeEnchantment(Enchantment.LUCK_OF_THE_SEA, 1)})
                 }
                 1 -> {
                     gui.setItem(itemLocation[i], getPlayerSkull(
-                        name,
+                        targetPlayer.key,
                         "&f&l플레이어: &e&l$displayName",
                         listOf("", "&f&l순위: ${rgb("FF1D19")}&l2위", "&f&l킬 수: ${rgb("FF1D19")}&l${targetPlayer.value.toFormat()}")
                     ).apply {addUnsafeEnchantment(Enchantment.LUCK_OF_THE_SEA, 2)})
                 }
                 2 -> {
                     gui.setItem(itemLocation[i], getPlayerSkull(
-                        name,
+                        targetPlayer.key,
                         "&f&l플레이어: &e&l$displayName",
                         listOf("", "&f&l순위: ${rgb("FF4C3F")}3위", "&f&l킬 수: ${rgb("FF4C3F")}&l${targetPlayer.value.toFormat()}")
                     ).apply {addUnsafeEnchantment(Enchantment.LUCK_OF_THE_SEA, 3)})
                 }
                 in 3..100 -> {
                     gui.setItem(itemLocation[i], getPlayerSkull(
-                        name,
+                        targetPlayer.key,
                         "&f&l플레이어: &e&l$displayName",
                         listOf("", "&f&l순위: &f&l${ranking + 1}위", "&f&l킬 수: &f&l${targetPlayer.value.toFormat()}")
                     ))
                 }
                 else -> {
                     gui.setItem(itemLocation[i], getPlayerSkull(
-                        name,
+                        targetPlayer.key,
                         "&f&l플레이어: &e&l$displayName",
                         listOf("", "&f&l순위: &7&l${ranking + 1}위", "&f&l킬 수: &7&l${targetPlayer.value.toFormat()}")
                     ))

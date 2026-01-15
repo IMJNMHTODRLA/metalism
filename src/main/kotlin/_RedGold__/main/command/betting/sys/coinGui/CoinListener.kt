@@ -4,6 +4,7 @@ import _RedGold__.main.function.Color.gc
 import _RedGold__.main.function.Data.getData
 import _RedGold__.main.function.Data.saveData
 import _RedGold__.main.function.Gui.getItem
+import _RedGold__.main.function.Scheduler.task
 import _RedGold__.main.function.ServerGold.addHoldGold
 import _RedGold__.main.function.ServerGold.addMakeGold
 import _RedGold__.main.function.api.toFormat
@@ -29,9 +30,9 @@ class CoinListener(private val plugin: JavaPlugin) : Listener {
     @EventHandler
     fun onInventoryClose(event: InventoryCloseEvent) {
         val holder = event.inventory.holder!!
-        if (holder is CoinHolder && holder.isStart) Bukkit.getScheduler().runTask(plugin, Runnable {
+        if (holder is CoinHolder && holder.isStart) plugin.task(1) {
             event.player.openInventory(event.inventory)
-        })
+        }
     }
 
     @EventHandler
@@ -60,7 +61,7 @@ class CoinListener(private val plugin: JavaPlugin) : Listener {
                             return
                         }
 
-                        if (holder.betGold > 1_000_000) {
+                        if (holder.betGold > 1_500_000) {
                             player.sendMessage(gc("&c베팅 금액이 너무 높습니다."))
                             player.playSound(player.location, Sound.ENTITY_ENDERMAN_TELEPORT, 1f, 0.5f)
                             return
@@ -78,13 +79,13 @@ class CoinListener(private val plugin: JavaPlugin) : Listener {
                         for (i in 0..50) {
                             val randomItem = random.nextInt(2) == 1
 
-                            Bukkit.getScheduler().runTaskLater(plugin, Runnable {
+                            plugin.task(delayTime) {
                                 gui.setItem(22, getItem(
                                     if (!randomItem) "emerald" else "redstone",
                                     "&7&l동전 던지는 중${".".repeat((i % 3) + 1)}"
                                 ))
                                 player.playSound(player.location, Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1f)
-                            }, delayTime)
+                            }
 
                             delayTime += 1
                         }
@@ -93,50 +94,50 @@ class CoinListener(private val plugin: JavaPlugin) : Listener {
                             delayTime += 2
                             val randomItem = random.nextInt(2) == 1
 
-                            Bukkit.getScheduler().runTaskLater(plugin, Runnable {
+                            plugin.task(delayTime) {
                                 gui.setItem(22, getItem(
                                     if (!randomItem) "emerald" else "redstone",
                                     "&7&l동전 던지는 중${".".repeat((i % 3) + 1)}"
                                 ))
                                 player.playSound(player.location, Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1f)
-                            }, delayTime)
+                            }
                         }
 
                         for (i in 0..10) {
                             delayTime += 3
                             val randomItem = random.nextInt(2) == 1
 
-                            Bukkit.getScheduler().runTaskLater(plugin, Runnable {
+                            plugin.task(delayTime) {
                                 gui.setItem(22, getItem(
                                     if (!randomItem) "emerald" else "redstone",
                                     "&7&l동전 던지는 중${".".repeat((i % 3) + 1)}"
                                 ))
                                 player.playSound(player.location, Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1f)
-                            }, delayTime)
+                            }
                         }
 
                         for (i in 0..8) {
                             delayTime += 6
                             val randomItem = random.nextInt(2) == 1
 
-                            Bukkit.getScheduler().runTaskLater(plugin, Runnable {
+                            plugin.task(delayTime) {
                                 gui.setItem(22, getItem(
                                     if (!randomItem) "emerald" else "redstone",
                                     "&7&l동전 던지는 중${".".repeat((i % 3) + 1)}"
                                 ))
                                 player.playSound(player.location, Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1f)
-                            }, delayTime)
+                            }
                         }
 
                         delayTime += 30
-                        Bukkit.getScheduler().runTaskLater(plugin, Runnable {
+                        plugin.task(delayTime) {
                             gui.setItem(22, getItem(
                                 if (!result) "emerald" else "redstone",
                                 "&f&l결과: ${if (!result) "&a&l앞면" else "&c&l뒷면"}"
                             ).apply {addUnsafeEnchantment(Enchantment.LUCK_OF_THE_SEA, 1)})
                             player.playSound(player.location, Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1.5f)
 
-                            Bukkit.getScheduler().runTaskLater(plugin, Runnable {
+                            plugin.task(20) {
                                 holder.isStart = false
                                 player.closeInventory()
 
@@ -154,8 +155,8 @@ class CoinListener(private val plugin: JavaPlugin) : Listener {
                                     player.sendMessage(gc("&c동전 던지기 도박에 실패하였습니다. 잃은 골드: ${holder.betGold.toFormat()} 골드"))
                                     player.playSound(player.location, Sound.ENTITY_ENDER_DRAGON_HURT, 1f, 1.5f)
                                 }
-                            }, 20)
-                        }, delayTime)
+                            }
+                        }
                     }
 
 
@@ -194,7 +195,7 @@ class CoinListener(private val plugin: JavaPlugin) : Listener {
                             else -> 0
                         }
 
-                        if (holder.betGold + addGold > 1_000_000) {
+                        if (holder.betGold + addGold > 1_500_000) {
                             player.sendMessage(gc("&c베팅 금액을 더 이상 높힐 수 없습니다."))
                             player.playSound(player.location, Sound.ENTITY_ENDERMAN_TELEPORT, 1f, 0.5f)
                             return

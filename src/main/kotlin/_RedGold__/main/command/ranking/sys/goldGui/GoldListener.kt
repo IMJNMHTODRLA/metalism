@@ -1,5 +1,6 @@
 package _RedGold__.main.command.ranking.sys.goldGui
 
+import _RedGold__.main.command.ranking.sys.cashGui.CashGui
 import _RedGold__.main.load.RequireListener
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -18,8 +19,8 @@ class GoldListener : Listener {
             event.isCancelled = true
 
             when (slot) {
-                45 -> if (holder.page != 0) GoldGui().openGui(player, holder.page - 1)
-                53 -> GoldGui().openGui(player, holder.page + 1)
+                45 -> if (holder.page != 0) CashGui().openGui(player, holder.page - 1)
+                53 -> CashGui().openGui(player, holder.page + 1)
             }
         }
     }

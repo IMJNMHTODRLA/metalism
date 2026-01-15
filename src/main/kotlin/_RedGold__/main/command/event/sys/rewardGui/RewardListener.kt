@@ -76,9 +76,7 @@ class RewardListener(private val plugin: JavaPlugin) : Listener {
                 }
 
                 if (item != null) player.inventory.addItem(item)
-
                 if (level != null) player.giveExpLevels(level)
-
                 if (makeAll != 0L) addMakeGold(plugin, 200000)
 
                 saveData(plugin, player, "randomEffect/get/$t", 1)
@@ -98,33 +96,66 @@ class RewardListener(private val plugin: JavaPlugin) : Listener {
                     13 -> reward(3, 400_000, mapOf("item" to getItem("respawn_anchor", t = 16)))
                     14 -> reward(4, 500_000, mapOf("item" to getItem("ender_pearl", t = 16)))
                     15 -> reward(5, 600_000, mapOf("item" to getItem("experience_bottle", t = 16)))
-                    16 -> reward(6, 700_000, mapOf("cash" to 30))
+                    16 -> reward(6, 700_000, mapOf("cash" to 5))
 
-                    19 -> reward(0, 800_000, mapOf("level" to 1))
-                    20 -> reward(1, 900_000, mapOf("gold" to 500_000))
-                    21 -> reward(2, 1_000_000, mapOf("item" to getItem("end_crystal", t = 24)))
-                    22 -> reward(3, 1_500_000, mapOf("item" to getItem("respawn_anchor", t = 24)))
-                    23 -> reward(4, 2_000_000, mapOf("item" to getItem("golden_carrot", t = 24)))
-                    24 -> reward(5, 2_500_000, mapOf("item" to getItem("experience_bottle", t = 24)))
-                    25 -> reward(6, 3_000_000, mapOf("cash" to 40))
+                    19 -> reward(7, 800_000, mapOf("level" to 1))
+                    20 -> reward(8, 900_000, mapOf("gold" to 500_000))
+                    21 -> reward(9, 1_000_000, mapOf("item" to getItem("end_crystal", t = 24)))
+                    22 -> reward(10, 1_500_000, mapOf("item" to getItem("respawn_anchor", t = 24)))
+                    23 -> reward(11, 2_000_000, mapOf("item" to getItem("golden_carrot", t = 24)))
+                    24 -> reward(12, 2_500_000, mapOf("item" to getItem("experience_bottle", t = 24)))
+                    25 -> reward(13, 3_000_000, mapOf("cash" to 10))
 
-                    28 -> reward(0, 3_500_000, mapOf("level" to 2))
-                    29 -> reward(1, 4_000_000, mapOf("gold" to 1_000_000))
-                    30 -> reward(2, 4_500_000, mapOf("item" to getItem("end_crystal", t = 48)))
-                    31 -> reward(3, 5_000_000, mapOf("item" to getItem("totem_of_undying", t = 8)))
-                    32 -> reward(4, 6_000_000, mapOf("item" to getItem("golden_carrot", t = 48)))
-                    33 -> reward(5, 7_000_000, mapOf("item" to getItem("experience_bottle", t = 48)))
-                    34 -> reward(6, 8_000_000, mapOf("cash" to 50))
+                    28 -> reward(14, 3_500_000, mapOf("level" to 2))
+                    29 -> reward(15, 4_000_000, mapOf("gold" to 1_000_000))
+                    30 -> reward(16, 4_500_000, mapOf("item" to getItem("end_crystal", t = 48)))
+                    31 -> reward(17, 5_000_000, mapOf("item" to getItem("totem_of_undying", t = 8)))
+                    32 -> reward(18, 6_000_000, mapOf("item" to getItem("golden_carrot", t = 48)))
+                    33 -> reward(19, 7_000_000, mapOf("item" to getItem("experience_bottle", t = 48)))
+                    34 -> reward(20, 8_000_000, mapOf("cash" to 50))
 
-                    37 -> reward(0, 9_000_000, mapOf("level" to 3))
-                    38 -> reward(1, 10_000_000, mapOf("gold" to 1_500_000))
-                    39 -> reward(2, 12_000_000, mapOf("item" to getItem("end_crystal", t = 64)))
-                    40 -> reward(3, 14_000_000, mapOf("item" to getItem("totem_of_undying", t = 12)))
-                    41 -> reward(4, 16_000_000, mapOf("item" to getItem("golden_carrot", t = 64)))
-                    42 -> reward(5, 18_000_000, mapOf("item" to getItem("experience_bottle", t = 64)))
-                    43 -> reward(6, 20_000_000, mapOf("cash" to 60))
+                    37 -> reward(21, 9_000_000, mapOf("level" to 3))
+                    38 -> reward(22, 10_000_000, mapOf("gold" to 2_500_000))
+                    39 -> reward(23, 12_000_000, mapOf("item" to getItem("end_crystal", t = 64)))
+                    40 -> reward(24, 14_000_000, mapOf("item" to getItem("totem_of_undying", t = 12)))
+                    41 -> reward(25, 16_000_000, mapOf("item" to getItem("golden_carrot", t = 64)))
+                    42 -> reward(26, 18_000_000, mapOf("item" to getItem("experience_bottle", t = 64)))
+                    43 -> reward(27, 20_000_000, mapOf("cash" to 50))
                 }
-                return
+            } else if (page == 2) {
+                when (slot) {
+                    10 -> reward(28, 22_000_000, mapOf("item" to getItem("totem_of_undying", t = 16)))
+                    11 -> reward(29, 24_000_000, mapOf("item" to getItem("end_crystal", t = 16)))
+                    12 -> reward(30, 26_000_000, mapOf("item" to getItem("golden_carrot", t = 16)))
+                    13 -> reward(31, 28_000_000, mapOf("item" to getItem("experience_bottle", t = 16)))
+                    14 -> reward(32, 30_000_000, mapOf("item" to getItem("respawn_anchor", t = 16)))
+                    15 -> reward(33, 32_000_000, mapOf("item" to getItem("ender_pearl", t = 16)))
+                    16 -> reward(34, 34_000_000, mapOf("cash" to 40))
+
+                    19 -> reward(35, 36_000_000, mapOf("gold" to 1_000_000))
+                    20 -> reward(36, 38_000_000, mapOf("gold" to 1_000_000))
+                    21 -> reward(37, 40_000_000, mapOf("gold" to 1_000_000))
+                    22 -> reward(38, 45_000_000, mapOf("gold" to 1_000_000))
+                    23 -> reward(39, 50_000_000, mapOf("gold" to 1_000_000))
+                    24 -> reward(40, 55_000_000, mapOf("gold" to 1_000_000))
+                    25 -> reward(41, 60_000_000, mapOf("cash" to 40))
+
+                    28 -> reward(42, 65_000_000, mapOf("gold" to 1_500_000))
+                    29 -> reward(43, 70_000_000, mapOf("gold" to 1_500_000))
+                    30 -> reward(44, 75_000_000, mapOf("gold" to 1_500_000))
+                    31 -> reward(45, 80_000_000, mapOf("gold" to 1_500_000))
+                    32 -> reward(46, 85_000_000, mapOf("gold" to 1_500_000))
+                    33 -> reward(47, 90_000_000, mapOf("gold" to 1_500_000))
+                    34 -> reward(48, 95_000_000, mapOf("cash" to 40))
+
+                    37 -> reward(49, 100_000_000, mapOf("level" to 20))
+                    38 -> reward(50, 110_000_000, mapOf("item" to getItem("obsidian", t = 64)))
+                    39 -> reward(51, 120_000_000, mapOf("item" to getItem("obsidian", t = 64)))
+                    40 -> reward(52, 130_000_000, mapOf("item" to getItem("glowstone", t = 64)))
+                    41 -> reward(53, 140_000_000, mapOf("item" to getItem("glowstone", t = 64)))
+                    42 -> reward(54, 150_000_000, mapOf("item" to getItem("golden_carrot", t = 64)))
+                    43 -> reward(55, 160_000_000, mapOf("cash" to 100))
+                }
             }
         }
     }

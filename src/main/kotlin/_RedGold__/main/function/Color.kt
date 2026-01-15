@@ -22,7 +22,7 @@ object Color {
     }
 
     fun Player.good(msg: String) {
-        this.sendMessage(msg)
+        this.sendMessage(gc(msg))
         this.playSound(this.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f)
     }
 }

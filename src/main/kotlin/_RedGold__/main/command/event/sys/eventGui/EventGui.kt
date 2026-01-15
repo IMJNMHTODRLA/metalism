@@ -4,6 +4,7 @@ import _RedGold__.main.Main.Event.EVENT_ITEM
 import _RedGold__.main.Main.Event.EVENT_NAME
 import _RedGold__.main.command.betting.sys.coinGui.CoinHolder
 import _RedGold__.main.command.event.sys.rankRewardGui.RankRewardGui
+import _RedGold__.main.event.randomEffect.System.RandomEffectEvent.bestPoint
 import _RedGold__.main.event.randomEffect.System.RandomEffectEvent.point
 import _RedGold__.main.function.Color.rgb
 import _RedGold__.main.function.Gui.getItem
@@ -68,12 +69,13 @@ class EventGui {
         val uuid = player.uniqueId
 
         gui.setItem(40, getPlayerSkull(
-            player.name,
+            uuid,
             "&b&l${player.name}&f&l님",
             listOf(
                 "",
-                "&f&l이벤트 점수: &d&l${point[uuid]?.toFormat()?: "-"} 점수",
-                "&f&l랭크: ${RankRewardGui().getTier2Player(uuid)}",
+                "&f&l랭크: ${RankRewardGui().getTier2Player(uuid)}&8&l/${RankRewardGui().getTierNumber2Player(uuid)}",
+                "&f&l이벤트 누적 점수: &d&l${point[uuid]?.toFormat()?: "-"} 점수",
+                "&e&l이벤트 최고 점수: &d&l${bestPoint[uuid]?.toFormat()?: "-"} 점수",
             )
         ).apply {addUnsafeEnchantment(Enchantment.SHARPNESS, 8)})
         //랭크별 상위 그런거

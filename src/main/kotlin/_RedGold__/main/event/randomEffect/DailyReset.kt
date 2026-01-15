@@ -4,6 +4,7 @@ import _RedGold__.main.Main.Event.END_TIME
 import _RedGold__.main.Main.Event.START_TIME
 import _RedGold__.main.event.randomEffect.System.RandomEffectEvent.max
 import _RedGold__.main.event.randomEffect.System.RandomEffectEvent.nextEvent
+import _RedGold__.main.function.Scheduler.taskAsync
 import _RedGold__.main.load.RequireJavaPlugin
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
@@ -27,11 +28,11 @@ class DailyReset(private val plugin: JavaPlugin) {
         var nextDay = nowKST.withHour(11).withMinute(0).withSecond(0).withNano(0)
         if (!nextDay.isAfter(nowKST)) nextDay = nextDay.plusDays(1)
 
-        Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, Runnable {
+        plugin.taskAsync(Duration.between(nowKST, nextDay).seconds * 20L) {
             val now = LocalDateTime.now()
             if (now.isBefore(START_TIME) || !now.isBefore(END_TIME)) {
                 nextEvent = -1L
-                return@Runnable
+                return@taskAsync
             }
 
             max.replaceAll {_, _ -> 0}
@@ -44,6 +45,6 @@ class DailyReset(private val plugin: JavaPlugin) {
             }
 
             loop()
-        }, Duration.between(nowKST, nextDay).seconds * 20L)
+        }
     }
 }

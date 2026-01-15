@@ -1,18 +1,26 @@
 package _RedGold__.main.sys
 
 import _RedGold__.main.function.Color.gc
+import _RedGold__.main.function.Data.getData
 import _RedGold__.main.function.Rank.getPlayerRankPrefix
+import _RedGold__.main.load.RequireJavaPlugin
 import _RedGold__.main.load.RequireListener
 import _RedGold__.main.sys.Chat.ChatApply.applyStyle
 import _RedGold__.main.sys.Chat.ChatApply.symmetry
+import _RedGold__.main.sys.KillRespawn.ChatApply.ggColorMapping
+import _RedGold__.main.sys.KillRespawn.ChatApply.ggTiming
+import org.bukkit.Bukkit
+import org.bukkit.Sound
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerChatEvent
+import org.bukkit.plugin.java.JavaPlugin
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
 @RequireListener
-class Chat : Listener {
+@RequireJavaPlugin
+class Chat(private val plugin: JavaPlugin) : Listener {
     object ChatApply {
         var applyStyle: MutableMap<UUID, Int> = ConcurrentHashMap()
         const val MAX_STYLE = 5
@@ -41,8 +49,33 @@ class Chat : Listener {
     fun onChat(event: PlayerChatEvent) {
         val player = event.player
         val uuid = player.uniqueId
+        var message = event.message
+        val now = System.currentTimeMillis() / 1000
 
-        if ((applyStyle[uuid]?: -1) == -1) event.format = gc("${getPlayerRankPrefix(player)} ${player.name}&f: ${event.message}")
-        else event.format = gc("${symmetry[applyStyle[uuid]!!]} ${getPlayerRankPrefix(player)} ${player.name}&f: ${event.message}")
+        if (
+            player.hasPermission("Main.plus") &&
+            message.lowercase() == "gg" &&
+            (ggTiming[uuid]?.values?.first()?: 0) > now
+        ) {
+            message = ggColorMapping[getData(plugin, player, "gg_color").toInt()] + message.uppercase()
+            player.playSound(player.location, Sound.UI_TOAST_CHALLENGE_COMPLETE, 1f, 1f)
+
+            val ggSendUuid = ggTiming[uuid]?.keys?.first()
+            if (ggSendUuid != null) {
+                val victimOfflinePlayer = Bukkit.getOfflinePlayer(ggSendUuid)
+                if (victimOfflinePlayer.isOnline) {
+                    val victimPlayer = victimOfflinePlayer.player!!
+
+                    victimPlayer.playSound(victimPlayer.location, Sound.ITEM_GOAT_HORN_SOUND_1, 1f, 1f)
+                }
+            }
+
+            ggTiming.remove(uuid)
+        }
+
+        val messageFormat = "${getPlayerRankPrefix(player)} ${player.name}&f: $message"
+
+        if ((applyStyle[uuid]?: -1) == -1) event.format = gc(messageFormat)
+        else event.format = gc("${symmetry[applyStyle[uuid]!!]} $messageFormat")
     }
 }

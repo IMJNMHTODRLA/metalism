@@ -2,6 +2,7 @@ package _RedGold__.main.sys
 
 import _RedGold__.main.function.Color.gc
 import _RedGold__.main.function.Color.rgb
+import _RedGold__.main.function.Scheduler.task
 import _RedGold__.main.load.RequireJavaPlugin
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
@@ -27,7 +28,7 @@ class AutoNotice(private val plugin: JavaPlugin) {
     }
 
     private fun loop() {
-        Bukkit.getScheduler().runTaskTimer(plugin, Runnable{
+        plugin.task(0, 20 * 60 * 10) {
             if (times >= 7) times = 0
             val msgs = when (times) {
                 0 -> gc("$prefix &f&l서버 규칙 위반 시 &c&l경고 없이 즉시 이 서버에서 차단 될 수 있습니다&f&l. &e&l/규칙 &f&l명령어로 규칙을 확인하세요.")
@@ -42,6 +43,6 @@ class AutoNotice(private val plugin: JavaPlugin) {
 
             Bukkit.getServer().broadcastMessage(msgs)
             times++
-        }, 0L, 20L * 60L * 10L)
+        }
     }
 }

@@ -16,10 +16,15 @@ class SelectListener : Listener {
             event.isCancelled = true
 
             when (slot) {
-                10 -> player.performCommand("ranking gold")
-                12 -> player.performCommand("ranking kill")
-                14 -> player.performCommand("ranking death")
-                16 -> player.performCommand("ranking boost")
+                3 -> player.performCommand("ranking gold")
+                4 -> player.performCommand("ranking cash")
+                5 -> player.performCommand("ranking playtime")
+
+                13 -> player.performCommand("ranking boost")
+
+                21 -> player.performCommand("ranking kill")
+                22 -> player.performCommand("ranking death")
+                23 -> player.performCommand("ranking streak")
             }
         }
     }

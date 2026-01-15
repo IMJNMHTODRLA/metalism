@@ -18,7 +18,7 @@ import java.security.SecureRandom
 import java.util.*
 
 @RequireJavaPlugin
-@RequireCommandExecutor("chest", "user")
+@RequireCommandExecutor("chest", "user", "", ["창고"])
 @RequireTabExecutor
 class Chest(private val plugin: JavaPlugin) : CommandExecutor, TabExecutor {
     override fun onCommand(

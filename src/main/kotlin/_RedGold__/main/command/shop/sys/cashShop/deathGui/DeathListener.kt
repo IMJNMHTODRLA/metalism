@@ -1,6 +1,8 @@
 package _RedGold__.main.command.shop.sys.cashShop.deathGui
 
+import _RedGold__.main.function.Color.fail
 import _RedGold__.main.function.Color.gc
+import _RedGold__.main.function.Color.good
 import _RedGold__.main.function.Data.getData
 import _RedGold__.main.function.Data.saveData
 import _RedGold__.main.function.Gui.getItem
@@ -38,24 +40,20 @@ class DeathListener(private val plugin: JavaPlugin) : Listener {
             val slot = event.slot
             event.isCancelled = true
 
-            fun buy(id: Int, removeCash: Long) {
-                val cash = getData(plugin, player, "cash").toLong()
+            fun buy(id: Int, removePoint: Long) {
+                val ticketPoint = getData(plugin, player, "ticket/point").toLong()
 
-                if (cash < removeCash) {
-                    player.sendMessage(gc("&c캐시가 부족합니다. 필요 캐시: ${(removeCash - cash).toFormat()}캐시"))
-                    player.playSound(player.location, Sound.ENTITY_ENDERMAN_TELEPORT, 1f, 0.5f)
+                if (ticketPoint < removePoint) {
+                    player.fail("&c캐시가 부족합니다. 필요 뽑기 포인트: ${(removePoint - ticketPoint).toFormat()} 뽑기 포인트")
                     return
                 }
 
-                saveData(plugin, player, "cash", cash - removeCash)
+                saveData(plugin, player, "ticket/point", ticketPoint - removePoint)
                 saveData(plugin, player, "death_sound", id)
                 applyDeath[player.uniqueId] = id
 
-                addHoldGold(plugin, removeCash * 10_000)
-
-                player.sendMessage(gc("&a사망 사운드 구매가 완료되었습니다."))
-
-                player.playSound(player.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f)
+                addHoldGold(plugin, ticketPoint * 500_000)
+                player.good("&a사망 사운드 구매가 완료되었습니다.")
                 DeathGui(plugin).openGui(player, 0f)
             }
 
@@ -66,20 +64,20 @@ class DeathListener(private val plugin: JavaPlugin) : Listener {
             if (clickType == ClickType.LEFT) {
                 when (slot) {
                     10 -> buy(0, 0)
-                    11 -> buy(1, 600)
-                    12 -> buy(2, 600)
-                    13 -> buy(3, 600)
-                    14 -> buy(4, 650)
-                    15 -> buy(5, 650)
-                    16 -> buy(6, 650)
+                    11 -> buy(1, 13)
+                    12 -> buy(2, 13)
+                    13 -> buy(3, 13)
+                    14 -> buy(4, 14)
+                    15 -> buy(5, 14)
+                    16 -> buy(6, 14)
 
-                    19 -> buy(7, 650)
-                    20 -> buy(8, 700)
-                    21 -> buy(9, 750)
-                    22 -> buy(10, 600)
-                    23 -> buy(11, 600)
-                    24 -> buy(12, 700)
-                    25 -> buy(13, 1000)
+                    19 -> buy(7, 14)
+                    20 -> buy(8, 15)
+                    21 -> buy(9, 16)
+                    22 -> buy(10, 13)
+                    23 -> buy(11, 13)
+                    24 -> buy(12, 14)
+                    25 -> buy(13, 20)
                 }
                 return
             }

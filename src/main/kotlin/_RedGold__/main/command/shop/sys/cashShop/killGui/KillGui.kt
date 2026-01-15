@@ -5,6 +5,7 @@ import _RedGold__.main.function.Data.getData
 import _RedGold__.main.function.Gui.getItem
 import _RedGold__.main.function.api.toFormat
 import org.bukkit.Sound
+import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 
@@ -48,7 +49,7 @@ class KillGui(private val plugin: JavaPlugin) {
                     "&f",
                     "&c&l새 킬 사운드를 구매하면 기존 킬 사운드를 재구매 해야 합니다."
                 )
-            ))
+            ).apply {if (killSound == type) addUnsafeEnchantment(Enchantment.PROTECTION, 1)})
         }
 
         fun Int.none() {

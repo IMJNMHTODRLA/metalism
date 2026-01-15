@@ -7,6 +7,7 @@ import _RedGold__.main.command.event.sys.rankRewardGui.RankRefresh.EventRank.eve
 import _RedGold__.main.command.event.sys.rankRewardGui.RankRefresh.EventRank.isLoading
 import _RedGold__.main.command.ranking.sys.Refresh.RankValue.boostRank
 import _RedGold__.main.command.ranking.sys.Refresh.RankValue.waitUpdate
+import _RedGold__.main.event.randomEffect.System.RandomEffectEvent.bestPoint
 import _RedGold__.main.event.randomEffect.System.RandomEffectEvent.point
 import _RedGold__.main.function.Color.fail
 import _RedGold__.main.function.Color.rgb
@@ -20,9 +21,27 @@ import org.bukkit.entity.Player
 import java.util.*
 
 class RankRewardGui {
+    private val prefix = """
+        ${rgb("2444FC")}§l§o[
+        ${rgb("2B49FC")}§l§oM
+        ${rgb("324DFC")}§l§oE
+        ${rgb("3952FD")}§l§oT
+        ${rgb("4057FD")}§l§oA
+        ${rgb("475CFD")}§l§oL
+        ${rgb("4E60FD")}§l§oI
+        ${rgb("5565FD")}§l§oS
+        ${rgb("5B6AFE")}§l§oM 
+        ${rgb("6973FE")}§l§oE
+        ${rgb("7078FE")}§l§oV
+        ${rgb("777DFE")}§l§oE
+        ${rgb("7E82FF")}§l§oN
+        ${rgb("8586FF")}§l§oT
+        ${rgb("8C8BFF")}§l§o]
+    """.trimIndent().replace("\n", "")
+
     fun getTier2Player(uuid: UUID, onlyColor: Boolean = false): String {
         val index = eventTier.indexOfFirst {it.key == uuid}
-        if (index == -1) return if (onlyColor) "&8&l" else "&8&l랭크 없음"
+        if (index == -1 || eventTier.isEmpty()) return if (onlyColor) "&8&l" else "&8&l랭크 없음"
 
         val rank = index + 1
         val totalPlayers = eventTier.size
@@ -46,8 +65,13 @@ class RankRewardGui {
         }
     }
 
+    fun getTierNumber2Player(uuid: UUID): Int {
+        val index = eventTier.indexOfFirst { it.key == uuid }
+        return if (index == -1) 0 else index + 1
+    }
+
     fun openGui(player: Player, page: Int) {
-        val gui = EventHolder().inventory
+        val gui = RankRewardHolder(page).inventory
         val uuid = player.uniqueId
 
         val now = System.currentTimeMillis() / 1000
@@ -63,23 +87,7 @@ class RankRewardGui {
 
         val background = getItem(
             "light_blue_stained_glass_pane",
-            """
-                ${rgb("2444FC")}§l§o[
-                ${rgb("2B49FC")}§l§oM
-                ${rgb("324DFC")}§l§oE
-                ${rgb("3952FD")}§l§oT
-                ${rgb("4057FD")}§l§oA
-                ${rgb("475CFD")}§l§oL
-                ${rgb("4E60FD")}§l§oI
-                ${rgb("5565FD")}§l§oS
-                ${rgb("5B6AFE")}§l§oM 
-                ${rgb("6973FE")}§l§oE
-                ${rgb("7078FE")}§l§oV
-                ${rgb("777DFE")}§l§oE
-                ${rgb("7E82FF")}§l§oN
-                ${rgb("8586FF")}§l§oT
-                ${rgb("8C8BFF")}§l§o]
-            """.trimIndent().replace("\n", "")
+            prefix
         )
 
         for (i in 0 until gui.size) gui.setItem(i, background)
@@ -98,30 +106,34 @@ class RankRewardGui {
 
             val targetPlayer = eventTier[ranking]
             val targetInfo = Bukkit.getOfflinePlayer(targetPlayer.key)
-            val name = targetInfo.name?: "steve"
-            val displayName = targetInfo.name?: "알 수 없음"
+            val name = targetInfo.name?: "알 수 없음"
             val tier = getTier2Player(targetPlayer.key)
             val color = getTier2Player(targetPlayer.key, true)
 
             gui.setItem(itemLocation[i], getPlayerSkull(
-                name,
-                "&f&l플레이어: $color$displayName",
-                listOf("", "&f&l랭크: $tier", "&f&l누적 이벤트 점수: &d&l${targetPlayer.value}")
+                targetPlayer.key,
+                "&f&l플레이어: $color$name",
+                listOf(
+                    "",
+                    "&f&l랭크: $tier&8&l/${ranking + 1}",
+                    "&e&l이벤트 최고 점수: &d&l${targetPlayer.value.toFormat()}"
+                )
             ).apply {addUnsafeEnchantment(Enchantment.LUCK_OF_THE_SEA, 1)})
         }
 
-        gui.setItem(45, getItem(
+        if (page > 0) gui.setItem(45, getItem(
             "red_stained_glass_pane",
             "&c이전 페이지로 이동(${page - 1})"
         ))
 
         gui.setItem(48, getPlayerSkull(
-            player.name,
+            uuid,
             "&b&l${player.name}&f&l님",
             listOf(
                 "",
-                "&f&l이벤트 점수: &d&l${point[player.uniqueId]?.toFormat()?: "-"} 점수",
-                "&f&l랭크: ${getTier2Player(uuid)}",
+                "&f&l랭크: ${getTier2Player(uuid)}&8&l/${getTierNumber2Player(uuid)}",
+                "&f&l이벤트 누적 점수: &d&l${point[uuid]?.toFormat()?: "-"} 점수",
+                "&e&l이벤트 최고 점수: &d&l${bestPoint[uuid]?.toFormat()?: "-"} 점수",
                 "",
                 "&e&l클릭 시 랭킹 보상을 획득 할 수 있습니다.",
                 "&e&l랭크 보상은 이벤트 종료 후 2일 뒤에 획득 가능합니다.",
@@ -140,27 +152,27 @@ class RankRewardGui {
             listOf(
                 "",
                 "${rgb("D593FF")}&l챌린저(1위)&f&l:",
-                "&6&l3,000,000 골드, &b&l200 캐시, &a&l경험치 병 64개,",
+                "&6&l2,250,000 골드, &b&l125 캐시, &a&l경험치 병 64개,",
                 "&d&l엔드 수정 64개, 리스폰 정박기 64개, 불사의 토템 24개",
                 "",
                 "${rgb("4FD0FF")}&l마스터(2위~5위)&f&l:",
-                "&6&l2,250,000 골드, &b&l150 캐시, &a&l경험치 병 48개,",
+                "&6&l2,000,000 골드, &b&l100 캐시, &a&l경험치 병 48개,",
                 "&d&l엔드 수정 48개, 리스폰 정박기 48개, 불사의 토템 16개",
                 "",
                 "${rgb("FFBFF4")}&l플래티넘(6위~상위 10%)&f&l:",
-                "&6&l2,000,000 골드, &b&l100 캐시, &a&l경험치 병 32개,",
+                "&6&l1,750,000 골드, &b&l75 캐시, &a&l경험치 병 32개,",
                 "&d&l엔드 수정 32개, 리스폰 정박기 32개, 불사의 토템 8개",
                 "",
                 "${rgb("FFBF00")}&l골드(상위 11%~30%)&f&l:",
-                "&6&l1,500,000 골드, &b&l75 캐시, &a&l경험치 병 24개,",
+                "&6&l1,500,000 골드, &b&l50 캐시, &a&l경험치 병 24개,",
                 "&d&l엔드 수정 24개, 리스폰 정박기 24개",
                 "",
                 "${rgb("999999")}&l실버(상위 31%~50%)&f&l:",
-                "&6&l1,250,000 골드, &b&l50 캐시, &a&l경험치 병 16개,",
+                "&6&l1,250,000 골드, &b&l25 캐시, &a&l경험치 병 16개,",
                 "&d&l엔드 수정 16개, 흑요석 24개",
                 "",
                 "${rgb("895422")}&l브론즈(상위 51%~100%)&f&l:",
-                "&6&l1,000,000 골드, &b&l25 캐시, &a&l경험치 병 8개,",
+                "&6&l1,000,000 골드, &b&l10 캐시, &a&l경험치 병 8개,",
                 "&d&l엔드 수정 8개, 흑요석 16개",
                 "",
             )
@@ -172,6 +184,6 @@ class RankRewardGui {
         ))
 
         player.openInventory(gui)
-        player.playSound(player.location, Sound.AMBIENT_CAVE, 1f, 1f)
+        player.playSound(player.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f)
     }
 }

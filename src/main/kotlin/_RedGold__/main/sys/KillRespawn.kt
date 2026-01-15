@@ -4,15 +4,18 @@ import _RedGold__.main.function.Color.gc
 import _RedGold__.main.function.Data.getData
 import _RedGold__.main.function.Data.saveData
 import _RedGold__.main.function.ServerGold.addHoldGold
+import _RedGold__.main.function.ServerGold.addMakeGold
 import _RedGold__.main.function.api.toFormat
 import _RedGold__.main.load.RequireJavaPlugin
 import _RedGold__.main.load.RequireListener
 import _RedGold__.main.sys.KillRespawn.ChatApply.applyDeath
 import _RedGold__.main.sys.KillRespawn.ChatApply.applyKill
+import _RedGold__.main.sys.KillRespawn.ChatApply.ggTiming
 import _RedGold__.main.sys.KillRespawn.ChatApply.soundPitch
 import _RedGold__.main.sys.KillRespawn.ChatApply.soundPitchKill
 import _RedGold__.main.sys.KillRespawn.ChatApply.soundType
 import _RedGold__.main.sys.KillRespawn.ChatApply.soundTypeKill
+import _RedGold__.main.sys.KillRespawn.KillStreakObject.killStreak
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Sound
@@ -21,16 +24,25 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.EntityDeathEvent
+import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.player.PlayerRespawnEvent
 import org.bukkit.plugin.java.JavaPlugin
 import java.security.SecureRandom
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
+import kotlin.math.atan
 
 @RequireJavaPlugin
 @RequireListener
 class KillRespawn(private val plugin: JavaPlugin) : Listener {
-    private val whoKill: MutableMap<Player, Long> = mutableMapOf()
+    private val whoKill: MutableMap<UUID, Long> = ConcurrentHashMap()
+    private val killStreakBonus: MutableMap<UUID, Long> = ConcurrentHashMap()
+    private val lastKilled: MutableMap<UUID, MutableMap<UUID, Long>> = ConcurrentHashMap()
+
+    object KillStreakObject {
+        val killStreak: MutableMap<UUID, Int> = ConcurrentHashMap()
+    }
+
     object ChatApply {
         var applyDeath: MutableMap<UUID, Int> = ConcurrentHashMap()
 
@@ -43,10 +55,10 @@ class KillRespawn(private val plugin: JavaPlugin) : Listener {
             Sound.BLOCK_VAULT_BREAK, Sound.MUSIC_CREDITS
         )
 
-        val soundPitch = listOf(1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 2.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f)
+        val soundPitch = listOf(1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 2.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f) //13
         val deathSoundMessage = listOf(
             "물에 빠진", "귀신", "비", "흑우", "박쥐", "돼지",
-            "모루", "부숴진", "폭팔", "먹다", "타버림", "금고 부숨"
+            "모루", "부숴진", "폭팔", "먹다", "타버림", "금고 부숨", "웅장한 브금(김)"
         )
 
         var applyKill: MutableMap<UUID, Int> = ConcurrentHashMap()
@@ -63,6 +75,12 @@ class KillRespawn(private val plugin: JavaPlugin) : Listener {
             "철퇴", "꿀", "슬라임", "좀비", "철문 공격", "조글린",
             "모루", "발전 과제", "셜커", "염소뿔", "삼지창", "웅장한 삼지창", "마심"
         )
+
+        val ggColorMapping: List<String> = listOf(
+            "&f", "&0&l", "&1&l", "&2&l", "&3&l", "&4&l", "&5&l", "&6&l", "&7&l", "&8&l", "&9&l",
+            "&a&l", "&b&l", "&c&l", "&d&l", "&e&l", "&f&l"
+        )
+        val ggTiming: MutableMap<UUID, MutableMap<UUID, Long>> = ConcurrentHashMap()
     }
 
     private val secureRandom = SecureRandom()
@@ -72,6 +90,8 @@ class KillRespawn(private val plugin: JavaPlugin) : Listener {
         val attacker = event.entity.killer?: return
         val victim = event.entity as? Player?: return
 
+        val now = System.currentTimeMillis() / 1000
+
         val victimUuid = victim.uniqueId
         val attackerUuid = attacker.uniqueId
 
@@ -80,6 +100,8 @@ class KillRespawn(private val plugin: JavaPlugin) : Listener {
 
         val attackerKill = getData(plugin, attacker, "kill").toLong()
         val victimDeath = getData(plugin, victim, "death").toLong()
+
+        val attackerName = attacker.name
 
         val level = attacker.level
 
@@ -105,14 +127,74 @@ class KillRespawn(private val plugin: JavaPlugin) : Listener {
 
         attacker.giveExp(giveLevel)
 
-        var getGold = 30000L
-        var getCash = 2L
-        var removeGold = 60000L
+        var getGold = 6000L
+        var getCash = 1L
+        var removeGold = 20000L
 
-        if (victimGold - 50000L < 0) {
+        if (victimGold - 20000L < 0) {
             getGold = victimGold
             getCash = 0
             removeGold = victimGold
+        }
+
+        val victimBonus = killStreakBonus[victimUuid] ?: 0L
+        if ((killStreak[victimUuid]?: 0) >= 30) {
+            val steelGold = (victimBonus * 0.1).toLong()
+            getGold += steelGold
+            removeGold += steelGold
+
+            attacker.sendMessage(gc("&f&l${attackerName}님의 &e&l연킬 보너스의 10%&8(${steelGold.toFormat()} 골드)&f&l를 &c&l뺏었습니다!"))
+        }
+
+        val lastKillMap = lastKilled.getOrPut(attackerUuid) {ConcurrentHashMap()}
+        val streak: Int
+
+        if ((lastKillMap[victimUuid]?: 0L) > now) {
+            streak = killStreak[attackerUuid]?: 0
+        } else {
+            streak = (killStreak[attackerUuid]?: 0) + 1
+            lastKillMap[victimUuid] = now + 150
+        }
+
+        val giveBonusGold = when {
+            streak < 2 -> false
+            streak in 2..9 -> streak % 2 == 0
+            streak in 10..29 -> streak % 5 == 0
+            else -> streak % 10 == 0
+        }
+
+        if (giveBonusGold) {
+            val streakDouble = streak.toDouble()
+            val bonusGold = when(streak) {
+                in 2..9 -> 9000L * (streakDouble / 10 + 1)
+                in 10..29 -> 1000L * (streakDouble / 8 + 1)
+                in 30..59 -> 11000L * (streakDouble / 7 + 1)
+                else -> 12000L * (streakDouble / 5 + 1)
+            }.toLong()
+
+            getGold += bonusGold
+            killStreakBonus[attackerUuid] = (killStreakBonus[attackerUuid]?: 0) + bonusGold
+
+            when {
+                streak < 10 -> {
+                    attacker.sendMessage(gc("&a&l${streak}연킬&f&l을 하여 &6&l${bonusGold.toFormat()} 골드&f&l를 획득하였습니다.&8&l(연킬은 매일마다 초기화 됩니다.)"))
+                    attacker.playSound(attacker.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f)
+                }
+                streak in 10..29 -> {
+                    attacker.sendMessage(gc("&c&l${streak}연킬&f&l을 하여 &6&l${bonusGold.toFormat()} 골드&f&l를 획득하였습니다.&8&l(연킬은 매일마다 초기화 됩니다.)"))
+                    attacker.playSound(attacker.location, Sound.UI_TOAST_CHALLENGE_COMPLETE, 1.0f, 1.5f)
+                }
+                else -> {
+                    attacker.sendMessage(gc("&d&l${streak}연킬&f&l을 하여 &6&l${bonusGold.toFormat()} 골드&f&l를 획득하였습니다.&8&l(연킬은 매일마다 초기화 됩니다.)"))
+
+                    Bukkit.broadcastMessage(gc("&f&l${attackerName}님이 &d&l${streak}연킬을 달성하였습니다!"))
+                    Bukkit.broadcastMessage(gc("&f&l${attackerName}님을 처치 시 &c&l획득한 연킬 보너스의 &4&l10%를 &c&l강탈할 수 있습니다."))
+
+                    attacker.playSound(attacker.location, Sound.ENTITY_WITHER_SPAWN, 1.0f, 1.0f)
+                    attacker.world.strikeLightningEffect(attacker.location)
+                    Bukkit.getOnlinePlayers().forEach {it.playSound(it.location, Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f)}
+                }
+            }
         }
 
         saveData(plugin, attacker, "gold", attackerGold + getGold)
@@ -120,29 +202,39 @@ class KillRespawn(private val plugin: JavaPlugin) : Listener {
 
         saveData(plugin, victim, "gold", victimGold - removeGold)
 
+        addHoldGold(plugin, removeGold)
+        addMakeGold(plugin, getGold)
+
         attacker.sendMessage(gc("&f&l+&6&l${getGold.toFormat()} 골드"))
         attacker.sendMessage(gc("&f&l+&b&l${getCash.toFormat()} 캐시"))
         attacker.sendMessage(gc("&f&l+&a&l${giveLevel.toFormat()} 경험치"))
+        attacker.sendMessage(gc("&f&l+&c&l1 연킬&7&l($streak)"))
+        attacker.sendMessage(gc("&7&l연킬 순위에서 보상을 획득 할 수 있습니다."))
 
         attacker.sendActionBar(gc(
             "&f&l+&6&l${getGold.toFormat()} 골드&8, &f&l+&b&l${getCash.toFormat()} 캐시&8, &f&l+&a&l${giveLevel.toFormat()} 경험치"
         ))
 
         victim.sendMessage(gc(
-            "&f&l당신은 플레이어에게 &4&l사망하여 &6&l${removeGold.toFormat()} 골드&f&l를 &c&l잃었습니다."
+            "&f&l당신은 플레이어에게 &4&l사망하여 &6&l${removeGold.toFormat()} 골드&f&l와 연킬을 &c&l잃었습니다."
         ))
 
         if (deathSound != -1) victim.playSound(victim.location, soundType[deathSound], 1.0f, soundPitch[deathSound])
         if (killSound != -1) attacker.playSound(attacker.location, soundTypeKill[killSound], 1.0f, soundPitchKill[killSound])
 
-        whoKill[victim] = (System.currentTimeMillis() / 1000) + 5
+        whoKill[victimUuid] = now + 5
+        killStreak[attackerUuid] = streak
+        killStreak.remove(victimUuid)
+        killStreakBonus.remove(victimUuid)
+
+        val innerMap = ggTiming.getOrPut(attackerUuid) {ConcurrentHashMap()}
+        innerMap[victimUuid] = now + 60
     }
 
     @EventHandler
     fun onDamage(event: EntityDamageEvent) {
-        val victim = event.entity as? Player?: return
-
-        if (whoKill[victim] != null && whoKill[victim]!! > System.currentTimeMillis() / 1000) event.isCancelled = true
+        val victimUuid = (event.entity as? Player?: return).uniqueId
+        if (whoKill[victimUuid] != null && whoKill[victimUuid]!! > System.currentTimeMillis() / 1000) event.isCancelled = true
     }
 
     @EventHandler
@@ -157,7 +249,9 @@ class KillRespawn(private val plugin: JavaPlugin) : Listener {
             event.respawnLocation = Location(world, x + 0.5, highestY, z + 0.5)
         }
 
-        if (whoKill[event.player] != null && whoKill[event.player]!! > System.currentTimeMillis() / 1000) {
+        val uuid = event.player.uniqueId
+
+        if (whoKill[uuid] != null && whoKill[uuid]!! > System.currentTimeMillis() / 1000) {
             event.player.sendMessage(gc("&f&l당신은 플레이어에게 &4&l사망하여 &a&l5초간 모든 데미지에 먼역입니다."))
         }
     }

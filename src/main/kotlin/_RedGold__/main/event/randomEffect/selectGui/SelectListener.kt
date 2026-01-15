@@ -2,6 +2,8 @@ package _RedGold__.main.event.randomEffect.selectGui
 
 import _RedGold__.main.Main.Event.END_TIME
 import _RedGold__.main.Main.Event.START_TIME
+import _RedGold__.main.event.randomEffect.System.RandomEffectEvent.cashingDifficulty
+import _RedGold__.main.event.randomEffect.System.RandomEffectEvent.cashingPoint
 import _RedGold__.main.event.randomEffect.System.RandomEffectEvent.difficulty
 import _RedGold__.main.event.randomEffect.System.RandomEffectEvent.difficultyEffect
 import _RedGold__.main.event.randomEffect.System.RandomEffectEvent.killEvent1
@@ -10,6 +12,7 @@ import _RedGold__.main.event.randomEffect.System.RandomEffectEvent.max
 import _RedGold__.main.event.randomEffect.System.RandomEffectEvent.point
 import _RedGold__.main.function.Color.fail
 import _RedGold__.main.function.Color.gc
+import _RedGold__.main.function.Color.good
 import _RedGold__.main.function.api.toFormat
 import _RedGold__.main.load.RequireJavaPlugin
 import _RedGold__.main.load.RequireListener
@@ -22,6 +25,7 @@ import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import kotlin.reflect.typeOf
 
 @RequireListener
 class SelectListener : Listener {
@@ -72,16 +76,20 @@ class SelectListener : Listener {
                 }
 
                 val elapsedTime = (System.currentTimeMillis() / 1000) - openTime
-                max[uuid] = max[uuid]!! + 1
 
                 if (elapsedTime > 120L) {
-                    player.sendMessage(gc("&c&l2분 안에 선택을 안하여 난이도 선택이 취소되었습니다.&8&l(선택 횟수: ${max[uuid]}/4)"))
+                    player.sendMessage(gc("&c&l2분 안에 선택을 안하여 난이도 선택이 취소되었습니다.&8&l(선택 횟수: ${max[uuid]}/3)"))
                     player.playSound(player.location, Sound.ENTITY_PLAYER_ATTACK_NODAMAGE, 1f, 1f)
                     return
                 }
 
+                cashingPoint[uuid] = 0
+
+                max[uuid] = max[uuid]!! + 1
                 val bonusPoint = 60_000L - (500L * elapsedTime)
                 point[uuid] = point[uuid]!! + bonusPoint
+                cashingPoint[uuid] = bonusPoint
+
                 killEvent1.remove(uuid)
                 killEvent2.remove(uuid)
                 difficulty[uuid] = type + 1
@@ -89,7 +97,7 @@ class SelectListener : Listener {
                 player.sendMessage(gc("${difficultyMessage[type]} &f&l난이도를 &c&l선택하였습니다.&8&l(선택 횟수: ${max[uuid]}/3)"))
                 player.sendMessage(gc("&a&l${elapsedTime}&f&l초 안에 클릭하여 &d&l${bonusPoint.toFormat()} 점수&f&l를 획득하였습니다."))
 
-                for (i in 0..<(type + 1)) player.addPotionEffect(difficultyEffect[i])
+                for (i in 0..type) player.addPotionEffect(difficultyEffect[i])
 
                 player.playSound(player.location, Sound.ENTITY_ENDER_DRAGON_AMBIENT, 1f, 1f)
                 player.closeInventory()
@@ -102,7 +110,7 @@ class SelectListener : Listener {
                     13 -> difficultySelect(2)
                     14 -> difficultySelect(3)
                     15 -> difficultySelect(4)
-                    22 -> {
+                    40 -> {
                         holder.isClose = true
 
                         killEvent1.remove(uuid)
@@ -115,6 +123,44 @@ class SelectListener : Listener {
                         player.playSound(player.location, Sound.ENTITY_PLAYER_ATTACK_NODAMAGE, 1f, 1f)
                         player.closeInventory()
                     }
+                }
+                return
+            }
+
+            val cashingPoint = cashingPoint[uuid]?: 0
+
+            fun difficultySweep(difficulty: Int) {
+                holder.isClose = true
+
+                if (cashingPoint <= 0 || difficulty != cashingDifficulty[uuid]) {
+                    player.fail("&c소탕이 불가능 합니다.")
+                    return
+                }
+
+                if (max[uuid]!! >= 3) {
+                    player.closeInventory()
+                    player.good("&a&l남은 횟수를 모두 소탕하였습니다.")
+                    return
+                }
+
+                max[uuid] = max[uuid]!! + 1
+                point[uuid] = point[uuid]!! + cashingPoint
+
+                killEvent1.remove(uuid)
+                killEvent2.remove(uuid)
+
+                player.playSound(player.location, Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f)
+                player.good("&a&l소탕이 완료되었습니다!")
+                SelectGui().openGui(player, openTime, 0f)
+            }
+
+            if (clickType == ClickType.RIGHT) {
+                when (slot) {
+                    11 -> difficultySweep(1)
+                    12 -> difficultySweep(2)
+                    13 -> difficultySweep(3)
+                    14 -> difficultySweep(4)
+                    15 -> difficultySweep(5)
                 }
                 return
             }

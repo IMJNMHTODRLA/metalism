@@ -15,22 +15,22 @@ import org.bukkit.plugin.java.JavaPlugin
 
 class StyleGui(private val plugin: JavaPlugin) {
     private val prefix = """
-                            ${rgb("2444FC")}§l§o[
-                            ${rgb("2B49FC")}§l§oM
-                            ${rgb("324DFC")}§l§oE
-                            ${rgb("3952FD")}§l§oT
-                            ${rgb("4057FD")}§l§oA
-                            ${rgb("475CFD")}§l§oL
-                            ${rgb("4E60FD")}§l§oI
-                            ${rgb("5565FD")}§l§oS
-                            ${rgb("5B6AFE")}§l§oM 
-                            ${rgb("6973FE")}§l§oS
-                            ${rgb("7078FE")}§l§oT
-                            ${rgb("777DFE")}§l§oY
-                            ${rgb("7E82FF")}§l§oL
-                            ${rgb("8586FF")}§l§oE
-                            ${rgb("8C8BFF")}§l§o]
-                        """.trimIndent().replace("\n", "")
+        ${rgb("2444FC")}§l§o[
+        ${rgb("2B49FC")}§l§oM
+        ${rgb("324DFC")}§l§oE
+        ${rgb("3952FD")}§l§oT
+        ${rgb("4057FD")}§l§oA
+        ${rgb("475CFD")}§l§oL
+        ${rgb("4E60FD")}§l§oI
+        ${rgb("5565FD")}§l§oS
+        ${rgb("5B6AFE")}§l§oM 
+        ${rgb("6973FE")}§l§oS
+        ${rgb("7078FE")}§l§oT
+        ${rgb("777DFE")}§l§oY
+        ${rgb("7E82FF")}§l§oL
+        ${rgb("8586FF")}§l§oE
+        ${rgb("8C8BFF")}§l§o]
+    """.trimIndent().replace("\n", "")
 
     private fun Inventory.none(n: Int) {
         val gui = this
@@ -49,7 +49,7 @@ class StyleGui(private val plugin: JavaPlugin) {
 
     fun openGui(player: Player, sound: Float = 1f) {
         val isBuy = mutableListOf<Boolean>()
-        for (i in 0..11) isBuy.add(getData(plugin, player, "style/$i") == "1")
+        for (i in 0..18) isBuy.add(getData(plugin, player, "style/$i") == "1")
 
         val isApply = applyStyle[player.uniqueId]?: -1
 
