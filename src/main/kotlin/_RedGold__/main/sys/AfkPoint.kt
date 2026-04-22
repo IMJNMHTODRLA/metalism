@@ -1,17 +1,14 @@
 package _RedGold__.main.sys
 
-import _RedGold__.main.function.Color.gc
-import _RedGold__.main.function.Color.rgb
+import _RedGold__.main.functions.Color.gc
+import _RedGold__.main.functions.Color.rgb
 import _RedGold__.main.function.Data.getData
 import _RedGold__.main.function.Data.saveData
-import _RedGold__.main.function.Scheduler.task
-import _RedGold__.main.function.ServerGold.addHoldGold
+import _RedGold__.main.functions.Scheduler.task
 import _RedGold__.main.function.ServerGold.addMakeGold
-import _RedGold__.main.load.RequireJavaPlugin
+import _RedGold__.main.loads.RequireJavaPlugin
 import org.bukkit.Bukkit
-import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
-import java.util.*
 
 @RequireJavaPlugin
 class AfkPoint(private val plugin: JavaPlugin) {
@@ -32,13 +29,11 @@ class AfkPoint(private val plugin: JavaPlugin) {
         plugin.task(0, 20 * 60 * 10) {
             for (player in Bukkit.getOnlinePlayers()) {
                 val gold = getData(plugin, player, "gold").toLong()
-                val cash = getData(plugin, player, "cash").toLong()
 
-                player.sendMessage(gc("$prefix &a&l10분간 &f&l접속하여 &b&l1 캐시&f&l와 &6&l30,000 골드&f&l를 지급 하였습니다."))
+                player.sendMessage(gc("$prefix &a&l10분간 &f&l접속하여 &6&l30,000 골드&f&l를 획득 하였습니다!"))
 
-                addMakeGold(plugin, 40000)
+                addMakeGold(plugin, 30000)
                 saveData(plugin, player, "gold", gold + 30_000L)
-                saveData(plugin, player, "cash", cash + 1L)
             }
         }
     }

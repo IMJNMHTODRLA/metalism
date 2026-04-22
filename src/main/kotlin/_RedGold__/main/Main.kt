@@ -8,17 +8,25 @@ import _RedGold__.main.function.Logger.info
 import _RedGold__.main.function.api.WriteSave
 import _RedGold__.main.function.api.isFileExists
 import _RedGold__.main.function.api.toUuid
-import _RedGold__.main.load.PreLoad
+import _RedGold__.main.loads.FinalFlush
+import _RedGold__.main.loads.PreLoad
+import _RedGold__.main.loads.SlowInit
+import _RedGold__.main.managers.InitManager
+import _RedGold__.main.managers.rebootManager.RebootManager
+import com.github.retrooper.packetevents.PacketEvents
 import com.google.gson.Gson
 import net.luckperms.api.LuckPermsProvider
 import net.luckperms.api.node.Node
 import okhttp3.*
+import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 import java.time.LocalDateTime
 import java.util.*
 import java.util.concurrent.TimeUnit
 
 class Main : JavaPlugin() {
+    private var rebootManager: RebootManager? = null
+
     object Event {
         const val EVENT_NAME = "&b&l대결전(PVE)"
         const val EVENT_CODE = "randomEffect"
@@ -30,7 +38,15 @@ class Main : JavaPlugin() {
     object Gacha {
         const val IS_LIMITED = false
         const val GACHA_MESSAGE = "상시 뽑기"
-        val gachaPercent = listOf(1.5, 1.5, 47.0, 50.0)
+        val gachaPercent = listOf(
+            0.5, 0.75, 1.0,
+            1.5, 1.5, 46.0, 48.75
+        )
+        //val gachaPercent = listOf(
+        //    0.75, 1.0, 1.25,
+        //    2.0, 2.0, 46.0, 47.0
+        //) //패스 가챠 때
+        const val GACHA_POINT_TO_GOLD_TIMES = 0L
     }
 
     private val client = OkHttpClient.Builder().connectTimeout(3, TimeUnit.SECONDS).build()
@@ -51,6 +67,15 @@ class Main : JavaPlugin() {
     }
 
     override fun onEnable() {
+        PacketEvents.getAPI().init()
+
+        InitManager(this).init()
+        PreLoad(this).load()
+
+        SlowInit().init()
+
+        rebootManager = RebootManager(this)
+
         if (!isFileExists(this, "server_gold", "hold.data")) WriteSave(this, "server_gold", "hold.data", "0")
         if (!isFileExists(this, "server_gold", "make.data")) WriteSave(this, "server_gold", "make.data", "0")
 
@@ -84,11 +109,11 @@ class Main : JavaPlugin() {
                 if (exp > now) monthlySubData[mid.toUuid()] = exp
             }
         })
-
-        PreLoad.loadClass(this)
     }
 
     override fun onDisable() {
+        rebootManager?.stop()
 
+        FinalFlush().init()
     }
 }

@@ -1,10 +1,10 @@
 package _RedGold__.main.sys
 
-import _RedGold__.main.function.Color.gc
+import _RedGold__.main.functions.Color.gc
 import _RedGold__.main.function.Data.getData
 import _RedGold__.main.function.Rank.getPlayerRankPrefix
-import _RedGold__.main.load.RequireJavaPlugin
-import _RedGold__.main.load.RequireListener
+import _RedGold__.main.loads.RequireJavaPlugin
+import _RedGold__.main.loads.RequireListener
 import _RedGold__.main.sys.Chat.ChatApply.applyStyle
 import _RedGold__.main.sys.Chat.ChatApply.symmetry
 import _RedGold__.main.sys.KillRespawn.ChatApply.ggColorMapping
@@ -51,13 +51,16 @@ class Chat(private val plugin: JavaPlugin) : Listener {
         val uuid = player.uniqueId
         var message = event.message
         val now = System.currentTimeMillis() / 1000
+        var addGgColor = ""
+        var isGgMessage = false
 
         if (
             player.hasPermission("Main.plus") &&
             message.lowercase() == "gg" &&
             (ggTiming[uuid]?.values?.first()?: 0) > now
         ) {
-            message = ggColorMapping[getData(plugin, player, "gg_color").toInt()] + message.uppercase()
+            addGgColor = ggColorMapping[getData(plugin, player, "gg_color").toInt()]
+            isGgMessage = true
             player.playSound(player.location, Sound.UI_TOAST_CHALLENGE_COMPLETE, 1f, 1f)
 
             val ggSendUuid = ggTiming[uuid]?.keys?.first()
@@ -65,7 +68,6 @@ class Chat(private val plugin: JavaPlugin) : Listener {
                 val victimOfflinePlayer = Bukkit.getOfflinePlayer(ggSendUuid)
                 if (victimOfflinePlayer.isOnline) {
                     val victimPlayer = victimOfflinePlayer.player!!
-
                     victimPlayer.playSound(victimPlayer.location, Sound.ITEM_GOAT_HORN_SOUND_1, 1f, 1f)
                 }
             }
@@ -73,9 +75,10 @@ class Chat(private val plugin: JavaPlugin) : Listener {
             ggTiming.remove(uuid)
         }
 
-        val messageFormat = "${getPlayerRankPrefix(player)} ${player.name}&f: $message"
+        val messageFormat = "${getPlayerRankPrefix(player)} ${player.name}&f: $addGgColor"
+        if (isGgMessage) message = message.uppercase()
 
-        if ((applyStyle[uuid]?: -1) == -1) event.format = gc(messageFormat)
-        else event.format = gc("${symmetry[applyStyle[uuid]!!]} $messageFormat")
+        if ((applyStyle[uuid]?: -1) == -1) event.format = gc(messageFormat) + message
+        else event.format = gc("${symmetry[applyStyle[uuid]!!]} $messageFormat") + message
     }
 }

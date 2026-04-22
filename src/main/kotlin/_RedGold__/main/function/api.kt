@@ -43,13 +43,8 @@ object api {
     }
 
     fun readFileContents(plugin: JavaPlugin, path: String, fileName: String): String {
-        try {
-            val filePath = plugin.dataFolder.toPath().resolve(path).resolve(fileName)
-            val bytes = Files.readAllBytes(filePath)
-            return String(bytes, StandardCharsets.UTF_8)
-        } catch (e: Exception) {
-            throw RuntimeException(e)
-        }
+        val file = plugin.dataFolder.resolve(path).resolve(fileName)
+        return if (file.exists()) file.readText(Charsets.UTF_8) else ""
     }
 
     fun readFileContentsOrNull(plugin: JavaPlugin, path: String, fileName: String): String? {
@@ -110,6 +105,18 @@ object api {
         }
     }
 
+    fun String.toUUIDOrNull(): UUID? {
+        return try {
+            if (this.contains("-")) UUID.fromString(this)
+            else UUID.fromString(this.replaceFirst(
+                "(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})".toRegex(),
+                "$1-$2-$3-$4-$5"
+            ))
+        } catch (e: IllegalArgumentException) {
+            return null
+        }
+    }
+
     fun Float.toFormat(number: Int): String {
         val formatter = NumberFormat.getInstance()
 
@@ -126,5 +133,11 @@ object api {
         formatter.maximumFractionDigits = number
 
         return formatter.format(this)
+    }
+
+    fun Long.toTimeFormat(): String {
+        val minutes = this / 60
+        val seconds = this % 60
+        return String.format("%02d:%02d", minutes, seconds)
     }
 }

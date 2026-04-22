@@ -1,19 +1,13 @@
 package _RedGold__.main.function
 
 import _RedGold__.main.function.api.WriteSave
-import _RedGold__.main.function.api.deleteFile
 import _RedGold__.main.function.api.isFileExists
 import _RedGold__.main.function.api.readFileContents
-import _RedGold__.main.function.api.readFileContentsOrNull
-import _RedGold__.main.load.RequireJavaPlugin
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 import java.io.IOException
 import java.nio.file.Files
-import java.sql.Connection
-import java.sql.DriverManager
 import java.util.*
-import kotlin.io.path.exists
 
 object Data {
     fun getData(plugin: JavaPlugin, player: Player, rootName: String): String {

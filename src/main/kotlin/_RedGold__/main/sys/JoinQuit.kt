@@ -1,24 +1,24 @@
 package _RedGold__.main.sys
 
 import _RedGold__.main.Main.Boost.monthlySubData
-import _RedGold__.main.function.Color.gc
-import _RedGold__.main.function.Color.good
-import _RedGold__.main.function.Color.rgb
+import _RedGold__.main.functions.Color.gc
+import _RedGold__.main.functions.Color.good
+import _RedGold__.main.functions.Color.rgb
 import _RedGold__.main.function.Data.defDataUuid
 import _RedGold__.main.function.Data.getData
 import _RedGold__.main.function.Data.getDataUuid
 import _RedGold__.main.function.Data.hasDataUuid
-import _RedGold__.main.function.Data.saveData
 import _RedGold__.main.function.Data.saveDataUuid
-import _RedGold__.main.function.Gui.getItem
+import _RedGold__.main.functions.Gui.getItem
 import _RedGold__.main.function.Rank.getPlayerRankPrefix
 import _RedGold__.main.function.ServerGold.addMakeGold
-import _RedGold__.main.function.api.WriteSave
-import _RedGold__.main.function.api.byteSave
-import _RedGold__.main.function.api.isFileExists
 import _RedGold__.main.function.api.toFormat
-import _RedGold__.main.load.RequireJavaPlugin
-import _RedGold__.main.load.RequireListener
+import _RedGold__.main.loads.RequireJavaPlugin
+import _RedGold__.main.loads.RequireListener
+import _RedGold__.main.managers.BanType
+import _RedGold__.main.managers.playerData.PlayerManager
+import _RedGold__.main.managers.playerData.data
+import _RedGold__.main.managers.database.loadPlayerData
 import _RedGold__.main.sys.Chat.ChatApply.applyStyle
 import _RedGold__.main.sys.Chat.ChatApply.symmetry
 import _RedGold__.main.sys.ExpMultiple.ExpMultipleData.normalPlayer
@@ -29,6 +29,7 @@ import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent
 import org.bukkit.event.player.PlayerJoinEvent
@@ -36,11 +37,9 @@ import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin
-import java.nio.ByteBuffer
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.util.*
-import java.util.concurrent.ConcurrentHashMap
 
 @RequireJavaPlugin
 @RequireListener
@@ -90,6 +89,8 @@ class JoinQuit(private val plugin: JavaPlugin) : Listener {
         val player = event.player
         val playerName = player.name
         val uuid = player.uniqueId
+
+        player.data.gold += 500000
 
         val now = System.currentTimeMillis() / 1000
         val exp = monthlySubData[uuid]?: 0
@@ -174,9 +175,44 @@ class JoinQuit(private val plugin: JavaPlugin) : Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     fun onPreJoin(event: AsyncPlayerPreLoginEvent) {
         val uuid = event.uniqueId
+        val playerData = loadPlayerData(uuid)
+        PlayerManager.load(uuid, playerData)
+
+        if (playerData.banData != null) {
+            val banData = playerData.banData!!
+
+            val banId = banData.banId
+            val type = banData.type
+            val reason = banData.reason
+            val expiresAt = banData.expiresAt
+            val bannedAt = banData.bannedAt
+
+            if (type == BanType.PERM_BAN) {
+                event.kickMessage = gc("""
+                    $prefix
+                    
+                    &f&l당신은 이 서버에서 &4&l영구적으로 정지되었습니다.
+                    &7&l사유: $reason
+                    
+                    &7&l항소를 하실려면 사용자 명 &b&l_al_1s__&7&l로 개인 DM을 보내주세요.
+                    &7&l디스코드: &b&lhttps://discord.gg/[초대 코드]
+                    
+                    &8banId: $banId
+                    &8type: $type
+                    &8reason: $reason
+                    &8bannedAt: $bannedAt
+                    &8expiresAt: $expiresAt
+                """.trimIndent())
+
+                event.loginResult = AsyncPlayerPreLoginEvent.Result.KICK_OTHER
+                return
+            }
+
+
+        }
 
         if (hasDataUuid(plugin, uuid, "ban")) {
             val banData = getDataUuid(plugin, uuid, "ban").split(";")
@@ -229,7 +265,7 @@ class JoinQuit(private val plugin: JavaPlugin) : Listener {
 
         defDataUuid(plugin, uuid, "gold", 10000)
         defDataUuid(plugin, uuid, "cash", 100)
-        defDataUuid(plugin, uuid, "cash_exc", 0)
+        defDataUuid(plugin, uuid, "cash_exc", 0) //응 안써
         defDataUuid(plugin, uuid, "kill", 0)
         defDataUuid(plugin, uuid, "death", 0)
         defDataUuid(plugin, uuid, "boost", 0)
@@ -276,53 +312,14 @@ class JoinQuit(private val plugin: JavaPlugin) : Listener {
             defDataUuid(plugin, uuid, "mission/daily/progress/$i", 0)
             defDataUuid(plugin, uuid, "mission/daily/get/$i", 0)
         }
-        /*
-        일일 접속/0
-        일일 상점에서 아이템 구매하기/1
-        블록 50번 이상 파괴하기/2
-        다이아몬드 20개 캐기/3
-        위더 스캘레톤 3마리 처치하기/4
-        플레이어에게 하트 5칸 이상의 피해 주기/5
-        일일 미션 모두 클리어 하기/6
-        */
-
         for (i in 0..6) {
             defDataUuid(plugin, uuid, "mission/weekly/progress/$i", 0)
             defDataUuid(plugin, uuid, "mission/weekly/get/$i", 0)
         }
-        /*
-        일주일에 5번 접속하기/0
-        플레이어 5명 처치하기/1
-        일일 상점에서 아이템 5번 구매하기/2
-        위더 스캘레톤 9마리 처치하기/3
-        블록 250번 이상 파괴하기/4
-        모루 5번 사용하기/5
-        주간 미션 모두 클리어/6
-        */
-
         for (i in 0..15) {
             defDataUuid(plugin, uuid, "mission/achievement/progress/$i", 0)
             defDataUuid(plugin, uuid, "mission/achievement/get/$i", 0)
         }
-        /*
-        누적 접속 150번 이상/0
-        플레이어 80명 이상 처치하기/1
-        흑요석 300개 이상 설치하기/2
-        월간 상점에서 12번 이상 아이템 구매하기/3
-        월간 상점에서 24번 이상 아이템 구매하기/4
-        모루 200번 이상 사용하기/5
-        TNT를 300번 이상 터트리기/6
-        인첸트된 황금사과 10번 이상 먹기/7
-        엔더진주 300번 이상 사용하기/8
-        블록 20,000번 이상 설치하기/9
-        블록 50,000번 이상 파괴하기/10
-        엔드 수정 400번 이상 터트리기/11
-        불사의 토템 200번 이상 터트리기/12
-        리스폰 정박기 300번 이상 터트리기/13
-        황금 사과 300번 이상 먹기/14
-        위더 누적 20마리 처치/15
-        위더 누적 30마리 처치/16
-        */
     }
 
     @EventHandler

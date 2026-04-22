@@ -1,19 +1,10 @@
 package _RedGold__.main.event.chase
 
-import _RedGold__.main.Main.Event.EVENT_CODE
-import _RedGold__.main.function.Color.gc
+import _RedGold__.main.functions.Color.gc
 import _RedGold__.main.function.Data.allFileName
-import _RedGold__.main.function.Data.getData
-import _RedGold__.main.function.Data.getDataUuid
 //import _RedGold__.main.function.Data.getDataUuidOrNull
-import _RedGold__.main.function.Data.hasDataUuid
 import _RedGold__.main.function.Data.saveData
-import _RedGold__.main.load.RequireJavaPlugin
-import _RedGold__.main.load.RequireListener
-import _RedGold__.main.sys.Scoreboard
-import _RedGold__.main.sys.TabList
 import org.bukkit.Bukkit
-import org.bukkit.event.Listener
 import org.bukkit.plugin.java.JavaPlugin
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap

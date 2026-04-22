@@ -1,6 +1,5 @@
 package _RedGold__.main.function
 
-import _RedGold__.main.load.RequireJavaPlugin
 import org.bukkit.plugin.java.JavaPlugin
 import java.sql.Connection
 import java.sql.DriverManager

@@ -1,13 +1,11 @@
 package _RedGold__.main.sys
 
-import _RedGold__.main.function.Data.getData
 import _RedGold__.main.function.Data.getDataUuid
-import _RedGold__.main.function.Scheduler.taskAsync
-import _RedGold__.main.load.RequireJavaPlugin
+import _RedGold__.main.functions.Scheduler.taskAsync
+import _RedGold__.main.loads.RequireJavaPlugin
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 import java.util.*
-import java.util.concurrent.Callable
 import java.util.concurrent.ConcurrentHashMap
 
 @RequireJavaPlugin

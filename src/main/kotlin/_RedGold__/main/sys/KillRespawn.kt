@@ -1,13 +1,14 @@
 package _RedGold__.main.sys
 
-import _RedGold__.main.function.Color.gc
+import _RedGold__.main.functions.Color.gc
 import _RedGold__.main.function.Data.getData
 import _RedGold__.main.function.Data.saveData
+import _RedGold__.main.functions.Gui.addPotion
 import _RedGold__.main.function.ServerGold.addHoldGold
 import _RedGold__.main.function.ServerGold.addMakeGold
 import _RedGold__.main.function.api.toFormat
-import _RedGold__.main.load.RequireJavaPlugin
-import _RedGold__.main.load.RequireListener
+import _RedGold__.main.loads.RequireJavaPlugin
+import _RedGold__.main.loads.RequireListener
 import _RedGold__.main.sys.KillRespawn.ChatApply.applyDeath
 import _RedGold__.main.sys.KillRespawn.ChatApply.applyKill
 import _RedGold__.main.sys.KillRespawn.ChatApply.ggTiming
@@ -24,13 +25,13 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.EntityDeathEvent
-import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.player.PlayerRespawnEvent
 import org.bukkit.plugin.java.JavaPlugin
+import org.bukkit.potion.PotionEffectType
 import java.security.SecureRandom
-import java.util.UUID
+import java.util.*
 import java.util.concurrent.ConcurrentHashMap
-import kotlin.math.atan
+
 
 @RequireJavaPlugin
 @RequireListener
@@ -109,8 +110,6 @@ class KillRespawn(private val plugin: JavaPlugin) : Listener {
         saveData(plugin, victim, "death", victimDeath + 1)
 
         val attackerGold = getData(plugin, attacker, "gold").toLong()
-        val attackerCash = getData(plugin, attacker, "cash").toLong()
-
         val victimGold = getData(plugin, victim, "gold").toLong()
 
         val giveLevel = when(level) {
@@ -127,13 +126,11 @@ class KillRespawn(private val plugin: JavaPlugin) : Listener {
 
         attacker.giveExp(giveLevel)
 
-        var getGold = 6000L
-        var getCash = 1L
-        var removeGold = 20000L
+        var getGold = 12000L
+        var removeGold = 15000L
 
-        if (victimGold - 20000L < 0) {
+        if (victimGold - 15000L < 0) {
             getGold = victimGold
-            getCash = 0
             removeGold = victimGold
         }
 
@@ -166,10 +163,10 @@ class KillRespawn(private val plugin: JavaPlugin) : Listener {
         if (giveBonusGold) {
             val streakDouble = streak.toDouble()
             val bonusGold = when(streak) {
-                in 2..9 -> 9000L * (streakDouble / 10 + 1)
-                in 10..29 -> 1000L * (streakDouble / 8 + 1)
-                in 30..59 -> 11000L * (streakDouble / 7 + 1)
-                else -> 12000L * (streakDouble / 5 + 1)
+                in 2..9 -> 8000L * (streakDouble / 10 + 1)
+                in 10..29 -> 9000L * (streakDouble / 8 + 1)
+                in 30..59 -> 10000L * (streakDouble / 7 + 1)
+                else -> 11000L * (streakDouble / 6 + 1)
             }.toLong()
 
             getGold += bonusGold
@@ -192,27 +189,25 @@ class KillRespawn(private val plugin: JavaPlugin) : Listener {
 
                     attacker.playSound(attacker.location, Sound.ENTITY_WITHER_SPAWN, 1.0f, 1.0f)
                     attacker.world.strikeLightningEffect(attacker.location)
-                    Bukkit.getOnlinePlayers().forEach {it.playSound(it.location, Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f)}
+                    attacker.addPotion(PotionEffectType.BLINDNESS, 2, 1)
+                    Bukkit.getOnlinePlayers().forEach {it.playSound(it.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f)}
                 }
             }
         }
 
         saveData(plugin, attacker, "gold", attackerGold + getGold)
-        saveData(plugin, attacker, "cash", attackerCash + getCash)
-
         saveData(plugin, victim, "gold", victimGold - removeGold)
 
         addHoldGold(plugin, removeGold)
         addMakeGold(plugin, getGold)
 
         attacker.sendMessage(gc("&f&l+&6&l${getGold.toFormat()} 골드"))
-        attacker.sendMessage(gc("&f&l+&b&l${getCash.toFormat()} 캐시"))
         attacker.sendMessage(gc("&f&l+&a&l${giveLevel.toFormat()} 경험치"))
         attacker.sendMessage(gc("&f&l+&c&l1 연킬&7&l($streak)"))
         attacker.sendMessage(gc("&7&l연킬 순위에서 보상을 획득 할 수 있습니다."))
 
         attacker.sendActionBar(gc(
-            "&f&l+&6&l${getGold.toFormat()} 골드&8, &f&l+&b&l${getCash.toFormat()} 캐시&8, &f&l+&a&l${giveLevel.toFormat()} 경험치"
+            "&f&l+&6&l${getGold.toFormat()} 골드&8, &f&l+&a&l${giveLevel.toFormat()} 경험치"
         ))
 
         victim.sendMessage(gc(

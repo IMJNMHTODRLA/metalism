@@ -1,7 +1,7 @@
 package _RedGold__.main.sys
 
 import _RedGold__.main.Main.Boost.monthlySubData
-import _RedGold__.main.load.RequireListener
+import _RedGold__.main.loads.RequireListener
 import _RedGold__.main.sys.ExpMultiple.ExpMultipleData.normalPlayer
 import _RedGold__.main.sys.ExpMultiple.ExpMultipleData.subPlayer
 import org.bukkit.event.EventHandler

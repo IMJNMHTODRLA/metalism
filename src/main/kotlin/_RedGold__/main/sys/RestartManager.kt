@@ -1,13 +1,12 @@
 package _RedGold__.main.sys
 
-import _RedGold__.main.function.Color.gc
-import _RedGold__.main.function.Color.rgb
-import _RedGold__.main.function.Scheduler.task
-import _RedGold__.main.load.RequireJavaPlugin
+import _RedGold__.main.functions.Color.gc
+import _RedGold__.main.functions.Color.rgb
+import _RedGold__.main.functions.Scheduler.task
+import _RedGold__.main.loads.RequireJavaPlugin
 import org.bukkit.Bukkit
 import org.bukkit.Sound
 import org.bukkit.plugin.java.JavaPlugin
-import org.bukkit.scheduler.BukkitRunnable
 import java.time.LocalDateTime
 import java.time.LocalTime
 
@@ -82,7 +81,7 @@ class RestartManager(private val plugin: JavaPlugin) {
                     for (player in Bukkit.getOnlinePlayers()) player.playSound(player.location, Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1f)
                 }
                 hour == 4 && minute == 0 -> {
-                    Bukkit.broadcastMessage(gc("$prefix &a&l서버가 3초 후 서버가 재시작 됩니다...(대기열 서버로 이동됩니다.)"))
+                    Bukkit.broadcastMessage(gc("$prefix &a&l서버가 3초 후 서버가 재시작 됩니다...(자동으로 대기열 서버로 이동됩니다.)"))
 
                     Bukkit.getScheduler().runTaskLater(plugin, Runnable {
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "stop")

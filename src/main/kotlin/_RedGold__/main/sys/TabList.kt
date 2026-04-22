@@ -1,12 +1,10 @@
 package _RedGold__.main.sys
 
-import _RedGold__.main.function.Color.gc
-import _RedGold__.main.function.Color.rgb
+import _RedGold__.main.functions.Color.gc
+import _RedGold__.main.functions.Color.rgb
 import _RedGold__.main.function.api.toFormat
-import _RedGold__.main.load.RequireJavaPlugin
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
-import org.bukkit.plugin.java.JavaPlugin
 
 class TabList {
     private val colorList: Map<Int, String> = java.util.Map.of(

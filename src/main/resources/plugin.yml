@@ -5,18 +5,3 @@ api-version: '1.21'
 load: STARTUP
 authors: [ _RedGold__ ]
 depend: [ LuckPerms, ProtocolLib ]
-
-permissions:
-  Main.user:
-    default: true
-  Main.plus:
-    default: false
-  Main.admin:
-    default: false
-    children:
-      - Main.plus
-  Main.owner:
-    default: false
-    children:
-      - Main.plus
-      - Main.admin

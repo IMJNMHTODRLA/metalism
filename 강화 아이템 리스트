@@ -1,0 +1,29 @@
+private val enhanceItemList = listOf(
+    Material.OAK_SAPLING, //모든 곳에서 뿌리기 가능
+    Material.OXEYE_DAISY, //22222
+    Material.SWEET_BERRIES, //3333333333
+    Material.APPLE, //얘는 정기 이벤트에서,
+    Material.ENCHANTED_GOLDEN_APPLE, //얘는 뿌리기 OR 지급 X, 만렙 직전 레벨에서 **1개** 사용
+    //회복 타입
+
+    Material.STICK,
+    Material.IRON_INGOT,
+    Material.END_CRYSTAL,
+    Material.DRAGON_BREATH,
+    Material.TRIDENT,
+    //전투 타입
+
+    Material.FIREWORK_ROCKET,
+    Material.RABBIT_FOOT,
+    Material.COMPASS,
+    Material.SADDLE,
+    Material.BEACON,
+    //이속 타임
+
+    Material.GLASS_BOTTLE,
+    Material.WATER_BUCKET,
+    Material.FISHING_ROD,
+    Material.PUFFER_FISH,
+    Material.TURTLE_HELMET
+    //수중 타입
+)

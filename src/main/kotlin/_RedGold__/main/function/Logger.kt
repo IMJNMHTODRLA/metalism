@@ -1,6 +1,6 @@
 package _RedGold__.main.function
 
-import _RedGold__.main.function.Color.gc
+import _RedGold__.main.functions.Color.gc
 import org.bukkit.Bukkit
 import java.text.SimpleDateFormat
 import java.util.*
