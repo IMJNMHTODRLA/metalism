@@ -1,4 +1,4 @@
-package _RedGold__.main.commands.mission.sys.achievementGui
+package _RedGold__.main.commands.user.mission.listeners.achievementGui
 
 import _RedGold__.main.functions.Color.rgb
 import _RedGold__.main.function.Data.getData
@@ -59,7 +59,7 @@ class AchievementGui(private val plugin: JavaPlugin) {
                     "&6&l보상:",
                     "   $reward",
                 ))
-            )
+            )w
         }
 
         val background = getItem(

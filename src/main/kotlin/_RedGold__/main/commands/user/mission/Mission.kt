@@ -1,11 +1,12 @@
-package _RedGold__.main.commands.mission
+package _RedGold__.main.commands.user.mission
 
-import _RedGold__.main.commands.mission.sys.achievementGui.AchievementGui
-import _RedGold__.main.commands.mission.sys.dailyGui.DailyGui
-import _RedGold__.main.commands.mission.sys.weeklyGui.WeeklyGui
+import _RedGold__.main.commands.user.mission.listeners.achievementGui.AchievementGui
+import _RedGold__.main.commands.user.mission.listeners.dailyGui.DailyGui
+import _RedGold__.main.commands.user.mission.listeners.weeklyGui.WeeklyGui
 import _RedGold__.main.loads.RequireCommandExecutor
 import _RedGold__.main.loads.RequireJavaPlugin
 import _RedGold__.main.loads.RequireTabExecutor
+import _RedGold__.main.managers.playerData.PermissionEnum
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
@@ -13,7 +14,7 @@ import org.bukkit.command.TabExecutor
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 
-@RequireCommandExecutor("mission", "user")
+@RequireCommandExecutor("mission", PermissionEnum.USER, aliases = ["미션"])
 @RequireTabExecutor
 @RequireJavaPlugin
 class Mission(private val plugin: JavaPlugin) : CommandExecutor, TabExecutor {

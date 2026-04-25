@@ -18,7 +18,6 @@ import com.google.gson.Gson
 import net.luckperms.api.LuckPermsProvider
 import net.luckperms.api.node.Node
 import okhttp3.*
-import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 import java.time.LocalDateTime
 import java.util.*
@@ -66,7 +65,14 @@ class Main : JavaPlugin() {
         val monthlySubData: MutableMap<UUID, Long> = mutableMapOf()
     }
 
+    companion object {
+        lateinit var instance: JavaPlugin
+            private set
+    }
+
     override fun onEnable() {
+        instance = this
+
         PacketEvents.getAPI().init()
 
         InitManager(this).init()

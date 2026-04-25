@@ -5,11 +5,11 @@ import java.util.*
 data class RankingData(
     val uuid: UUID,
 
-    var gold: Long = 0,
-    var boost: Int = 0,
+    val gold: Long = 0,
+    val boost: Int = 0,
 
-    var kill: Int = 0,
-    var killStreak: Int = 0,
-    var death: Int = 0,
-    var deathStreak: Int = 0
+    val kill: Int = 0,
+    val killStreak: Int = 0,
+    val death: Int = 0,
+    val deathStreak: Int = 0
 )

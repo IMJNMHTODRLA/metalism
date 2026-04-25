@@ -2,7 +2,6 @@ package _RedGold__.main.functions
 
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.inventory.ItemStack
-import org.bukkit.plugin.java.JavaPlugin
 
 object EasyEnchant {
     class EnchantProxy(private val item: ItemStack) {

@@ -1,7 +1,7 @@
-package _RedGold__.main.commands.mission.sys.achievementGui
+package _RedGold__.main.commands.user.mission.listeners.achievementGui
 
-import _RedGold__.main.commands.mission.sys.dailyGui.DailyGui
-import _RedGold__.main.commands.mission.sys.weeklyGui.WeeklyGui
+import _RedGold__.main.commands.user.mission.listeners.dailyGui.DailyGui
+import _RedGold__.main.commands.user.mission.listeners.weeklyGui.WeeklyGui
 import _RedGold__.main.functions.Color.fail
 import _RedGold__.main.functions.Color.gc
 import _RedGold__.main.function.Data.getData

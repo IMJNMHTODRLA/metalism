@@ -19,20 +19,26 @@ import kotlin.random.Random
 
 object CrystalDailyConst {
     private val enhanceBase = DailyGlobalConst.range.random(Random)
+    private val getSkillItem = DailyGlobalConst.getSkillItem
+    private val isReinforceItemMap = mapOf(3 to 0, 4 to 1, 5 to 2, 6 to 3)
 
     private val itemDataList = listOf(
+        GlobalConst.ShopItem(Material.GOLD_NUGGET, "1,000,000 골드", 60),
         GlobalConst.ShopItem(Material.GOLD_INGOT, "2,000,000 골드", 120),
-        GlobalConst.ShopItem(Material.GOLD_BLOCK, "3,000,000 골드", 200),
+        GlobalConst.ShopItem(Material.GOLD_BLOCK, "3,000,000 골드", 180),
 
-        GlobalConst.ShopItem(
-            ReinforceItemList[DailyGlobalConst.getSkillItem(enhanceBase, 1)], "하급 강화 아이템", 30
-        ),
-        GlobalConst.ShopItem(
-            ReinforceItemList[DailyGlobalConst.getSkillItem(enhanceBase, 2)], "초급 강화 아이템", 90
-        ),
-        GlobalConst.ShopItem(
-            ReinforceItemList[DailyGlobalConst.getSkillItem(enhanceBase, 3)], "중급 강화 아이템", 360
-        ),
+        ReinforceItemList[getSkillItem(enhanceBase, 0)].let {
+            GlobalConst.ShopItem(it.material, "${it.import.displayName} 강화 아이템(${it.type.displayName})", 15)
+        },
+        ReinforceItemList[getSkillItem(enhanceBase, 1)].let {
+            GlobalConst.ShopItem(it.material, "${it.import.displayName} 강화 아이템(${it.type.displayName})", 30)
+        },
+        ReinforceItemList[getSkillItem(enhanceBase, 2)].let {
+            GlobalConst.ShopItem(it.material, "${it.import.displayName} 강화 아이템(${it.type.displayName})", 60)
+        },
+        ReinforceItemList[getSkillItem(enhanceBase, 3)].let {
+            GlobalConst.ShopItem(it.material, "${it.import.displayName} 강화 아이템(${it.type.displayName})", 120)
+        }
     )
 
     fun buy(player: Player, shopId: Int) {
@@ -58,7 +64,11 @@ object CrystalDailyConst {
         totalPurchaseDaily.getOrPut(DailyEnum.CRYSTAL) { mutableSetOf() }.add(shopId)
         player.data.crystal -= totalItemPrice
 
-        player.inv += ItemStack(item.id)
+        if (shopId in isReinforceItemMap.keys) {
+            val skillItem = getSkillItem(enhanceBase, isReinforceItemMap[shopId]?: return)
+            player.inv += ReinforceItemList[skillItem].item
+        } else player.inv += ItemStack(item.id)
+
         player.good("&a${item.name}을(를) 구매했습니다.")
     }
 

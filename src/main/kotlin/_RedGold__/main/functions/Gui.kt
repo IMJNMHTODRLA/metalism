@@ -89,9 +89,9 @@ object Gui {
         return PotionEffect(potionType, time * 20, level)
     }
 
-    fun ItemStack.getStringId(key: NamespacedKey): String? {
-        return this.itemMeta?.persistentDataContainer?.get(key, PersistentDataType.STRING)
-    }
+    //fun ItemStack.getStringId(key: NamespacedKey): String? {
+    //    return this.itemMeta?.persistentDataContainer?.get(key, PersistentDataType.STRING)
+    //} //TODO: 이동
 
     /* fun Player.addHeart(amount: Double) {
         val maxHealth = this.getAttribute(Attribute.GENERIC_MAX_HEALTH)?.value?: 20.0

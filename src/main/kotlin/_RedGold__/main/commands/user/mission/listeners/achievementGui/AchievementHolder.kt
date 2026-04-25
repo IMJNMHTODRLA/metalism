@@ -1,14 +1,15 @@
-package _RedGold__.main.commands.mission.sys.weeklyGui
+package _RedGold__.main.commands.user.mission.listeners.achievementGui
 
 import org.bukkit.Bukkit
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.InventoryHolder
 
-class WeeklyHolder(
+class AchievementHolder(
+    val page: Int,
     val progressList: MutableList<Int>,
     val getList: MutableList<Boolean>
 ) : InventoryHolder {
     override fun getInventory(): Inventory {
-        return Bukkit.createInventory(this, 6 * 9, "주간 미션")
+        return Bukkit.createInventory(this, 6 * 9, "업적 미션")
     }
 }

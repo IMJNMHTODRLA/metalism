@@ -1,8 +1,8 @@
-package _RedGold__.main.commands.mission.sys.dailyGui
+package _RedGold__.main.commands.user.mission.listeners.dailyGui
 
-import _RedGold__.main.commands.mission.sys.achievementGui.AchievementUpdate
-import _RedGold__.main.commands.mission.sys.dailyGui.DailyUpdate.DailyUpdate.isGet
-import _RedGold__.main.commands.mission.sys.weeklyGui.WeeklyUpdate
+import _RedGold__.main.commands.user.mission.listeners.achievementGui.AchievementUpdate
+import _RedGold__.main.commands.user.mission.listeners.dailyGui.DailyUpdate.DailyUpdate.isGet
+import _RedGold__.main.commands.user.mission.listeners.weeklyGui.WeeklyUpdate
 import _RedGold__.main.functions.Color.gc
 import _RedGold__.main.function.Data.getData
 import _RedGold__.main.function.Data.saveData

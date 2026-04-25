@@ -1,6 +1,6 @@
-package _RedGold__.main.commands.mission.sys
+package _RedGold__.main.commands.user.mission.listeners
 
-import _RedGold__.main.commands.mission.sys.dailyGui.DailyUpdate.DailyUpdate.isGet
+import _RedGold__.main.commands.user.mission.listeners.dailyGui.DailyUpdate.DailyUpdate.isGet
 import _RedGold__.main.loads.RequireJavaPlugin
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin

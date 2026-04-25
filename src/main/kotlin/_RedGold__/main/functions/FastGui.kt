@@ -5,6 +5,7 @@ import org.bukkit.enchantments.Enchantment
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.meta.ItemMeta
 
 object FastGui {
     class FastGuiProxy(private val inventory: Inventory) {

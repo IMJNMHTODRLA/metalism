@@ -1,6 +1,6 @@
-package _RedGold__.main.commands.mission.sys.weeklyGui
+package _RedGold__.main.commands.user.mission.listeners.weeklyGui
 
-import _RedGold__.main.commands.mission.sys.dailyGui.DailyUpdate.DailyUpdate.isGet
+import _RedGold__.main.commands.user.mission.listeners.dailyGui.DailyUpdate.DailyUpdate.isGet
 import _RedGold__.main.functions.Color.gc
 import _RedGold__.main.function.Data.getData
 import _RedGold__.main.function.Data.saveData

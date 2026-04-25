@@ -10,7 +10,7 @@ import org.bukkit.command.CommandSender
 import org.bukkit.command.TabExecutor
 import org.bukkit.entity.Player
 
-@RequireCommandExecutor("style", PermissionEnum.USER)
+@RequireCommandExecutor("cosmetic", PermissionEnum.USER)
 @RequireTabExecutor
 class Cosmetic : CommandExecutor, TabExecutor {
     override fun onCommand(
@@ -20,7 +20,6 @@ class Cosmetic : CommandExecutor, TabExecutor {
         args: Array<out String>
     ): Boolean {
         val player = sender as? Player?: return false
-        player.sendMessage("abc", "efg")
 
         SelectGui().openGui(player)
         return true

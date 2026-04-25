@@ -19,6 +19,8 @@ import kotlin.random.Random
 
 object GoldDailyConst {
     private val enhanceBase = DailyGlobalConst.range.random(Random)
+    private val getSkillItem = DailyGlobalConst.getSkillItem
+    private val isReinforceItemMap = mapOf(4 to 0, 5 to 1, 6 to 2)
 
     private val itemDataList = listOf(
         GlobalConst.ShopItem(Material.ENDER_EYE, "엔더의 눈", 6_000),
@@ -26,15 +28,15 @@ object GoldDailyConst {
         GlobalConst.ShopItem(Material.BONE_BLOCK, "뼈 블록", 12_000),
         GlobalConst.ShopItem(Material.WIND_CHARGE, "돌풍구", 8_000),
 
-        GlobalConst.ShopItem(
-            ReinforceItemList[DailyGlobalConst.getSkillItem(enhanceBase, 0)], "일반 강화 아이템", 8_000
-        ),
-        GlobalConst.ShopItem(
-            ReinforceItemList[DailyGlobalConst.getSkillItem(enhanceBase, 1)], "하급 강화 아이템", 12_000
-        ),
-        GlobalConst.ShopItem(
-            ReinforceItemList[DailyGlobalConst.getSkillItem(enhanceBase, 2)], "초급 강화 아이템", 24_000
-        ),
+        ReinforceItemList[getSkillItem(enhanceBase, 0)].let {
+            GlobalConst.ShopItem(it.material, "${it.import.displayName} 강화 아이템(${it.type.displayName})", 8_000)
+        },
+        ReinforceItemList[getSkillItem(enhanceBase, 1)].let {
+            GlobalConst.ShopItem(it.material, "${it.import.displayName} 강화 아이템(${it.type.displayName})", 12_000)
+        },
+        ReinforceItemList[getSkillItem(enhanceBase, 2)].let {
+            GlobalConst.ShopItem(it.material, "${it.import.displayName} 강화 아이템(${it.type.displayName})", 24_000)
+        }
     )
 
     fun buy(player: Player, shopId: Int) {
@@ -60,7 +62,11 @@ object GoldDailyConst {
         totalPurchaseDaily.getOrPut(DailyEnum.GOLD) { mutableSetOf() }.add(shopId)
         player.data.gold -= totalItemPrice
 
-        player.inv += ItemStack(item.id)
+        if (shopId in isReinforceItemMap.keys) {
+            val skillItem = getSkillItem(enhanceBase, isReinforceItemMap[shopId]?: return)
+            player.inv += ReinforceItemList[skillItem].item
+        } else player.inv += ItemStack(item.id)
+
         player.good("&a${item.name}을(를) 구매했습니다.")
     }
 
