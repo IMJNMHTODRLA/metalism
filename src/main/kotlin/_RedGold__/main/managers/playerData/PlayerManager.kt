@@ -5,6 +5,9 @@ import _RedGold__.main.functions.PluginException
 import org.bukkit.entity.Player
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
+import kotlin.reflect.KProperty
+
+fun <T> logger(uuid: UUID) = { prop: KProperty<*>, old: T, new: T -> "$uuid 님의 ${prop.name} 변경: $old -> $new" }
 
 object PlayerManager {
     private val dataMap = ConcurrentHashMap<UUID, PlayerData>()
@@ -15,13 +18,8 @@ object PlayerManager {
     operator fun set(uuid: UUID, data: PlayerData) { dataMap[uuid] = data }
     fun getOrLoad(uuid: UUID, loader: (UUID) -> PlayerData) = dataMap.computeIfAbsent(uuid, loader)
 
-    fun load(uuid: UUID, data: PlayerData) {
-        dataMap[uuid] = data
-    }
-
-    fun unload(uuid: UUID) {
-        dataMap.remove(uuid)
-    }
+    fun load(uuid: UUID, data: PlayerData) { dataMap[uuid] = data }
+    fun unload(uuid: UUID) { dataMap.remove(uuid) }
 }
 
 val Player.data: PlayerData get() = PlayerManager[uniqueId]

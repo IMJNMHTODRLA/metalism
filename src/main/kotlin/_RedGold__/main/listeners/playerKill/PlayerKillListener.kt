@@ -28,8 +28,8 @@ class PlayerKillListener : Listener {
         val giveGold = minOf(victim.data.gold, PlayerKillConst.GIVE_GOLD)
         var giveCrystal = 0
 
-        val victimDeath = victim.data.equipDeath.second
-        val attackerKill = attacker.data.equipKill.second
+        val (_, victimDeath) = victim.data.equipDeath
+        val (_, attackerKill) = attacker.data.equipKill
 
         attacker.data.combatData.kill++
         victim.data.combatData.death++

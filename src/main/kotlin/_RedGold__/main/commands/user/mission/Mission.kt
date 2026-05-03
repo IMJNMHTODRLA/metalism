@@ -16,20 +16,19 @@ import org.bukkit.plugin.java.JavaPlugin
 
 @RequireCommandExecutor("mission", PermissionEnum.USER, aliases = ["미션"])
 @RequireTabExecutor
-@RequireJavaPlugin
-class Mission(private val plugin: JavaPlugin) : CommandExecutor, TabExecutor {
+class Mission : TabExecutor {
     override fun onCommand(
         sender: CommandSender,
         command: Command,
         label: String,
         args: Array<out String>
     ): Boolean {
-        val player = sender as? Player ?: return false
+        val player = sender as? Player?: return false
 
         if (args.isEmpty()) return true
-        else if (args[0] == "daily") DailyGui(plugin).openGui(player)
-        else if (args[0] == "weekly") WeeklyGui(plugin).openGui(player)
-        else if (args[0] == "achievement") AchievementGui(plugin).openGui(player, 0)
+        else if (args[0] == "daily") DailyGui().openGui(player)
+        else if (args[0] == "weekly") WeeklyGui().openGui(player)
+        else if (args[0] == "achievement") AchievementGui().openGui(player)
 
         return true
     }

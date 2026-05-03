@@ -1,5 +1,7 @@
 package _RedGold__.main.commands.user.shop.listeners.dailyShop.crystalDailyGui
 
+import _RedGold__.main.commands.user.mission.listeners.dailyGui.DailyConst
+import _RedGold__.main.commands.user.mission.listeners.weeklyGui.WeeklyConst
 import _RedGold__.main.commands.user.shop.listeners.GlobalConst
 import _RedGold__.main.commands.user.shop.listeners.dailyShop.DailyGlobalConst
 import _RedGold__.main.functions.Color.fail
@@ -69,6 +71,8 @@ object CrystalDailyConst {
             player.inv += ReinforceItemList[skillItem].item
         } else player.inv += ItemStack(item.id)
 
+        DailyConst.mission(player, 1)
+        WeeklyConst.mission(player, 1)
         player.good("&a${item.name}을(를) 구매했습니다.")
     }
 

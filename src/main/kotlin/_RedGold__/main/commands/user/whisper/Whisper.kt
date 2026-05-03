@@ -6,7 +6,6 @@ import _RedGold__.main.loads.RequireCommandExecutor
 import _RedGold__.main.loads.RequireTabExecutor
 import _RedGold__.main.managers.playerData.PermissionEnum
 import _RedGold__.main.managers.playerData.data
-import _RedGold__.main.managers.playerData.variableManager.cosmeticManager.CosmeticEnum
 import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
@@ -32,17 +31,11 @@ class Whisper : CommandExecutor, TabExecutor {
             return true
         }
 
-        val sendStyle = sendPlayer.data.equipStyle.let {
-            if (it.first) "${it.second} "
-            else ""
-        }
+        val (_, sendStyle) = receivePlayer.data.equipStyle
         val sendRank = PermissionEnum[sendPlayer].prefix
         val sendName = sendPlayer.name
 
-        val receiveStyle = receivePlayer.data.equipStyle.let {
-            if (it.first) "${it.second} "
-            else ""
-        }
+        val (_, receiveStyle) = receivePlayer.data.equipStyle
         val receiveRank = PermissionEnum[receivePlayer].prefix
         val receiveName = receivePlayer.name
 

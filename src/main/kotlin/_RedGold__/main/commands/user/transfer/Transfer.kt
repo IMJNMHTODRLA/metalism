@@ -7,8 +7,6 @@ import _RedGold__.main.loads.RequireCommandExecutor
 import _RedGold__.main.loads.RequireTabExecutor
 import _RedGold__.main.managers.playerData.PermissionEnum
 import _RedGold__.main.managers.playerData.data
-import _RedGold__.main.managers.playerData.variableManager.cosmeticManager.CosmeticEnum
-import _RedGold__.main.managers.playerData.variableManager.cosmeticManager.STYLE_COSMETIC
 import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
@@ -44,17 +42,11 @@ class Transfer : CommandExecutor, TabExecutor {
             return true
         }
 
-        val sendStyle = sendPlayer.data.equipStyle.let {
-            if (it.first) "${it.second} "
-            else ""
-        }
+        val (_, sendStyle) = sendPlayer.data.equipStyle
         val sendRank = PermissionEnum[sendPlayer].prefix
         val sendName = sendPlayer.name
 
-        val receiveStyle = receivePlayer.data.equipStyle.let {
-            if (it.first) "${it.second} "
-            else ""
-        }
+        val (_, receiveStyle) = receivePlayer.data.equipStyle
         val receiveRank = PermissionEnum[receivePlayer].prefix
         val receiveName = receivePlayer.name
 

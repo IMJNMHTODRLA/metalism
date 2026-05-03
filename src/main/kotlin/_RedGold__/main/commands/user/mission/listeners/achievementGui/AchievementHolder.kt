@@ -1,15 +1,7 @@
 package _RedGold__.main.commands.user.mission.listeners.achievementGui
 
-import org.bukkit.Bukkit
-import org.bukkit.inventory.Inventory
-import org.bukkit.inventory.InventoryHolder
+import _RedGold__.main.functions.EasyHolder
 
-class AchievementHolder(
-    val page: Int,
-    val progressList: MutableList<Int>,
-    val getList: MutableList<Boolean>
-) : InventoryHolder {
-    override fun getInventory(): Inventory {
-        return Bukkit.createInventory(this, 6 * 9, "업적 미션")
-    }
+class AchievementHolder : EasyHolder(6 * 9) {
+    override fun title() = "업적 미션"
 }

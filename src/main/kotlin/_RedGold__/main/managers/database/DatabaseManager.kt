@@ -75,12 +75,12 @@ fun loadPlayerData(playerUuid: UUID): PlayerData = catch("플레이어 데이터
         }
 
         CombatStats.selectAll().where { CombatStats.uuid eq strUUID }.forEach { combatRow ->
-            playerData.combatData = CombatData(
-                combatRow[CombatStats.kill],
-                combatRow[CombatStats.killStreak],
-                combatRow[CombatStats.death],
-                combatRow[CombatStats.deathStreak]
-            )
+            val combatData = playerData.combatData
+
+            combatData.kill = combatRow[CombatStats.kill]
+            combatData.killStreak = combatRow[CombatStats.killStreak]
+            combatData.death = combatRow[CombatStats.death]
+            combatData.deathStreak = combatRow[CombatStats.deathStreak]
         }
 
         ShopStats.selectAll().where { ShopStats.uuid eq strUUID }.forEach { shopRow ->

@@ -47,7 +47,7 @@ class CosmeticListener(private val plugin: JavaPlugin) : Listener {
                 val rankPrefix = PermissionEnum[player].prefix
                 val name = player.name
 
-                player.good("$displayName $rankPrefix $name&f: 테스트 메시지 입니다.")
+                player.good("$displayName $rankPrefix $name&f: 테스트 메시지 입니다.") //TODO: 나중에 이스터 애그나 만들자ㅇㅇ
                 player.closeInventory()
 
                 plugin.task(1.seconds) {

@@ -11,6 +11,7 @@ internal object PlayerScoreboardConst {
         "",
         "&f&l골드: &6&l%gold% 골드".gc(),
         "&f&l크리스탈: &b&l%crystal% 크리스탈".gc(),
+        "&f&l루비: &4&l%ruby% 루비".gc(),
         " ",
         "&f&l누적 킬: &a&l%kill%".gc(),
         "&f&l누적 데스: &c&l%death%".gc(),

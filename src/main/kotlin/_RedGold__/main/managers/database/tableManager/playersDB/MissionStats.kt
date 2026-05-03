@@ -1,6 +1,6 @@
 package _RedGold__.main.managers.database.tableManager.playersDB
 
-import _RedGold__.main.managers.playerData.variableManager.MissionEnum
+import _RedGold__.main.managers.playerData.variableManager.missionManager.MissionEnum
 import org.jetbrains.exposed.sql.Table
 
 object MissionStats : Table("mission_stats") {

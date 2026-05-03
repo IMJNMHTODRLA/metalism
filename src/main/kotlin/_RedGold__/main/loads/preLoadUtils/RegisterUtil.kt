@@ -51,8 +51,7 @@ object RegisterUtil {
 
         val cmd = if (hasTab && instance is TabExecutor) {
             plugin.registerCommand(annotation.commandName, instance, instance)
-        }
-        else {
+        } else {
             plugin.registerCommand(annotation.commandName, instance)
         }
 

@@ -122,7 +122,7 @@ object Gui {
         }
 
     fun Player.sendSound(sound: Sound, pitch: Float = 1f, volume: Float = 1f) {
-        this.playSound(this.location, sound, volume, pitch)
+        playSound(location, sound, volume, pitch)
     }
 
     class AttributeProxy(private val entity: LivingEntity) {

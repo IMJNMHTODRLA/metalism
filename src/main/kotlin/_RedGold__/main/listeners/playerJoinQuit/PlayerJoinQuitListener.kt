@@ -50,10 +50,7 @@ class PlayerJoinQuitListener : Listener {
         }
 
         val (_, message) = player.data.equipJoin
-        val style = player.data.equipStyle.let {
-            if (it.first) "${it.second} "
-            else ""
-        }
+        val (_, style) = player.data.equipStyle
 
         event.joinMessage = message.fill(
             "style" to style,
@@ -71,13 +68,15 @@ class PlayerJoinQuitListener : Listener {
             !PlayerJoinQuitValue.monthlyClaimed.contains(uuid) &&
             remainingPeriod > 0
         ) {
+            PlayerJoinQuitValue.monthlyClaimed.add(uuid)
+
             player.sendMsg(PlayerJoinQuitConst.dailyGiveMessage.fill(
                 "crystal" to PlayerJoinQuitConst.monthly.dailyCrystal.toFormat(),
                 "day_exp" to (remainingPeriod / 86400.0).toFormat(1)
             ))
 
             player.data.crystal += PlayerJoinQuitConst.monthly.dailyCrystal
-            PlayerJoinQuitValue.monthlyClaimed.add(uuid)
+            PlayerJoinQuitConst.monthly.dailyItem.forEach { player.inv += it }
         }
     }
 

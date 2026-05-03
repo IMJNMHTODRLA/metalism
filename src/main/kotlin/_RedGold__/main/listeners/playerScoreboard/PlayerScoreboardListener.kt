@@ -11,7 +11,6 @@ import _RedGold__.main.listeners.GlobalConst
 import _RedGold__.main.loads.RequireJavaPlugin
 import _RedGold__.main.managers.playerData.PermissionEnum
 import _RedGold__.main.managers.playerData.data
-import _RedGold__.main.managers.playerData.variableManager.cosmeticManager.CosmeticEnum
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.entity.Player
@@ -46,10 +45,7 @@ class PlayerScoreboardListener(plugin: JavaPlugin) {
             val rankPrefix = rank.prefix
             val teamName = "${rank.priority}_${rank.node}"
 
-            val style = other.data.equipStyle.let {
-                if (it.first) "${it.second} "
-                else ""
-            }
+            val (_, style) = other.data.equipStyle
 
             val team = personalBoard.getTeam(teamName)?: personalBoard.registerNewTeam(teamName)
             val fullPrefix = PlayerScoreboardConst.PLAYER_TAB_PREFIX.fill(
@@ -79,10 +75,7 @@ class PlayerScoreboardListener(plugin: JavaPlugin) {
         val rank = PermissionEnum[player]
         val sidebarMsg = PlayerScoreboardConst.SIDEBAR_MSG
 
-        val style = player.data.equipStyle.let {
-            if (it.first) "${it.second} "
-            else ""
-        }
+        val (_, style) = player.data.equipStyle
 
         val personalBoard = boards.getOrPut(uuid) {
             val newBoard = Bukkit.getScoreboardManager().newScoreboard
@@ -116,13 +109,14 @@ class PlayerScoreboardListener(plugin: JavaPlugin) {
         sidebar.score[98] = sidebarMsg[1]
         sidebar.score[97] = sidebarMsg[2].fill("gold" to player.data.gold.toFormat())
         sidebar.score[96] = sidebarMsg[3].fill("crystal" to player.data.crystal.toFormat())
-        sidebar.score[95] = sidebarMsg[4]
+        sidebar.score[95] = sidebarMsg[4].fill("ruby" to player.data.ruby.toFormat())
         sidebar.score[94] = sidebarMsg[5]
-        sidebar.score[93] = sidebarMsg[6].fill("kill" to player.data.combatData.kill.toFormat())
-        sidebar.score[92] = sidebarMsg[7].fill("death" to player.data.combatData.death.toFormat())
-        sidebar.score[91] = sidebarMsg[8]
+        sidebar.score[93] = sidebarMsg[6]
+        sidebar.score[92] = sidebarMsg[7].fill("kill" to player.data.combatData.kill.toFormat())
+        sidebar.score[91] = sidebarMsg[8].fill("death" to player.data.combatData.death.toFormat())
         sidebar.score[90] = sidebarMsg[9]
         sidebar.score[89] = sidebarMsg[10]
-        sidebar.score[88] = sidebarMsg[11].fill("ping" to player.ping)
+        sidebar.score[88] = sidebarMsg[11]
+        sidebar.score[87] = sidebarMsg[12].fill("ping" to player.ping)
     }
 }

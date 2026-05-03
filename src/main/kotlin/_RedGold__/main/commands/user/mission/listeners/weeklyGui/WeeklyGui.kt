@@ -1,104 +1,54 @@
 package _RedGold__.main.commands.user.mission.listeners.weeklyGui
 
-import _RedGold__.main.functions.Color.rgb
-import _RedGold__.main.function.Data.getData
+import _RedGold__.main.commands.user.mission.listeners.GlobalConst
+import _RedGold__.main.functions.FastGui.enchantEffect
+import _RedGold__.main.functions.FastGui.end
+import _RedGold__.main.functions.FastGui.item
 import _RedGold__.main.functions.Gui.getItem
+import _RedGold__.main.functions.Gui.inv
+import _RedGold__.main.functions.Gui.sendSound
+import _RedGold__.main.functions.modify
+import _RedGold__.main.managers.playerData.BACKGROUND
+import _RedGold__.main.managers.playerData.BACKGROUND_1
+import _RedGold__.main.managers.playerData.data
+import _RedGold__.main.managers.playerData.variableManager.missionManager.MissionEnum
+import _RedGold__.main.managers.playerData.variableManager.missionManager.TOTAL_WEEKLY_MISSION
+import _RedGold__.main.managers.playerData.variableManager.missionManager.missionList.weeklyMissionInfoList
+import org.bukkit.Material
 import org.bukkit.Sound
-import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
-import org.bukkit.plugin.java.JavaPlugin
 
-class WeeklyGui(private val plugin: JavaPlugin) {
-    private val prefix = """
-        ${rgb("2444FC")}§l§o[
-        ${rgb("2A48FC")}§l§oM
-        ${rgb("304CFC")}§l§oE
-        ${rgb("3651FD")}§l§oT
-        ${rgb("3C55FD")}§l§oA
-        ${rgb("4359FD")}§l§oL
-        ${rgb("495DFD")}§l§oI
-        ${rgb("4F61FD")}§l§oS
-        ${rgb("5565FD")}§l§oM 
-        ${rgb("616EFE")}§l§oM
-        ${rgb("6772FE")}§l§oI
-        ${rgb("6D76FE")}§l§oS
-        ${rgb("747AFE")}§l§oS
-        ${rgb("7A7EFE")}§l§oI
-        ${rgb("8083FF")}§l§oO
-        ${rgb("8687FF")}§l§oN
-        ${rgb("8C8BFF")}§l§o]
-    """.trimIndent().replace("\n", "")
+class WeeklyGui {
+    fun openGui(player: Player, sound: Float = 1f) {
+        val gui = WeeklyHolder().inventory
 
-    fun openGui(player: Player, sendSound: Float = 1f) {
-        val progressList = mutableListOf<Int>()
-        val getList = mutableListOf<Boolean>()
-        for (i in 0..6) {
-            progressList.add(getData(plugin, player, "mission/weekly/progress/$i").toInt())
-            getList.add(getData(plugin, player, "mission/weekly/get/$i") == "1")
+        gui.item[0..44] = BACKGROUND
+        gui.item[45..gui.end] = BACKGROUND_1
+
+        repeat(TOTAL_WEEKLY_MISSION) { i ->
+            val missionInfo = weeklyMissionInfoList[i]
+            val missionData = player.data.missionMap[MissionEnum.WEEKLY]?.get(i)?: return@repeat
+            val slot = GlobalConst.getSlot(i)
+
+            gui.item[slot] = GlobalConst.setMission(missionData, missionInfo)
         }
 
-        val gui = WeeklyHolder(progressList, getList).inventory
-
-        fun i(n: Int, t: Int, name: String, max: Int, reward: String) {
-            val id =
-                if (getList[t]) "netherite_ingot"
-                else if (progressList[t] >= max) "gold_ingot"
-                else "gold_nugget"
-
-            val title =
-                if (getList[t]) "&f&l$name &a&l클리어 완료! &7&l(이미 보상을 획득 하였습니다.)"
-                else if (progressList[t] >= max) "&f&l$name &a&l클리어 완료! &7&l(보상 획득이 가능합니다.)"
-                else "&f&l$name &e&l(${progressList[t]}/$max)"
-
-            gui.setItem(n, getItem(
-                id,
-                title,
-                listOf(
-                    "&f&l",
-                    prefix,
-                    "&6&l보상:",
-                    "   $reward",
-                ))
-            )
-        }
-
-        val background = getItem(
-            "magenta_stained_glass_pane",
-            prefix
-        )
-
-        val background1 = getItem(
-            "black_stained_glass_pane",
-            prefix
-        )
-
-        for (i in 0 until gui.size) gui.setItem(i, background)
-        for (i in 45 until gui.size) gui.setItem(i, background1)
-
-        i(19, 0, "일일 접속을 5회", 5, "&6&l10,000 골드 지급")
-        i(20, 1, "일일 상점 아이템 구매를 5회", 5, "&6&l10,000 골드 지급")
-        i(21, 2, "블록 파괴를 64회", 64, "&6&l10,000 골드 지급")
-        i(22, 3, "블록 설치를 64회", 64, "&6&l10,000 골드 지급")
-        i(23, 4, "위더 스켈레톤 처치를 9회", 9, "&6&l10,000 골드 지급")
-        i(24, 5, "플레이어 처치를 5회", 5, "&6&l10,000 골드 지급")
-        i(25, 6, "주간 미션을 5회 클리어", 5, "&b&l8 캐시 지급")
-
-        gui.setItem(48, getItem(
-            "emerald",
+        gui.item[48] = getItem(
+            Material.EMERALD,
             "&a&l일일 미션"
-        ))
+        )
 
-        gui.setItem(49, getItem(
-            "diamond",
+        gui.item[49] = getItem(
+            Material.DIAMOND,
             "&e&l주간 미션"
-        ).apply {addUnsafeEnchantment(Enchantment.LUCK_OF_THE_SEA, 69)})
+        ) modify { enchantEffect() }
 
-        gui.setItem(50, getItem(
-            "dragon_egg",
+        gui.item[50] = getItem(
+            Material.DRAGON_EGG,
             "&d&l업적 미션"
-        ))
+        )
 
-        player.playSound(player.location, Sound.UI_LOOM_TAKE_RESULT, sendSound, 1f)
-        player.openInventory(gui)
+        player.sendSound(Sound.UI_LOOM_TAKE_RESULT, 1f, sound)
+        player.inv + gui
     }
 }
