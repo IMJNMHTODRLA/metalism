@@ -5,23 +5,29 @@ import _RedGold__.main.functions.catch
 import _RedGold__.main.managers.*
 import _RedGold__.main.managers.database.tableManager.banDB.BanStats
 import _RedGold__.main.managers.database.tableManager.chestDB.ChestStats
-import _RedGold__.main.managers.playerData.dataManager.*
-import _RedGold__.main.managers.playerData.*
+import _RedGold__.main.managers.database.tableManager.guildDB.GuildShareChests
+import _RedGold__.main.managers.database.tableManager.guildDB.GuildMembers
+import _RedGold__.main.managers.database.tableManager.guildDB.GuildStats
+import _RedGold__.main.managers.database.tableManager.guildDB.GuildWhitelists
+import _RedGold__.main.managers.database.tableManager.guildDB.guildBan.GuildBans
+import _RedGold__.main.managers.database.tableManager.mailboxDB.MailBox
+import _RedGold__.main.managers.database.tableManager.playersDB.*
 import _RedGold__.main.managers.database.tableManager.playersDB.boost.BoostSettingStats
 import _RedGold__.main.managers.database.tableManager.playersDB.boost.BoostStats
 import _RedGold__.main.managers.database.tableManager.playersDB.cosmetic.CosmeticStats
 import _RedGold__.main.managers.database.tableManager.playersDB.cosmetic.EquipCosmeticStats
 import _RedGold__.main.managers.database.tableManager.userShopDB.UserShopStats
-import _RedGold__.main.managers.database.tableManager.mailboxDB.MailBox
-import _RedGold__.main.managers.database.tableManager.playersDB.*
-import org.bukkit.Bukkit
-import org.bukkit.Location
+import _RedGold__.main.managers.playerData.PlayerData
+import _RedGold__.main.managers.playerData.dataManager.*
 import org.bukkit.plugin.java.JavaPlugin
-import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils.createMissingTablesAndColumns
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.util.*
+import kotlin.collections.forEach
+import kotlin.collections.set
 
 fun initDatabase(plugin: JavaPlugin) = catch("DB 초기화 실패", ExceptionSeverity.SHUTDOWN) {
     if (!plugin.dataFolder.exists()) plugin.dataFolder.mkdirs()
@@ -33,6 +39,7 @@ fun initDatabase(plugin: JavaPlugin) = catch("DB 초기화 실패", ExceptionSev
     mailboxDB = Database.connect(databaseDefaultConfig(path, "mailbox.db"))
     playersDB = Database.connect(databaseDefaultConfig(path, "players.db"))
     userShopDB = Database.connect(databaseDefaultConfig(path, "user_shop.db"))
+    guildDB = Database.connect(databaseDefaultConfig(path, "guild.db"))
 
     TransactionManager.defaultDatabase = playersDB
 
@@ -40,6 +47,9 @@ fun initDatabase(plugin: JavaPlugin) = catch("DB 초기화 실패", ExceptionSev
     transaction(chestDB) { @Suppress("DEPRECATION") createMissingTablesAndColumns(ChestStats) }
     transaction(mailboxDB) { @Suppress("DEPRECATION") createMissingTablesAndColumns(MailBox) }
     transaction(userShopDB) { @Suppress("DEPRECATION") createMissingTablesAndColumns(UserShopStats) }
+    transaction(guildDB) {
+        @Suppress("DEPRECATION") createMissingTablesAndColumns(GuildStats, GuildMembers, GuildWhitelists, GuildBans, GuildShareChests)
+    }
 
     transaction {
         @Suppress("DEPRECATION") createMissingTablesAndColumns(
@@ -54,6 +64,8 @@ fun initDatabase(plugin: JavaPlugin) = catch("DB 초기화 실패", ExceptionSev
         )
     }
 }
+
+//TODO: 테이블 그거 수정시 무조건 default나 nullable 추가
 
 fun loadPlayerData(playerUuid: UUID): PlayerData = catch("플레이어 데이터 로드 실패", ExceptionSeverity.CRITICAL) {
     val strUUID = playerUuid.toString()
@@ -92,7 +104,6 @@ fun loadPlayerData(playerUuid: UUID): PlayerData = catch("플레이어 데이터
         HomeStats.selectAll().where { HomeStats.uuid eq strUUID }.forEach { homeRow ->
             val index = homeRow[HomeStats.index]
 
-            val world = homeRow[HomeStats.world]
             val x = homeRow[HomeStats.x]
             val y = homeRow[HomeStats.y]
             val z = homeRow[HomeStats.z]
@@ -101,7 +112,7 @@ fun loadPlayerData(playerUuid: UUID): PlayerData = catch("플레이어 데이터
 
             playerData.homeMap[index] = HomeData(
                 homeRow[HomeStats.isUnlocked],
-                Location(Bukkit.getWorld(world), x, y, z, yaw, pitch)
+                LocationData(x, y, z, yaw, pitch)
             )
         }
 

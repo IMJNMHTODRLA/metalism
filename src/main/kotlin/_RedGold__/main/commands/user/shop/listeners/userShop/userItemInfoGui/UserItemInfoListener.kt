@@ -2,7 +2,6 @@ package _RedGold__.main.commands.user.shop.listeners.userShop.userItemInfoGui
 
 import _RedGold__.main.commands.user.shop.listeners.userShop.userItemBuyGui.UserItemBuyGui
 import _RedGold__.main.commands.user.shop.listeners.userShop.userItemListGui.UserItemListGui
-import _RedGold__.main.commands.user.shop.listeners.userShop.userItemListGui.UserItemListHolder
 import _RedGold__.main.functions.Scheduler.task
 import _RedGold__.main.loads.RequireJavaPlugin
 import _RedGold__.main.loads.RequireListener
@@ -47,7 +46,7 @@ class UserItemInfoListener(private val plugin: JavaPlugin) : Listener {
 
         if (clickType == ClickType.LEFT && slot == 14) {
             holder.isBuy = true
-            UserItemBuyGui(plugin).openGui(player, holder.returnPage, holder.itemData?: return)
+            UserItemBuyGui().openGui(player, holder.returnPage, holder.itemData?: return)
         }
     }
 }

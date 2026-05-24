@@ -2,8 +2,8 @@ package _RedGold__.main.managers.playerData.variableManager
 
 import _RedGold__.main.functions.TimeTool.now
 import _RedGold__.main.managers.playerData.data
-import _RedGold__.main.managers.reinforceManager.ReinforceImportEnum
-import _RedGold__.main.managers.reinforceManager.randomReinforceItem
+import _RedGold__.main.core.gacha.item.skill.reinforceManager.ReinforceImportEnum
+import _RedGold__.main.core.gacha.item.skill.reinforceManager.randomReinforceItem
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack

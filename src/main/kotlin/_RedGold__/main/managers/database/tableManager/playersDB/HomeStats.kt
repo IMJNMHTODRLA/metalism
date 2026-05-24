@@ -7,7 +7,6 @@ object HomeStats : Table("home_stats") {
     val index = integer("index")
     val isUnlocked = bool("is_unlocked")
 
-    val world = text("world")
     val x = double("x")
     val y = double("y")
     val z = double("z")

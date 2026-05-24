@@ -23,8 +23,8 @@ object UserGlobalConst {
         updateAllUserShopData(allUserShopData, newUserItemData)
     }
 
-    val dbCooldown = mutableMapOf<UUID, Long>()
-    const val COOLDOWN_TIME = 2
+    private val dbCooldown = mutableMapOf<UUID, Long>()
+    private const val COOLDOWN_TIME = 2
 
     fun isUnderCooldown(player: Player): Boolean {
         val uuid = player.uniqueId

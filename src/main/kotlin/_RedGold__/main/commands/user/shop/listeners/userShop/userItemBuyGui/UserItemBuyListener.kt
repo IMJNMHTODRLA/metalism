@@ -8,11 +8,10 @@ import _RedGold__.main.functions.Cubic.then
 import _RedGold__.main.functions.FastBoolean.trueRun
 import _RedGold__.main.functions.Gui.inv
 import _RedGold__.main.functions.NumberFormat.toFormat
-import _RedGold__.main.functions.Scheduler.task
-import _RedGold__.main.functions.Scheduler.taskAsync
 import _RedGold__.main.functions.TimeTool.now
 import _RedGold__.main.functions.isNegative
-import _RedGold__.main.loads.RequireJavaPlugin
+import _RedGold__.main.functions.task
+import _RedGold__.main.functions.taskAsync
 import _RedGold__.main.loads.RequireListener
 import _RedGold__.main.managers.mailBoxManager.MailBoxData
 import _RedGold__.main.managers.mailBoxManager.sendMail
@@ -25,18 +24,16 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
-import org.bukkit.plugin.java.JavaPlugin
 
 @RequireListener
-@RequireJavaPlugin
-class UserItemBuyListener(private val plugin: JavaPlugin) : Listener {
+class UserItemBuyListener : Listener {
     @EventHandler
     fun onInventoryClose(event: InventoryCloseEvent) {
         val player = event.player as? Player?: return
         val holder = event.inventory.holder as? UserItemBuyHolder?: return
         if (holder.isBuy) return //true는 넘겨, false는 붙잡기
 
-        plugin.task(1) {
+        task(1) {
             if (!player.isOnline) return@task
             if (holder.isBuy) return@task
 
@@ -99,7 +96,7 @@ class UserItemBuyListener(private val plugin: JavaPlugin) : Listener {
                 priceType[player.data] -= priceTotalAmount
 
                 player.inv += holder.itemData.item
-                plugin.taskAsync {
+                taskAsync {
                     sendMail(
                         MailBoxData(
                             0, userShopData.uuid,

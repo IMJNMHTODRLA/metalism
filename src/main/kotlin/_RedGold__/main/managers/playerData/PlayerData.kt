@@ -3,7 +3,7 @@ package _RedGold__.main.managers.playerData
 import _RedGold__.main.managers.logManager.logObserver
 import _RedGold__.main.managers.playerData.dataManager.*
 import _RedGold__.main.managers.playerData.variableManager.BoostEnum
-import _RedGold__.main.managers.playerData.variableManager.BoostSettingEnum
+import _RedGold__.main.managers.playerData.variableManager.boostSettingManager.BoostSettingEnum
 import _RedGold__.main.managers.playerData.variableManager.RANGE_HOME
 import _RedGold__.main.managers.playerData.variableManager.cosmeticManager.CosmeticEnum
 import _RedGold__.main.managers.playerData.variableManager.missionManager.MissionEnum
@@ -46,9 +46,6 @@ data class PlayerData(
 
         return isEquipped to item
     }
-
-    @Deprecated(".let 계속 입력해야 되서 사용 안하는 걸 추천ㅇㅇ", ReplaceWith("equipStyle"), DeprecationLevel.WARNING)
-    val rawEquipStyle get() = getEquipRaw(CosmeticEnum.STYLE) as Pair<Boolean, String>
 
     val equipStyle get() =
         (getEquipRaw(CosmeticEnum.STYLE) as Pair<Boolean, String>).let {

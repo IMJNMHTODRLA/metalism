@@ -5,9 +5,6 @@ import _RedGold__.main.functions.NumberFormat.toUuid
 import _RedGold__.main.functions.catch
 import _RedGold__.main.managers.database.tableManager.playersDB.CombatStats
 import _RedGold__.main.managers.database.tableManager.playersDB.DefaultStats
-import _RedGold__.main.managers.playerData.PlayerData
-import _RedGold__.main.managers.playerData.dataManager.CombatData
-import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
 fun getRanking() = catch("전체 랭킹 데이터 로드 실패", ExceptionSeverity.CRITICAL) {

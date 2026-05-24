@@ -1,9 +1,8 @@
 package _RedGold__.main.commands.user.betting.listeners.highLow
 
 import _RedGold__.main.commands.user.betting.listeners.GlobalConst
-import _RedGold__.main.functions.Color.rgb
 import _RedGold__.main.functions.Gui.getItem
-import _RedGold__.main.function.api.toFormat
+import _RedGold__.main.functions.NumberFormat.toFormat
 import _RedGold__.main.functions.Color.gc
 import _RedGold__.main.functions.FastGui.item
 import _RedGold__.main.functions.FastReplace.fill

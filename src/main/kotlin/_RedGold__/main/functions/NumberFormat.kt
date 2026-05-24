@@ -4,18 +4,14 @@ import java.text.NumberFormat
 import java.util.*
 
 object NumberFormat {
-    fun Long.toFormat(): String {
-        return NumberFormat.getInstance().format(this)
-    }
+    fun Long.toFormat(): String = NumberFormat.getInstance().format(this)
+    fun Int.toFormat(): String = NumberFormat.getInstance().format(this)
 
-    fun Int.toFormat(): String {
-        return NumberFormat.getInstance().format(this)
-    }
-
-    fun String.toUuid(): UUID {
+    fun String?.toUuid(): UUID {
         return try {
-            if (this.contains("-")) UUID.fromString(this)
-            else UUID.fromString(this.replaceFirst(
+            if (this == null) return UUID.randomUUID()
+            if (contains("-")) UUID.fromString(this)
+            else UUID.fromString(replaceFirst(
                 "(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})".toRegex(),
                 "$1-$2-$3-$4-$5"
             ))
@@ -24,28 +20,16 @@ object NumberFormat {
         }
     }
 
-    fun String.toUUIDOrNull(): UUID? {
-        return try {
-            if (this.contains("-")) UUID.fromString(this)
-            else UUID.fromString(this.replaceFirst(
-                "(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})".toRegex(),
-                "$1-$2-$3-$4-$5"
-            ))
-        } catch (e: IllegalArgumentException) {
-            return null
-        }
-    }
-
     fun String?.toUUIDOrNull(): UUID? {
-        if (this.isNull()) return null
         return try {
-            if (this.contains("-")) UUID.fromString(this)
-            else UUID.fromString(this.replaceFirst(
+            if (this == null) return null
+            if (contains("-")) UUID.fromString(this)
+            else UUID.fromString(replaceFirst(
                 "(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})".toRegex(),
                 "$1-$2-$3-$4-$5"
             ))
         } catch (e: IllegalArgumentException) {
-            return null
+            null
         }
     }
 

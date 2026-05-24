@@ -5,9 +5,8 @@ import _RedGold__.main.commands.user.shop.listeners.userShop.userShopProfile.reg
 import _RedGold__.main.functions.Color.fail
 import _RedGold__.main.functions.Color.good
 import _RedGold__.main.functions.Gui.inv
-import _RedGold__.main.functions.Scheduler.task
 import _RedGold__.main.functions.ifRun
-import _RedGold__.main.loads.RequireJavaPlugin
+import _RedGold__.main.functions.task
 import _RedGold__.main.loads.RequireListener
 import _RedGold__.main.managers.playerData.data
 import org.bukkit.entity.Player
@@ -15,17 +14,15 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
-import org.bukkit.plugin.java.JavaPlugin
 
 @RequireListener
-@RequireJavaPlugin
-class CollectItemListener(private val plugin: JavaPlugin) : Listener {
+class CollectItemListener : Listener {
     @EventHandler
     fun onInventoryClose(event: InventoryCloseEvent) {
         val player = event.player as? Player?: return
         val holder = event.inventory.holder as? CollectItemHolder?: return
 
-        plugin.task(1) {
+        task(1) {
             if (!player.isOnline) return@task
             ReggedListGui().openGui(player, holder.returnPage)
         }

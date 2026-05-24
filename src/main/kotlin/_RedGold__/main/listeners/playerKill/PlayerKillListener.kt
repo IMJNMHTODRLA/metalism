@@ -1,10 +1,10 @@
 package _RedGold__.main.listeners.playerKill
 
-import _RedGold__.main.function.api.toFormat
 import _RedGold__.main.functions.Color.sendAction
 import _RedGold__.main.functions.Color.sendMsg
 import _RedGold__.main.functions.FastReplace.fill
 import _RedGold__.main.functions.Gui.sendSound
+import _RedGold__.main.functions.NumberFormat.toFormat
 import _RedGold__.main.functions.TimeTool.now
 import _RedGold__.main.listeners.GlobalValue
 import _RedGold__.main.loads.RequireListener
@@ -20,7 +20,7 @@ class PlayerKillListener : Listener {
     @EventHandler
     fun onKill(event: EntityDeathEvent) {
         val attacker = event.entity.killer?: return
-        val victim = event.entity as? Player ?: return
+        val victim = event.entity as? Player?: return
 
         val attackerUUID = attacker.uniqueId
         val victimUUID = victim.uniqueId

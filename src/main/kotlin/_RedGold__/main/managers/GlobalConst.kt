@@ -10,3 +10,4 @@ lateinit var chestDB: Database
 lateinit var mailboxDB: Database
 lateinit var playersDB: Database
 lateinit var userShopDB: Database
+lateinit var guildDB: Database

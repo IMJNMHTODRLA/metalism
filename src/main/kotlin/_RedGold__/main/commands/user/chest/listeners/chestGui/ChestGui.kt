@@ -4,19 +4,18 @@ import _RedGold__.main.functions.Color.fail
 import _RedGold__.main.functions.Color.sendMsg
 import _RedGold__.main.functions.Gui.inv
 import _RedGold__.main.functions.Gui.sendSound
-import _RedGold__.main.functions.Scheduler.task
-import _RedGold__.main.functions.Scheduler.taskAsync
 import _RedGold__.main.functions.TimeTool.now
 import _RedGold__.main.functions.afterWith
 import _RedGold__.main.functions.remainingWith
+import _RedGold__.main.functions.task
+import _RedGold__.main.functions.taskAsync
 import _RedGold__.main.managers.chestManager.DEF_CHEST_SLOT
 import _RedGold__.main.managers.chestManager.getChest
 import _RedGold__.main.managers.chestManager.isChestSaving
 import org.bukkit.Sound
 import org.bukkit.entity.Player
-import org.bukkit.plugin.java.JavaPlugin
 
-class ChestGui(private val plugin: JavaPlugin) {
+class ChestGui {
     fun openGui(player: Player, page: Int) {
         val uuid = player.uniqueId
 
@@ -33,10 +32,10 @@ class ChestGui(private val plugin: JavaPlugin) {
         ChestValue.dbCooldown[uuid] = now
 
         val gui = ChestHolder(page).inventory
-        plugin.taskAsync {
+        taskAsync {
             val itemArray = getChest(uuid, page * (DEF_CHEST_SLOT + 1L))
 
-            plugin.task {
+            task {
                 if (!player.isOnline) return@task
 
                 gui.contents = itemArray

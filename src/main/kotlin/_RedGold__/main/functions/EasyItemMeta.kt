@@ -3,14 +3,23 @@ package _RedGold__.main.functions
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
 
-inline infix fun ItemStack.modifyMeta(action: ItemMeta.() -> Unit): ItemStack {
-    val meta = this.itemMeta?: return this
+inline fun ItemStack.modifyMeta(action: ItemMeta.() -> Unit): ItemStack {
+    val meta = itemMeta?: return this
     meta.action()
-    this.itemMeta = meta
+    itemMeta = meta
     return this
 }
 
-inline infix fun ItemStack.modify(action: ItemStack.() -> Unit): ItemStack {
-    this.action()
+inline fun <reified T : ItemMeta> ItemStack.modifyMeta(action: T.() -> Unit): ItemStack {
+    val meta = itemMeta as? T?: return this
+    meta.action()
+    itemMeta = meta
     return this
 }
+
+inline fun ItemStack.modify(action: ItemStack.() -> Unit): ItemStack {
+    action()
+    return this
+}
+
+inline val ItemStack.plainDisplayName get() = itemMeta.displayName

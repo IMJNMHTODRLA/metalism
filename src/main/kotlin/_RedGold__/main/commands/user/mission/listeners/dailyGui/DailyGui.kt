@@ -36,7 +36,7 @@ class DailyGui {
         gui.item[48] = getItem(
             Material.EMERALD,
             "&a&l일일 미션"
-        ) modify { enchantEffect() }
+        ).modify { enchantEffect() }
 
         gui.item[49] = getItem(
             Material.DIAMOND,

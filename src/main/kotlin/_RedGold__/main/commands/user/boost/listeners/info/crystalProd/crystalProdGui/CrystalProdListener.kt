@@ -4,6 +4,7 @@ import _RedGold__.main.commands.user.boost.listeners.info.crystalProd.alwaysGui.
 import _RedGold__.main.commands.user.boost.listeners.info.crystalProd.limitGui.LimitGui
 import _RedGold__.main.commands.user.boost.listeners.info.infoGui.InfoGui
 import _RedGold__.main.functions.Scheduler.task
+import _RedGold__.main.functions.task
 import _RedGold__.main.loads.RequireJavaPlugin
 import _RedGold__.main.loads.RequireListener
 import org.bukkit.entity.Player
@@ -14,15 +15,14 @@ import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.plugin.java.JavaPlugin
 
 @RequireListener
-@RequireJavaPlugin
-class CrystalProdListener(private val plugin: JavaPlugin) : Listener {
+class CrystalProdListener : Listener {
     @EventHandler
     fun onCloseInventory(event: InventoryCloseEvent) {
         val gui = event.inventory
         val player = event.player as Player
         val holder = gui.holder as? CrystalProdHolder?: return
 
-        plugin.task {
+        task {
             if (!player.isOnline) return@task
             if (!holder.isClose) return@task
 

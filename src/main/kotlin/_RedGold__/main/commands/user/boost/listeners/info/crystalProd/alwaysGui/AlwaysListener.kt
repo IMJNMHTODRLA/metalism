@@ -6,8 +6,7 @@ import _RedGold__.main.functions.Color.fail
 import _RedGold__.main.functions.FastGui.item
 import _RedGold__.main.functions.Gui.getItem
 import _RedGold__.main.functions.PlusMath.pow
-import _RedGold__.main.functions.Scheduler.task
-import _RedGold__.main.loads.RequireJavaPlugin
+import _RedGold__.main.functions.task
 import _RedGold__.main.loads.RequireListener
 import _RedGold__.main.managers.playerData.data
 import org.bukkit.Material
@@ -16,18 +15,16 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
-import org.bukkit.plugin.java.JavaPlugin
 
 @RequireListener
-@RequireJavaPlugin
-class AlwaysListener(private val plugin: JavaPlugin) : Listener {
+class AlwaysListener : Listener {
     @EventHandler
     fun onCloseInventory(event: InventoryCloseEvent) {
         val gui = event.inventory
         val player = event.player as Player
         if (gui.holder !is AlwaysHolder) return
 
-        plugin.task {
+        task(1) {
             if (!player.isOnline) return@task
             CrystalProdGui().openGui(player)
         }

@@ -46,7 +46,7 @@ class AchievementGui {
         gui.item[50] = getItem(
             Material.DRAGON_EGG,
             "&d&l업적 미션"
-        ) modify { enchantEffect() }
+        ).modify { enchantEffect() }
 
         player.sendSound(Sound.UI_LOOM_TAKE_RESULT, 1f, sound)
         player.inv + gui

@@ -9,6 +9,7 @@ import _RedGold__.main.function.Data.getDataUuid
 import _RedGold__.main.functions.Scheduler.task
 import _RedGold__.main.functions.Scheduler.taskAsync
 import _RedGold__.main.function.api.toUuid
+import _RedGold__.main.functions.task
 import _RedGold__.main.loads.RequireJavaPlugin
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
@@ -40,7 +41,7 @@ class RankRefresh(private val plugin: JavaPlugin) {
 
     init {
         plugin.taskAsync(20 * 30, 20 * 60 * 30) {
-            plugin.task {
+            task {
                 Bukkit.getServer().broadcastMessage(gc("&8이벤트 순위 새로고침 중..."))
             }
 

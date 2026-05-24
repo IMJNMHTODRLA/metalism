@@ -11,6 +11,7 @@ import _RedGold__.main.loads.RequireListener
 import _RedGold__.main.managers.playerData.OVER_WORLD
 import _RedGold__.main.managers.playerData.data
 import _RedGold__.main.managers.playerData.dataManager.HomeData
+import _RedGold__.main.managers.playerData.dataManager.LocationData
 import _RedGold__.main.managers.playerData.variableManager.RANGE_HOME
 import org.bukkit.*
 import org.bukkit.entity.Player
@@ -66,11 +67,11 @@ class HomeListener : Listener {
                         return
                     }
 
-                    player.data.homeMap[i]?.let { it.location = player.location }
+                    player.data.homeMap[i]?.let { it.location = LocationData(player.location) }
                     return
                 }
 
-                player.teleportAsync(location)
+                player.teleportAsync(location())
                 player.sendMsg("&a${i + 1}번 홈으로 이동했습니다.")
                 player.sendTitleMsg("&a${i + 1}번 홈으로 이동했습니다.")
                 player.sendSound(Sound.ENTITY_ENDERMAN_TELEPORT)

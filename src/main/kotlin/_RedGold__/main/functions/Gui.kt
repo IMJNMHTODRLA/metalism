@@ -3,7 +3,6 @@ package _RedGold__.main.functions
 import _RedGold__.main.functions.Color.gc
 import org.bukkit.Bukkit
 import org.bukkit.Material
-import org.bukkit.NamespacedKey
 import org.bukkit.Sound
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.LivingEntity
@@ -15,62 +14,51 @@ import org.bukkit.inventory.meta.Damageable
 import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.inventory.meta.PotionMeta
 import org.bukkit.inventory.meta.SkullMeta
-import org.bukkit.persistence.PersistentDataType
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import java.util.*
-import java.util.stream.Collectors
 
 object Gui {
-    fun getPlayerSkull(playerUuid: UUID, title: String? = null, description: List<String>? = null, t: Int? = null): ItemStack {
-        val skull = ItemStack(Material.PLAYER_HEAD)
-        val skullMeta = skull.itemMeta as SkullMeta
-
-        val offlinePlayer = Bukkit.getOfflinePlayer(playerUuid)
-        skullMeta.setOwningPlayer(offlinePlayer) // 스킨 적용
-        if (title != null) skullMeta.setDisplayName(gc(title))
-
-        if (description != null) {
-            skullMeta.lore = description.stream()
-                .map {line: String -> gc(line)}
-                .collect(Collectors.toList())
-        }
-
-        skull.setItemMeta(skullMeta)
-        if (t != null) skull.amount = t
-
-        return skull
+    fun getPlayerSkull(uuid: UUID, title: String? = null, description: List<String>? = null, t: Int? = null): ItemStack {
+        return getItem(Material.PLAYER_HEAD, title, description, t)
+            .modifyMeta<SkullMeta> {
+                owningPlayer = Bukkit.getOfflinePlayer(uuid)
+            }
     }
+
+    fun getPlayerSkull(
+        uuid: UUID, title: String? = null, vararg description: String = emptyArray(), t: Int? = null
+    ) = getPlayerSkull(uuid, title, description.toList(), t)
 
     fun getItem(itemId: Material, title: String? = null, description: List<String>? = null, t: Int? = null): ItemStack {
-        val item = ItemStack(itemId)
-        val meta = item.itemMeta
-        if (title != null) meta.setDisplayName(gc(title))
-
-        if (description != null) {
-            meta.lore = description.stream()
-                .map {line: String -> gc(line)}
-                .collect(Collectors.toList())
-        }
-
-        item.setItemMeta(meta)
-        if (t != null) item.amount = t
-
-        return item
+        return ItemStack(itemId)
+            .modifyMeta {
+                title?.let { setDisplayName(it.gc()) }
+                description?.let {
+                    lore = it.map { iit -> iit.gc() }
+                }
+            }.modify { t?.let { amount = it } }
     }
 
+    fun getItem(
+        itemId: Material, title: String? = null, vararg description: String = emptyArray(), t: Int? = null
+    ) = getItem(itemId, title, description.toList(), t)
+
+    @Deprecated("그냥 .modifyMeta<Damageable> 이거 써라ㅇㅇ", ReplaceWith("modifyMeta"), DeprecationLevel.ERROR)
     fun itemDamage(item: ItemMeta, damage: Int): ItemMeta {
         val meta = item as? Damageable?: return item
         meta.damage = damage
         return meta
     }
 
+    @Deprecated("그냥 .modifyMeta<Damageable> 이거 써라ㅇㅇ", ReplaceWith("modifyMeta"), DeprecationLevel.ERROR)
     fun addItemDamage(item: ItemMeta, damage: Int): ItemMeta {
         val meta = item as? Damageable?: return item
         meta.damage += damage
         return meta
     }
 
+    @Deprecated("그냥 .modifyMeta<PotionMeta> 이거 써라ㅇㅇ", ReplaceWith("modifyMeta"), DeprecationLevel.ERROR)
     fun itemPotion(item: ItemMeta, potionType: PotionEffectType, time: Int, level: Int, over: Boolean = false): ItemMeta {
         val meta = item as? PotionMeta?: return item
         meta.addCustomEffect(PotionEffect(
@@ -82,7 +70,7 @@ object Gui {
     }
 
     fun Player.addPotion(potionType: PotionEffectType, time: Int, level: Int = 0) {
-        this.addPotionEffect(genPotion(potionType, time, level))
+        addPotionEffect(genPotion(potionType, time, level))
     }
 
     fun genPotion(potionType: PotionEffectType, time: Int, level: Int = 0): PotionEffect {
@@ -104,17 +92,19 @@ object Gui {
         }
     }*/
 
+    //TODO: 나중에 heal() 쪽으로 수정좀 하자
     fun LivingEntity.addHealth(amount: Double) {
         val maxHealth = this.getAttribute(Attribute.GENERIC_MAX_HEALTH)?.value?: 20.0
         val currentHealth = this.health
 
-        if (currentHealth + amount <= maxHealth) this.health += amount
+        if (currentHealth + amount <= maxHealth) heal(amount)
         else {
             this.health = maxHealth
             this.absorptionAmount += (currentHealth + amount) - maxHealth
         }
     }
 
+    @Deprecated("그냥 properties 이거 써라ㅇㅇ", ReplaceWith("properties[Attribute.GENERIC_MAX_HEALTH]"), DeprecationLevel.ERROR)
     var LivingEntity.baseMaxHealth
         get() = this.properties[Attribute.GENERIC_MAX_HEALTH]
         set(value) {
@@ -125,14 +115,10 @@ object Gui {
         playSound(location, sound, volume, pitch)
     }
 
-    class AttributeProxy(private val entity: LivingEntity) {
-        operator fun get(type: Attribute): Double {
-            return entity.getAttribute(type)?.baseValue?: 0.0
-        }
-
-        operator fun set(type: Attribute, value: Double) {
-            entity.getAttribute(type)?.baseValue = value
-        }
+    @JvmInline
+    value class AttributeProxy(private val entity: LivingEntity) {
+        operator fun get(type: Attribute) = entity.getAttribute(type)?.baseValue?: 0.0
+        operator fun set(type: Attribute, value: Double) { entity.getAttribute(type)?.baseValue = value }
     }
 
     val LivingEntity.properties get() = AttributeProxy(this)

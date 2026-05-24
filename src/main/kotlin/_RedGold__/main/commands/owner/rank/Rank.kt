@@ -2,22 +2,19 @@ package _RedGold__.main.commands.owner.rank
 
 import _RedGold__.main.functions.Color.sendMsg
 import _RedGold__.main.functions.NumberFormat.toUUIDOrNull
-import _RedGold__.main.functions.Scheduler.task
-import _RedGold__.main.functions.Scheduler.taskAsync
 import _RedGold__.main.functions.getTabPlayers
+import _RedGold__.main.functions.task
+import _RedGold__.main.functions.taskAsync
 import _RedGold__.main.loads.RequireCommandExecutor
-import _RedGold__.main.loads.RequireJavaPlugin
 import _RedGold__.main.loads.RequireTabExecutor
 import _RedGold__.main.managers.playerData.PermissionEnum
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabExecutor
-import org.bukkit.plugin.java.JavaPlugin
 
 @RequireCommandExecutor("rank", PermissionEnum.OWNER, "&c/<command> [name] [permission]", ["permission", "펄미션", "랭크"])
 @RequireTabExecutor
-@RequireJavaPlugin
-class Rank(private val plugin: JavaPlugin) : TabExecutor {
+class Rank : TabExecutor {
     override fun onCommand(
         sender: CommandSender,
         command: Command,
@@ -30,9 +27,9 @@ class Rank(private val plugin: JavaPlugin) : TabExecutor {
         val targetUUID = args[0].toUUIDOrNull()?: return false
         val targetRank = PermissionEnum[args[1]]?: return false
 
-        plugin.taskAsync {
+        taskAsync {
             val result = PermissionEnum.modify(targetUUID, targetRank)
-            plugin.task {
+            task {
                 if (result) sender.sendMsg("&a펄미션 적용에 성공했습니다!(${targetRank.node})")
                 else sender.sendMsg("&a펄미션 적용에 실패했습니다.(${targetRank.node})")
             }

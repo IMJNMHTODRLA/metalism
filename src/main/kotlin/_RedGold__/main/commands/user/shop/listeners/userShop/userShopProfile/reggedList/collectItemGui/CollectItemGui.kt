@@ -8,15 +8,14 @@ import _RedGold__.main.functions.FastGui.item
 import _RedGold__.main.functions.Gui.getItem
 import _RedGold__.main.functions.Gui.inv
 import _RedGold__.main.functions.Gui.sendSound
-import _RedGold__.main.functions.Scheduler.task
-import _RedGold__.main.functions.Scheduler.taskAsync
+import _RedGold__.main.functions.task
+import _RedGold__.main.functions.taskAsync
 import _RedGold__.main.managers.playerData.BACKGROUND
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.entity.Player
-import org.bukkit.plugin.java.JavaPlugin
 
-class CollectItemGui(private val plugin: JavaPlugin) {
+class CollectItemGui {
     fun openGui(player: Player, returnPage: Int, data: Any) {
         UserGlobalConst.isUnderCooldown(player).trueRun { return }
 
@@ -26,12 +25,12 @@ class CollectItemGui(private val plugin: JavaPlugin) {
         gui.item[11] = getItem(Material.GREEN_CONCRETE, "&a&l회수 하기")
         gui.item[15] = getItem(Material.RED_CONCRETE, "&c&l취소")
 
-        plugin.taskAsync {
+        taskAsync {
             val detail = ListGlobalConst.getDBDetail(data)
             (gui.holder as CollectItemHolder).detail = detail
 
-            plugin.task {
-                gui.item[13] = detail?.item?: run {
+            task {
+                gui.item[13] = detail?.item ?: run {
                     player.sendMsg("&c아이템을 찾을 수 없습니다.")
                     return@task
                 }

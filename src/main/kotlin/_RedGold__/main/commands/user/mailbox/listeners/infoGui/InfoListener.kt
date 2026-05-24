@@ -2,35 +2,24 @@ package _RedGold__.main.commands.user.mailbox.listeners.infoGui
 
 import _RedGold__.main.commands.user.mailbox.listeners.GlobalConst
 import _RedGold__.main.commands.user.mailbox.listeners.mailboxGui.MailboxGui
-import _RedGold__.main.commands.user.shop.listeners.userShop.userShopProfile.itemReg.setGoodGui.SetGoodHolder
-import _RedGold__.main.commands.user.shop.listeners.userShop.userShopProfile.profileGui.ProfileGui
-import _RedGold__.main.functions.Color.fail
-import _RedGold__.main.functions.Color.good
-import _RedGold__.main.functions.Gui.inv
-import _RedGold__.main.functions.Scheduler.task
-import _RedGold__.main.functions.ifRun
-import _RedGold__.main.loads.RequireJavaPlugin
+import _RedGold__.main.functions.task
 import _RedGold__.main.loads.RequireListener
-import _RedGold__.main.managers.mailBoxManager.readMailId
-import _RedGold__.main.managers.playerData.data
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
-import org.bukkit.plugin.java.JavaPlugin
 
 @RequireListener
-@RequireJavaPlugin
-class InfoListener(private val plugin: JavaPlugin) : Listener {
+class InfoListener : Listener {
     @EventHandler
     fun onInventoryClose(event: InventoryCloseEvent) {
         val player = event.player as? Player?: return
         val holder = event.inventory.holder as? InfoHolder?: return
 
-        plugin.task(1) {
+        task(1) {
             if (!player.isOnline) return@task
-            MailboxGui(plugin).openGui(player, holder.returnPage)
+            MailboxGui().openGui(player, holder.returnPage)
         }
     }
 

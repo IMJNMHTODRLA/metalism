@@ -1,28 +1,26 @@
 package _RedGold__.main.commands.user.boost.listeners.info.infoGui
 
+import _RedGold__.main.commands.user.boost.listeners.info.crystalProd.crystalProdGui.CrystalProdGui
 import _RedGold__.main.commands.user.boost.listeners.info.packageProd.packageProdGui.PackageProdGui
 import _RedGold__.main.commands.user.boost.listeners.info.rankProd.rankProdGui.RankProdGui
 import _RedGold__.main.commands.user.boost.listeners.selectGui.SelectGui
-import _RedGold__.main.functions.Scheduler.task
-import _RedGold__.main.loads.RequireJavaPlugin
+import _RedGold__.main.functions.task
 import _RedGold__.main.loads.RequireListener
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
-import org.bukkit.plugin.java.JavaPlugin
 
 @RequireListener
-@RequireJavaPlugin
-class InfoListener(private val plugin: JavaPlugin) : Listener {
+class InfoListener : Listener {
     @EventHandler
     fun onCloseInventory(event: InventoryCloseEvent) {
         val gui = event.inventory
         val player = event.player as Player
         val holder = gui.holder as? InfoHolder?: return
 
-        plugin.task {
+        task(1) {
             if (!player.isOnline) return@task
             if (!holder.isClose) return@task
 
@@ -43,7 +41,7 @@ class InfoListener(private val plugin: JavaPlugin) : Listener {
 
         when (slot) {
             11 -> {
-                //TODO: 크리스탈 그거 상품 열리게 만들기
+                CrystalProdGui().openGui(player)
                 holder.isClose = true
             }
             13 -> {

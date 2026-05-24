@@ -7,8 +7,8 @@ plugins {
 group = "_RedGold__"
 version = "1.0.0"
 
-val Name = "main"
-val Version = "1.0.0"
+val projName = "main"
+val projVersion = "1.0.0"
 
 repositories {
     mavenCentral()
@@ -52,14 +52,15 @@ dependencies {
     implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:2.15.0")
     implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:2.15.0")
 
-    implementation("org.jetbrains.exposed:exposed-core:0.58.0")
-    implementation("org.jetbrains.exposed:exposed-dao:0.58.0")
-    implementation("org.jetbrains.exposed:exposed-jdbc:0.58.0")
-    implementation("org.xerial:sqlite-jdbc:3.45.1.0")
+    implementation("org.jetbrains.exposed:exposed-core:0.58.0") //sqlite API
+    implementation("org.jetbrains.exposed:exposed-dao:0.58.0") //sqlite API
+    implementation("org.jetbrains.exposed:exposed-jdbc:0.58.0") //sqlite API
+    implementation("org.xerial:sqlite-jdbc:3.45.1.0") //sqlite API
 
-    implementation("com.zaxxer:HikariCP:5.1.0")
+    implementation("com.zaxxer:HikariCP:5.1.0") //sqlite API
 
-    implementation("com.github.retrooper:packetevents-spigot:2.11.2")
+    implementation("com.github.retrooper:packetevents-spigot:2.11.2") //packetevents API
+    //implementation("me.chancesd.pvpmanager:pvpmanager-plugin:4.0.9") //PVPManager API
 }
 
 tasks {
@@ -84,7 +85,7 @@ tasks.build {
 }
 
 tasks.shadowJar {
-    archiveFileName.set("$Name-$Version.jar") // 기본 jar 이름 그대로
+    archiveFileName.set("$projName-$projVersion.jar") // 기본 jar 이름 그대로
     mergeServiceFiles()       // ACF 관련 서비스 파일 병합
 
     //re("co.aikar", "libs.acf-paper")
@@ -94,7 +95,7 @@ tasks.shadowJar {
 tasks.register<Copy>("copyPlugin") {
     doFirst { println("copying built plugin ...") }
 
-    from("build/libs/$Name-$Version.jar")
+    from("build/libs/$name-$projVersion.jar")
     into("C:/Users/User/OneDrive/바탕 화면/plgins/마크서버테스트용플러그인/testset/VelocitysServer/metalism.mcv.kr@/Main/plugins")
 
     doLast { println("copied built plugin!") }

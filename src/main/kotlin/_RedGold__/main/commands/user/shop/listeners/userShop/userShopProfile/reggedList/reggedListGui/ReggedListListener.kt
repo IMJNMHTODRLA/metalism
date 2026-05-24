@@ -5,8 +5,7 @@ import _RedGold__.main.commands.user.shop.listeners.userShop.userShopProfile.ite
 import _RedGold__.main.commands.user.shop.listeners.userShop.userShopProfile.profileGui.ProfileGui
 import _RedGold__.main.commands.user.shop.listeners.userShop.userShopProfile.reggedList.collectItemGui.CollectItemGui
 import _RedGold__.main.commands.user.shop.listeners.userShop.userShopProfile.reggedList.infoItemGui.InfoItemGui
-import _RedGold__.main.functions.Scheduler.task
-import _RedGold__.main.loads.RequireJavaPlugin
+import _RedGold__.main.functions.task
 import _RedGold__.main.managers.playerData.PermissionEnum
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -14,16 +13,14 @@ import org.bukkit.event.Listener
 import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
-import org.bukkit.plugin.java.JavaPlugin
 
-@RequireJavaPlugin
-class ReggedListListener(private val plugin: JavaPlugin) : Listener {
+class ReggedListListener : Listener {
     @EventHandler
     fun onInventoryClose(event: InventoryCloseEvent) {
         val player = event.player as? Player?: return
         val holder = event.inventory.holder as? ReggedListHolder?: return
 
-        plugin.task(1) {
+        task(1) {
             if (!player.isOnline) return@task
             if (!holder.isClose) return@task
             ProfileGui().openGui(player, holder.returnPage)
@@ -59,11 +56,11 @@ class ReggedListListener(private val plugin: JavaPlugin) : Listener {
         when(clickType) {
             ClickType.LEFT -> {
                 holder.isClose = true
-                CollectItemGui(plugin).openGui(player, holder.returnPage, item)
+                CollectItemGui().openGui(player, holder.returnPage, item)
             }
             ClickType.RIGHT -> {
                 holder.isClose = true
-                InfoItemGui(plugin).openGui(player, holder.returnPage, item)
+                InfoItemGui().openGui(player, holder.returnPage, item)
             }
 
             else -> {}

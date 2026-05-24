@@ -7,19 +7,18 @@ import _RedGold__.main.functions.FastGui.end
 import _RedGold__.main.functions.FastGui.item
 import _RedGold__.main.functions.Gui.inv
 import _RedGold__.main.functions.Gui.sendSound
-import _RedGold__.main.functions.Scheduler.task
-import _RedGold__.main.functions.Scheduler.taskAsync
 import _RedGold__.main.functions.TimeTool.now
 import _RedGold__.main.functions.afterWith
 import _RedGold__.main.functions.remainingWith
+import _RedGold__.main.functions.task
+import _RedGold__.main.functions.taskAsync
 import _RedGold__.main.managers.mailBoxManager.getMail
 import _RedGold__.main.managers.playerData.BACKGROUND
 import _RedGold__.main.managers.playerData.BACKGROUND_1
 import org.bukkit.Sound
 import org.bukkit.entity.Player
-import org.bukkit.plugin.java.JavaPlugin
 
-class MailboxGui(private val plugin: JavaPlugin) {
+class MailboxGui {
     fun openGui(player: Player, page: Long) {
         val uuid = player.uniqueId
 
@@ -35,10 +34,10 @@ class MailboxGui(private val plugin: JavaPlugin) {
         gui.item(BACKGROUND)
         gui.item[27..gui.end] = BACKGROUND_1
 
-        plugin.taskAsync {
+        taskAsync {
             val mailList = getMail(uuid, page)
 
-            plugin.task {
+            task {
                 (gui.holder as MailboxHolder).mailList = mailList
 
                 mailList.forEachIndexed { i, mail ->

@@ -41,7 +41,7 @@ class WeeklyGui {
         gui.item[49] = getItem(
             Material.DIAMOND,
             "&e&l주간 미션"
-        ) modify { enchantEffect() }
+        ).modify { enchantEffect() }
 
         gui.item[50] = getItem(
             Material.DRAGON_EGG,

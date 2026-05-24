@@ -2,9 +2,9 @@ package _RedGold__.main.managers.playerData.variableManager.missionManager.missi
 
 import _RedGold__.main.managers.playerData.variableManager.missionManager.MissionInfoData
 import _RedGold__.main.managers.playerData.variableManager.missionManager.MissionRewardData
-import _RedGold__.main.managers.reinforceManager.ReinforceImportEnum.INTERMEDIA
-import _RedGold__.main.managers.reinforceManager.ReinforceImportEnum.ADVANCED
-import _RedGold__.main.managers.reinforceManager.randomReinforceItem
+import _RedGold__.main.core.gacha.item.skill.reinforceManager.ReinforceImportEnum.INTERMEDIA
+import _RedGold__.main.core.gacha.item.skill.reinforceManager.ReinforceImportEnum.ADVANCED
+import _RedGold__.main.core.gacha.item.skill.reinforceManager.randomReinforceItem
 
 val achievementMissionInfoList = listOf(
     MissionInfoData("일일 접속 365회", 365, "&a&l[시간의 연속] 칭호 지급, &b&l600 크리스탈 지급"), //완

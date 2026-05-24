@@ -20,7 +20,7 @@ class CrystalProdGui {
             Material.DIAMOND_BLOCK,
             "&b&l한정 판매 크리스탈",
             listOf("", "&7&l클릭하여 혜택을 볼 수 있습니다.")
-        ) modify { enchantEffect() }
+        ).modify { enchantEffect() }
 
         gui.item[14] = getItem(
             Material.DIAMOND,

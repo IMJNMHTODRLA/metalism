@@ -6,9 +6,9 @@ import _RedGold__.main.functions.Color.fail
 import _RedGold__.main.functions.FastGui.item
 import _RedGold__.main.functions.Gui.getItem
 import _RedGold__.main.functions.Gui.sendSound
-import _RedGold__.main.functions.Scheduler.task
-import _RedGold__.main.functions.ifRun
 import _RedGold__.main.functions.isNull
+import _RedGold__.main.functions.task
+import _RedGold__.main.loads.RequireListener
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.entity.Player
@@ -16,15 +16,15 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
-import org.bukkit.plugin.java.JavaPlugin
 
-class UploadItemListener(private val plugin: JavaPlugin) : Listener {
+@RequireListener
+class UploadItemListener : Listener {
     @EventHandler
     fun onInventoryClose(event: InventoryCloseEvent) {
         val player = event.player as? Player?: return
         val holder = event.inventory.holder as? UploadItemHolder?: return
 
-        plugin.task(1) {
+        task(1) {
             if (!player.isOnline) return@task
             if (holder.isClose) return@task
             ProfileGui().openGui(player, holder.returnPage)

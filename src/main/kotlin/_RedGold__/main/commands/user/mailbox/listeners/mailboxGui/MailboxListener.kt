@@ -2,17 +2,14 @@ package _RedGold__.main.commands.user.mailbox.listeners.mailboxGui
 
 import _RedGold__.main.commands.user.mailbox.listeners.GlobalConst
 import _RedGold__.main.commands.user.mailbox.listeners.infoGui.InfoGui
-import _RedGold__.main.loads.RequireJavaPlugin
 import _RedGold__.main.loads.RequireListener
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
-import org.bukkit.plugin.java.JavaPlugin
 
 @RequireListener
-@RequireJavaPlugin
-class MailboxListener(private val plugin: JavaPlugin) : Listener {
+class MailboxListener : Listener {
     @EventHandler
     fun onInventoryClick(event: InventoryClickEvent) {
         val gui = event.view.topInventory
@@ -39,8 +36,8 @@ class MailboxListener(private val plugin: JavaPlugin) : Listener {
                 else if (clickType.isRightClick) InfoGui().openGui(player, page, mailData)
             }
 
-            27 -> MailboxGui(plugin).openGui(player, (page - 1).coerceAtLeast(0))
-            35 -> MailboxGui(plugin).openGui(player, page + 1)
+            27 -> MailboxGui().openGui(player, (page - 1).coerceAtLeast(0))
+            35 -> MailboxGui().openGui(player, page + 1)
         }
     }
 }

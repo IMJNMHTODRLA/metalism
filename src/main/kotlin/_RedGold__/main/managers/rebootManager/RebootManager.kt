@@ -1,6 +1,6 @@
 package _RedGold__.main.managers.rebootManager
 
-import _RedGold__.main.functions.Scheduler.task
+import _RedGold__.main.functions.task
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 import java.time.Duration
@@ -22,7 +22,7 @@ class RebootManager(private val plugin: JavaPlugin) {
 
         // 대기 후 종료 명령 실행
         scheduler.schedule({
-            plugin.task {
+            task {
                 Bukkit.shutdown()
             }
         }, delay, TimeUnit.SECONDS)
@@ -30,6 +30,11 @@ class RebootManager(private val plugin: JavaPlugin) {
 
     fun stop() {
         scheduler.shutdownNow()
+        /*
+        * TODO: 여기에다가 저장할 때 마지막으로 DB먼저, 무조건 먼저 저장하고! 그 다음에! 백업하기
+        * TODO: 플레이어 연결은 무조건 끊기
+        * TODO: onDisable과 이 stop함수 에서는 무조건 Main 스레드만 사용
+        * */
 
         try {
             if (!scheduler.awaitTermination(1, TimeUnit.SECONDS)) {

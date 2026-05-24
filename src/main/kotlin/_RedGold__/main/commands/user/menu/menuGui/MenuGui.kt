@@ -1,12 +1,12 @@
 package _RedGold__.main.commands.user.menu.menuGui
 
-import _RedGold__.main.function.api.toFormat
 import _RedGold__.main.functions.FastGui.enchantEffect
 import _RedGold__.main.functions.FastGui.item
 import _RedGold__.main.functions.Gui.getItem
 import _RedGold__.main.functions.Gui.getPlayerSkull
 import _RedGold__.main.functions.Gui.inv
 import _RedGold__.main.functions.Gui.sendSound
+import _RedGold__.main.functions.NumberFormat.toFormat
 import _RedGold__.main.functions.modify
 import _RedGold__.main.managers.playerData.BACKGROUND
 import _RedGold__.main.managers.playerData.PermissionEnum
@@ -29,11 +29,12 @@ class MenuGui {
         gui.item[16] = getItem(Material.RED_BED, "&f&l홈 관리") //home 완
 
         gui.item[19] = getItem(Material.REDSTONE, "&f&l죽은 위치로 돌아가기") //플러그인 사용
-        gui.item[20] = getItem(Material.CAKE, "&f&l이벤트") modify { enchantEffect() } //event 완
-        gui.item[21] = getItem(Material.BOOK, "&f&l미션") modify { enchantEffect() } //mission 완
+        gui.item[20] = getItem(Material.CAKE, "&f&l이벤트").modify { enchantEffect() } //event 완
+        gui.item[21] = getItem(Material.BOOK, "&f&l미션").modify { enchantEffect() } //mission 완
         gui.item[22] = getItem(Material.WRITABLE_BOOK, "&f&l치장품 관리") //cosmetic 완
-        gui.item[23] = getItem(Material.ENDER_CHEST, "&a&l엔더 상자", listOf("", "&c&lplus 랭크 이상만 사용 가능합니다.")) //완
+        gui.item[23] = getItem(Material.ENDER_CHEST, "&a&l엔더 상자", listOf("", "&c&lvip 랭크 이상만 사용 가능합니다.")) //완
         gui.item[24] = getItem(Material.PAPER, "&b&l디스코드 / 커뮤니티")
+        //TODO: 길드 추가
 
         gui.item[49] = getPlayerSkull(
             player.uniqueId,

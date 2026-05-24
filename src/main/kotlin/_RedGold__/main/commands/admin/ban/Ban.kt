@@ -3,30 +3,27 @@ package _RedGold__.main.commands.admin.ban
 import _RedGold__.main.functions.Color.gc
 import _RedGold__.main.functions.Color.sendMsg
 import _RedGold__.main.functions.NumberFormat.toUUIDOrNull
-import _RedGold__.main.functions.Scheduler.task
-import _RedGold__.main.functions.Scheduler.taskAsync
 import _RedGold__.main.functions.TimeTool.now
+import _RedGold__.main.functions.task
+import _RedGold__.main.functions.taskAsync
 import _RedGold__.main.loads.RequireCommandExecutor
-import _RedGold__.main.loads.RequireJavaPlugin
 import _RedGold__.main.loads.RequireTabExecutor
-import _RedGold__.main.managers.playerData.PermissionEnum
 import _RedGold__.main.managers.banManager.BanData
 import _RedGold__.main.managers.banManager.BanEnum
 import _RedGold__.main.managers.banManager.removeBan
 import _RedGold__.main.managers.banManager.saveBan
+import _RedGold__.main.managers.playerData.PermissionEnum
 import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabExecutor
-import org.bukkit.plugin.java.JavaPlugin
 import java.util.*
 import java.util.stream.Collectors
 
 @RequireCommandExecutor("ban", PermissionEnum.ADMIN, "&cusage: /<command> [uuid] [temp|perm(only ban)] [reason(only ban)]", ["unban"])
 @RequireTabExecutor
-@RequireJavaPlugin
-class Ban(private val plugin: JavaPlugin) : CommandExecutor, TabExecutor {
+class Ban : CommandExecutor, TabExecutor {
     override fun onCommand(
         sender: CommandSender,
         command: Command,
@@ -42,9 +39,9 @@ class Ban(private val plugin: JavaPlugin) : CommandExecutor, TabExecutor {
             if (args.isEmpty()) return false
 
             sender.sendMsg("&8&l밴 정보 삭제중...")
-            plugin.taskAsync {
+            taskAsync {
                 removeBan(uuid)
-                plugin.task {
+                task {
                     sender.sendMsg("&a&l밴 정보 삭제 완료!")
                 }
             }
@@ -69,9 +66,9 @@ class Ban(private val plugin: JavaPlugin) : CommandExecutor, TabExecutor {
             )
 
             sender.sendMsg("&8&l밴 정보 저장중...")
-            plugin.taskAsync {
+            taskAsync {
                 saveBan(banData)
-                plugin.task {
+                task {
                     sender.sendMsg("&a&l밴 정보 저장 완료!")
 
                     Bukkit.getPlayer(uuid)?.kickPlayer("""

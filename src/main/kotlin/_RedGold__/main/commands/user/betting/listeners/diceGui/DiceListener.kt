@@ -1,19 +1,17 @@
 package _RedGold__.main.commands.user.betting.listeners.diceGui
 
 import _RedGold__.main.commands.user.betting.listeners.GlobalConst
-import _RedGold__.main.commands.user.betting.listeners.coinGui.CoinConst
-import _RedGold__.main.functions.Color.gc
-import _RedGold__.main.functions.Gui.getItem
-import _RedGold__.main.functions.Scheduler.task
 import _RedGold__.main.functions.Color.fail
+import _RedGold__.main.functions.Color.gc
 import _RedGold__.main.functions.Color.sendMsg
-import _RedGold__.main.functions.EasyEnchant.enchant
 import _RedGold__.main.functions.FastGui.enchantEffect
 import _RedGold__.main.functions.FastGui.item
 import _RedGold__.main.functions.FastReplace.fill
+import _RedGold__.main.functions.Gui.getItem
 import _RedGold__.main.functions.Gui.sendSound
 import _RedGold__.main.functions.NumberFormat.toFormat
 import _RedGold__.main.functions.PlusMath.pow
+import _RedGold__.main.functions.task
 import _RedGold__.main.loads.RequireJavaPlugin
 import _RedGold__.main.loads.RequireListener
 import _RedGold__.main.managers.playerData.data
@@ -22,13 +20,11 @@ import com.github.shynixn.mccoroutine.bukkit.ticks
 import kotlinx.coroutines.delay
 import org.bukkit.Material
 import org.bukkit.Sound
-import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
-import org.bukkit.inventory.ItemFlag
 import org.bukkit.plugin.java.JavaPlugin
 
 @RequireListener
@@ -40,7 +36,7 @@ class DiceListener(private val plugin: JavaPlugin) : Listener {
         val holder = event.inventory.holder as? DiceHolder?: return
         if (!holder.isStart) return
 
-        plugin.task(1) {
+        task(1) {
             if (!player.isOnline) return@task
             if (!holder.isStart) return@task
 

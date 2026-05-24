@@ -2,6 +2,7 @@ package _RedGold__.main.commands.user.boost
 
 import _RedGold__.main.commands.user.boost.listeners.info.infoGui.InfoGui
 import _RedGold__.main.commands.user.boost.listeners.selectGui.SelectGui
+import _RedGold__.main.commands.user.boost.listeners.settings.settingsGui.SettingsGui
 import _RedGold__.main.loads.RequireCommandExecutor
 import _RedGold__.main.loads.RequireJavaPlugin
 import _RedGold__.main.loads.RequireTabExecutor
@@ -29,9 +30,9 @@ class Boost(private val plugin: JavaPlugin) : CommandExecutor, TabExecutor {
         when {
             args.isEmpty() -> SelectGui().openGui(player)
             args[0] == "info" -> InfoGui().openGui(player)
-            args[0] == "setting" -> SettingGui().openGui(player)
+            args[0] == "setting" -> SettingsGui().openGui(player)
             args[0] == "apply" -> ApplyGui().openGui(player)
-        }
+        } //TODO: 만들어야한다
 
         return true
     }

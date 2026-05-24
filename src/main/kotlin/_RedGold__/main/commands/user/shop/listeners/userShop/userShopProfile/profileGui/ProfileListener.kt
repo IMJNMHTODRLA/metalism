@@ -3,23 +3,22 @@ package _RedGold__.main.commands.user.shop.listeners.userShop.userShopProfile.pr
 import _RedGold__.main.commands.user.shop.listeners.userShop.userItemListGui.UserItemListGui
 import _RedGold__.main.commands.user.shop.listeners.userShop.userShopProfile.itemReg.uploadItemGui.UploadItemGui
 import _RedGold__.main.commands.user.shop.listeners.userShop.userShopProfile.reggedList.reggedListGui.ReggedListGui
-import _RedGold__.main.functions.Scheduler.task
-import _RedGold__.main.loads.RequireJavaPlugin
+import _RedGold__.main.functions.task
+import _RedGold__.main.loads.RequireListener
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
-import org.bukkit.plugin.java.JavaPlugin
 
-@RequireJavaPlugin
-class ProfileListener(private val plugin: JavaPlugin) : Listener {
+@RequireListener
+class ProfileListener : Listener {
     @EventHandler
     fun onInventoryClose(event: InventoryCloseEvent) {
         val player = event.player as? Player?: return
         val holder = event.inventory.holder as? ProfileHolder?: return
 
-        plugin.task(1) {
+        task(1) {
             if (!player.isOnline) return@task
             UserItemListGui().openGui(player, holder.returnPage)
         }

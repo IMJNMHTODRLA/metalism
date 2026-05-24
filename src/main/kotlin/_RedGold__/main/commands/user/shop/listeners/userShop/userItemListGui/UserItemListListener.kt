@@ -7,18 +7,15 @@ import _RedGold__.main.commands.user.shop.listeners.userShop.userShopProfile.pro
 import _RedGold__.main.functions.Color.sendMsg
 import _RedGold__.main.functions.FastBoolean.trueRun
 import _RedGold__.main.functions.isNegative
-import _RedGold__.main.loads.RequireJavaPlugin
 import _RedGold__.main.loads.RequireListener
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryClickEvent
-import org.bukkit.plugin.java.JavaPlugin
 
 @RequireListener
-@RequireJavaPlugin
-class UserItemListListener(private val plugin: JavaPlugin) : Listener {
+class UserItemListListener : Listener {
     @EventHandler
     fun onInventoryClick(event: InventoryClickEvent) {
         val gui = event.view.topInventory
@@ -51,8 +48,8 @@ class UserItemListListener(private val plugin: JavaPlugin) : Listener {
                 }
 
                 when (clickType) {
-                    ClickType.LEFT -> UserItemBuyGui(plugin).openGui(player, page, getId)
-                    ClickType.RIGHT -> UserItemInfoGui(plugin).openGui(player, page, getId) //상세정보
+                    ClickType.LEFT -> UserItemBuyGui().openGui(player, page, getId)
+                    ClickType.RIGHT -> UserItemInfoGui().openGui(player, page, getId) //상세정보
                     else -> {}
                 }
             }

@@ -1,7 +1,6 @@
 package _RedGold__.main.commands.user.shop.listeners.goldShop.enchantGui
 
 import _RedGold__.main.commands.user.shop.listeners.GlobalConst
-import _RedGold__.main.commands.user.shop.listeners.goldShop.GoldGlobalConst
 import _RedGold__.main.functions.Color.fail
 import _RedGold__.main.functions.Color.good
 import _RedGold__.main.functions.Gui.getItem

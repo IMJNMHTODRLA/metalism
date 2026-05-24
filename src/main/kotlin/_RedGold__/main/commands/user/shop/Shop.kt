@@ -9,14 +9,13 @@ import _RedGold__.main.loads.RequireCommandExecutor
 import _RedGold__.main.loads.RequireTabExecutor
 import _RedGold__.main.managers.playerData.PermissionEnum
 import org.bukkit.command.Command
-import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabExecutor
 import org.bukkit.entity.Player
 
 @RequireCommandExecutor("shop", PermissionEnum.USER, aliases = ["상점"])
 @RequireTabExecutor
-class Shop : CommandExecutor, TabExecutor {
+class Shop : TabExecutor {
     override fun onCommand(
         sender: CommandSender,
         command: Command,

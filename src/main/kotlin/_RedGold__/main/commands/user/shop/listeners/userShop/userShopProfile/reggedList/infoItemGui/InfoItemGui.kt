@@ -7,26 +7,25 @@ import _RedGold__.main.functions.FastBoolean.trueRun
 import _RedGold__.main.functions.FastGui.item
 import _RedGold__.main.functions.Gui.inv
 import _RedGold__.main.functions.Gui.sendSound
-import _RedGold__.main.functions.Scheduler.task
-import _RedGold__.main.functions.Scheduler.taskAsync
+import _RedGold__.main.functions.task
+import _RedGold__.main.functions.taskAsync
 import _RedGold__.main.managers.playerData.BACKGROUND
 import org.bukkit.Sound
 import org.bukkit.entity.Player
-import org.bukkit.plugin.java.JavaPlugin
 
-class InfoItemGui(private val plugin: JavaPlugin) {
+class InfoItemGui {
     fun openGui(player: Player, returnPage: Int, data: Any) {
         UserGlobalConst.isUnderCooldown(player).trueRun { return }
 
         val gui = InfoItemHolder(returnPage).inventory
         gui.item(BACKGROUND)
 
-        plugin.taskAsync {
+        taskAsync {
             val detail = ListGlobalConst.getDBDetail(data)
             (gui.holder as InfoItemHolder).detail = detail
 
-            plugin.task {
-                gui.item[13] = detail?.item?: run {
+            task {
+                gui.item[13] = detail?.item ?: run {
                     player.sendMsg("&c아이템을 찾을 수 없습니다.")
                     return@task
                 }

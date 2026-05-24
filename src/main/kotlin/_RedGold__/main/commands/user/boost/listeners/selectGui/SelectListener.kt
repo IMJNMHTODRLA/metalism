@@ -23,7 +23,7 @@ class SelectListener : Listener {
 
         when (slot) {
             11 -> player.onCommand<Boost>("info")
-            13 -> player.onCommand<Boost>("apply")
+            13 -> player.onCommand<Boost>("apply") //TODO: 후원 신청 기능 만들기
             15 -> player.onCommand<Boost>("setting")
         }
     }

@@ -13,7 +13,7 @@ import _RedGold__.main.managers.playerData.BACKGROUND
 import _RedGold__.main.managers.playerData.PREFIX
 import _RedGold__.main.managers.playerData.data
 import _RedGold__.main.managers.playerData.variableManager.DailyEnum
-import _RedGold__.main.managers.reinforceManager.ReinforceItemList
+import _RedGold__.main.core.gacha.item.skill.reinforceManager.ReinforceItemList
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack

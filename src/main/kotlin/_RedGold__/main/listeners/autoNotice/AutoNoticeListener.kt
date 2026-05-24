@@ -4,7 +4,6 @@ import _RedGold__.main.functions.Color.broadcast
 import _RedGold__.main.functions.FastNumber.minutes
 import _RedGold__.main.functions.Scheduler.task
 import _RedGold__.main.loads.RequireJavaPlugin
-import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 
 @RequireJavaPlugin

@@ -4,7 +4,8 @@ import org.bukkit.enchantments.Enchantment
 import org.bukkit.inventory.ItemStack
 
 object EasyEnchant {
-    class EnchantProxy(private val item: ItemStack) {
+    @JvmInline
+    value class EnchantProxy(private val item: ItemStack) {
         operator fun contains(enchant: Enchantment?): Boolean {
             return item.containsEnchantment(
                 enchant?: return item.itemMeta.hasEnchants()

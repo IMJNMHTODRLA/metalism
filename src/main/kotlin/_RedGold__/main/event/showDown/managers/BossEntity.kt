@@ -37,7 +37,7 @@ class BossEntity(private val plugin: JavaPlugin) {
             properties[Attribute.GENERIC_ARMOR] = bossMetadata.defense
             properties[Attribute.GENERIC_ATTACK_DAMAGE] = bossMetadata.damage
 
-            baseMaxHealth = bossMetadata.hp
+            properties[Attribute.GENERIC_MAX_HEALTH] = bossMetadata.hp
             health = bossMetadata.hp
 
             setGravity(true)

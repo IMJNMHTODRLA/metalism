@@ -24,7 +24,7 @@ class SelectGui {
         gui.item[13] = getItem(
             Material.EMERALD,
             "&e&l후원 신청 하기"
-        ) modify { enchantEffect() }
+        ).modify { enchantEffect() }
 
         gui.item[15] = getItem(
             Material.EMERALD_BLOCK,

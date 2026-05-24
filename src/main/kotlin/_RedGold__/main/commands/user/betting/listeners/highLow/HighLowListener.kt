@@ -1,7 +1,6 @@
 package _RedGold__.main.commands.user.betting.listeners.highLow
 
 import _RedGold__.main.commands.user.betting.listeners.GlobalConst
-import _RedGold__.main.commands.user.betting.listeners.diceGui.DiceHolder
 import _RedGold__.main.functions.Color.gc
 import _RedGold__.main.functions.Gui.getItem
 import _RedGold__.main.functions.Scheduler.task
@@ -29,8 +28,6 @@ import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.plugin.java.JavaPlugin
-import java.security.SecureRandom
-import kotlin.math.floor
 
 @RequireListener
 @RequireJavaPlugin

@@ -2,17 +2,16 @@ package _RedGold__.main.commands.user.betting.listeners.coinGui
 
 import _RedGold__.main.commands.user.betting.listeners.GlobalConst
 import _RedGold__.main.functions.Gui.getItem
-import _RedGold__.main.function.api.toFormat
 import _RedGold__.main.functions.Color.gc
 import _RedGold__.main.functions.FastGui.item
 import _RedGold__.main.functions.FastReplace.fill
 import _RedGold__.main.functions.Gui.sendSound
+import _RedGold__.main.functions.NumberFormat.toFormat
 import _RedGold__.main.functions.PlusMath.pow
 import _RedGold__.main.managers.playerData.BACKGROUND
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.entity.Player
-import kotlin.math.pow
 
 class CoinGui {
     fun openGui(player: Player) {
