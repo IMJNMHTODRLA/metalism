@@ -22,7 +22,7 @@ class ReggedListListener : Listener {
 
         task(1) {
             if (!player.isOnline) return@task
-            if (!holder.isClose) return@task
+            if (holder.isClose) return@task
             ProfileGui().openGui(player, holder.returnPage)
         }
     }

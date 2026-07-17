@@ -6,6 +6,7 @@ import _RedGold__.main.functions.Color.good
 import _RedGold__.main.functions.Gui.getItem
 import _RedGold__.main.functions.Gui.inv
 import _RedGold__.main.functions.NumberFormat.toFormat
+import _RedGold__.main.functions.modifyMeta
 import _RedGold__.main.managers.playerData.PREFIX
 import _RedGold__.main.managers.playerData.data
 import org.bukkit.Material
@@ -81,11 +82,10 @@ object EnchantConst {
         val totalItemPrice = enchant.buy * itemTimes
 
         val itemId = Material.ENCHANTED_BOOK
-        val item = ItemStack(itemId).apply {
-            val meta = itemMeta as EnchantmentStorageMeta
-            meta.addStoredEnchant(enchant.id, enchant.id.maxLevel, false)
-            itemMeta = meta
-        }
+        val item = ItemStack(itemId)
+            .modifyMeta<EnchantmentStorageMeta> {
+                addStoredEnchant(enchant.id, enchant.id.maxLevel, false)
+            }
 
         if (player.data.gold < totalItemPrice) {
             player.fail("&c골드가 부족합니다. 필요 골드: ${(totalItemPrice - player.data.gold).toFormat()} 골드")
@@ -110,18 +110,15 @@ object EnchantConst {
         return getItem(
             Material.ENCHANTED_BOOK,
             "&b&l${enchant.name}",
-            listOf(
+            "",
+            PREFIX,
+            "&a&l[구매(좌클릭)] &f&l구매가: ${enchant.buy.toFormat()} 골드",
+            "&8Shift + 좌클릭 시 64개가 구매됩니다.",
                 "",
-                PREFIX,
-                "&a&l[구매(좌클릭)] &f&l구매가: ${enchant.buy.toFormat()} 골드",
-                "&8Shift + 좌클릭 시 64개가 구매됩니다.",
-                "&c&l[판매 불가]",
-                ""
-            )
-        ).apply {
-            val meta = itemMeta as EnchantmentStorageMeta
-            meta.addStoredEnchant(enchant.id, enchant.id.maxLevel, false)
-            itemMeta = meta
+            "&c&l[판매 불가]",
+            ""
+        ).modifyMeta<EnchantmentStorageMeta> {
+            addStoredEnchant(enchant.id, enchant.id.maxLevel, false)
         }
     }
 }

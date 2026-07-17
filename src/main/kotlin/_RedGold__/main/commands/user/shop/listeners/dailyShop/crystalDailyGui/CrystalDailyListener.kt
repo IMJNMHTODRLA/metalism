@@ -15,21 +15,15 @@ class CrystalDailyListener : Listener {
         if (gui.holder !is CrystalDailyHolder) return
 
         event.isCancelled = true
-
         if (event.clickedInventory != gui) return
 
         val player = event.whoClicked as Player
         val clickType = event.click
         val slot = event.slot
 
-        if (clickType == ClickType.LEFT || clickType == ClickType.SHIFT_LEFT) {
-            when (slot) {
-                11 -> CrystalDailyConst.buy(player, 0)
-                12 -> CrystalDailyConst.buy(player, 1)
-                13 -> CrystalDailyConst.buy(player, 2)
-                14 -> CrystalDailyConst.buy(player, 3)
-                15 -> CrystalDailyConst.buy(player, 4)
-            }
-        }
+        if (
+            (clickType == ClickType.LEFT || clickType == ClickType.SHIFT_LEFT) &&
+            slot in 10..16
+        ) CrystalDailyConst.buy(player, slot - 10)
     }
 }

@@ -65,17 +65,17 @@ class PlayerJoinQuitListener : Listener {
         val remainingPeriod = expirationAt - now
 
         if (
-            !PlayerJoinQuitValue.monthlyClaimed.contains(uuid) &&
+            uuid !in PlayerJoinQuitValue.monthlyClaimed &&
             remainingPeriod > 0
         ) {
-            PlayerJoinQuitValue.monthlyClaimed.add(uuid)
+            PlayerJoinQuitValue.monthlyClaimed += uuid
 
             player.sendMsg(PlayerJoinQuitConst.dailyGiveMessage.fill(
-                "crystal" to PlayerJoinQuitConst.monthly.dailyCrystal.toFormat(),
+                "crystal" to PlayerJoinQuitConst.monthly.DAILY_CRYSTAL.toFormat(),
                 "day_exp" to (remainingPeriod / 86400.0).toFormat(1)
             ))
 
-            player.data.crystal += PlayerJoinQuitConst.monthly.dailyCrystal
+            player.data.crystal += PlayerJoinQuitConst.monthly.DAILY_CRYSTAL
             PlayerJoinQuitConst.monthly.dailyItem.forEach { player.inv += it }
         }
     }
@@ -84,6 +84,6 @@ class PlayerJoinQuitListener : Listener {
     fun onQuit(event: PlayerQuitEvent) {
         val player = event.player
         player.isInvulnerable = false //TODO: 언젠가 얘도 해야함
-        event.quitMessage = "&8[&c-&8] ${PermissionEnum[player].node} ${player.name} &e님이 서버에서 퇴장했습니다.".gc()
+        event.quitMessage = "&8[&c-&8] ${PermissionEnum[player].prefix} ${player.name} &e님이 서버에서 퇴장했습니다.".gc()
     }
 }

@@ -2,9 +2,8 @@ package _RedGold__.main.commands.user.betting.listeners.diceGui
 
 import _RedGold__.main.functions.Gui.getItem
 import org.bukkit.Material
-import java.security.SecureRandom
 
-internal object DiceConst {
+object DiceConst {
     const val MAX_BET = 7_500_000
 
     val ITEM = { i: Int ->

@@ -34,17 +34,17 @@ class AlwaysGui {
 
         gui.item[22] = getItem(
             Material.GRAY_STAINED_GLASS_PANE,
-            "&b&l구매 할 크리스탈&f: &b&l${holder.addCrystal} 크리스탈"
+            "&b&l구매 할 크리스탈&f: &b&l${holder.addCrystal.toFormat()} 크리스탈"
         )
 
         gui.item[13] = getItem(
             Material.DIAMOND,
             "&e&l클릭하여 상시 판매 크리스탈 구매하기",
-            listOf("",
-                "&f&l구매가: &4&l${holder.getTotalPrice} 루비",
-                "",
-                "&8&o* 구매 제한 없음"
-            )
+            "",
+            "&b&l구매 할 크리스탈&f: &b&l${holder.addCrystal.toFormat()} 크리스탈",
+            "&f&l구매가: &4&l${holder.getTotalPrice.toFormat()} 루비",
+            "",
+            "&8&o* 구매 제한 없음"
         )
 
         player.inv + gui

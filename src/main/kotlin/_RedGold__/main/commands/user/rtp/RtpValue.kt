@@ -1,9 +1,9 @@
 package _RedGold__.main.commands.user.rtp
 
-import java.security.SecureRandom
 import java.util.*
+import java.util.concurrent.ThreadLocalRandom
 
-internal object RtpValue {
-    val secureRandom = SecureRandom()
+object RtpValue {
+    val threadLocalRandom: ThreadLocalRandom = ThreadLocalRandom.current()
     val rtpCooldown = mutableMapOf<UUID, Long>()
 }

@@ -32,12 +32,12 @@ class MonthlyGui {
             "&e&l혜택 정보",
             listOf("",
                 "&a&l[ 구매 시 혜택 ]",
-                "&7&l  - &b&l${MonthlyConst.pack.giveCrystal.toFormat()} 크리스탈 지급",
+                "&7&l  - &b&l${MonthlyConst.pack.GIVE_CRYSTAL.toFormat()} 크리스탈 지급",
                 "",
                 "&b&l[ 구매 직후 30일 간 혜택 ]",
-                "&7&l  - &e&l일일 접속 시 ${MonthlyConst.pack.dailyCrystal.toFormat()} 크리스탈 지급",
+                "&7&l  - &e&l일일 접속 시 ${MonthlyConst.pack.DAILY_CRYSTAL.toFormat()} 크리스탈 지급",
                 "&7&l  - &e&l일일 접속 시 무작위 일반 강화석 지급",
-                "&7&l  - &e&l획득하는 모든 경험치 &f&l${MonthlyConst.pack.multipleExp.toPercent} &e&l배수 적용",
+                "&7&l  - &e&l획득하는 모든 경험치 &f&l${MonthlyConst.pack.MULTIPLE_EXP.toPercent} &e&l배수 적용",
             )
         )
 

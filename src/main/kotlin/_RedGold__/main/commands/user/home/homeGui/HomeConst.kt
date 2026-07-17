@@ -8,8 +8,8 @@ import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 
 object HomeConst {
-    val getSlot = { i: Int -> 2 + i }
-    val getIndex = { i: Int -> i - 2 }
+    fun getSlot(i: Int) = 2 + i
+    fun getIndex(i: Int) = i - 2
 
     fun buyAmount(i: Int) = when(i) {
         0 -> 30_000

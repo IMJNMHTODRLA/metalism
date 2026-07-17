@@ -1,6 +1,8 @@
 package _RedGold__.main.core.guild.settings.member
 
+import _RedGold__.main.core.guild.homeManager.home.teleportGuildHome
 import _RedGold__.main.core.guild.settings.member.donate.DonateGui
+import _RedGold__.main.core.guild.settings.member.leave.LeaveGui
 import _RedGold__.main.core.guild.settings.member.stats.StatsGui
 import _RedGold__.main.core.guild.shareChestManager.shareChestInv.ShareChestInvGui
 import _RedGold__.main.loads.RequireListener
@@ -26,7 +28,8 @@ class MemberListener : Listener {
             10 -> DonateGui.openGui(player)
             11 -> StatsGui.openGui(player)
             12 -> ShareChestInvGui.openGui(player)
-            13 -> DeleteGui.openGui(player)
+            13 -> teleportGuildHome(player)
+            14 -> LeaveGui.openGui(player)
         }
     }
 }

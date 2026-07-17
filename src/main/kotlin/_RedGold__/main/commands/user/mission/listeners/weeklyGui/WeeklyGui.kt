@@ -10,10 +10,8 @@ import _RedGold__.main.functions.Gui.sendSound
 import _RedGold__.main.functions.modify
 import _RedGold__.main.managers.playerData.BACKGROUND
 import _RedGold__.main.managers.playerData.BACKGROUND_1
-import _RedGold__.main.managers.playerData.data
-import _RedGold__.main.managers.playerData.variableManager.missionManager.MissionEnum
+import _RedGold__.main.managers.playerData.variableManager.missionManager.MissionEnum.WEEKLY
 import _RedGold__.main.managers.playerData.variableManager.missionManager.TOTAL_WEEKLY_MISSION
-import _RedGold__.main.managers.playerData.variableManager.missionManager.missionList.weeklyMissionInfoList
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.entity.Player
@@ -26,11 +24,9 @@ class WeeklyGui {
         gui.item[45..gui.end] = BACKGROUND_1
 
         repeat(TOTAL_WEEKLY_MISSION) { i ->
-            val missionInfo = weeklyMissionInfoList[i]
-            val missionData = player.data.missionMap[MissionEnum.WEEKLY]?.get(i)?: return@repeat
             val slot = GlobalConst.getSlot(i)
 
-            gui.item[slot] = GlobalConst.setMission(missionData, missionInfo)
+            gui.item[slot] = GlobalConst.setMission(player, i, WEEKLY)
         }
 
         gui.item[48] = getItem(

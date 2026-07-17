@@ -21,6 +21,7 @@ object EasyEnchant {
                 enchants.forEach { enchant ->
                     item.addUnsafeEnchantment(enchant, value)
                 }
+
                 true
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -29,5 +30,5 @@ object EasyEnchant {
         }
     }
 
-    val ItemStack.enchant: EnchantProxy get() = EnchantProxy(this)
+    val ItemStack.enchant get() = EnchantProxy(this)
 }

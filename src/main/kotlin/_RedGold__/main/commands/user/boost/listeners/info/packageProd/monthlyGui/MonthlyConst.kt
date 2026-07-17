@@ -6,6 +6,6 @@ import _RedGold__.main.managers.playerData.variableManager.BoostSealed
 object MonthlyConst {
     const val PRICE = 9_900
 
-    val pack = BoostSealed.MonthlyPackage()
+    val pack = BoostSealed.MonthlyPackage
     val enum = BoostEnum.MONTHLY_PACKAGE
 }

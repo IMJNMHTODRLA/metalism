@@ -2,8 +2,8 @@ package _RedGold__.main.listeners.playerJoinQuit
 
 import _RedGold__.main.managers.playerData.variableManager.BoostSealed
 
-internal object PlayerJoinQuitConst {
-    val monthly = BoostSealed.MonthlyPackage()
+object PlayerJoinQuitConst {
+    val monthly = BoostSealed.MonthlyPackage
 
     val dailyGiveMessage = """
         &a&l월간 패키지의 혜택으로 %crystal% 크리스탈을 받았습니다.

@@ -1,7 +1,6 @@
 package _RedGold__.main.commands.user.boost.listeners.settings.vip.jumpParticleEffectGui
 
 import _RedGold__.main.commands.user.boost.listeners.settings.SettingsGlobalConst
-import _RedGold__.main.loads.RequireJavaPlugin
 import _RedGold__.main.loads.RequireListener
 import _RedGold__.main.managers.playerData.OVER_WORLD
 import _RedGold__.main.managers.playerData.variableManager.boostSettingManager.BoostSettingEnum.JUMP_PARTICLE_EFFECT
@@ -11,11 +10,9 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
-import org.bukkit.plugin.java.JavaPlugin
 
 @RequireListener
-@RequireJavaPlugin
-class JumpParticleEffectListener(private val plugin: JavaPlugin) : Listener {
+class JumpParticleEffectListener : Listener {
     @EventHandler
     fun onInventoryClick(event: InventoryClickEvent) {
         val gui = event.view.topInventory
@@ -43,7 +40,7 @@ class JumpParticleEffectListener(private val plugin: JavaPlugin) : Listener {
                         JumpParticleEffectGui().openGui(player, page)
                     }
                 else if (clickType.isRightClick)
-                    SettingsGlobalConst.preview(plugin, player, {
+                    SettingsGlobalConst.preview(player, {
                         val world = Bukkit.getWorld(OVER_WORLD)?: return@preview
 
                         val width = width / 2.0

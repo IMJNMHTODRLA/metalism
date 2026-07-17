@@ -41,8 +41,7 @@ class DailyListener : Listener {
                 GlobalConst.missionReward(
                     player,
                     MissionEnum.DAILY,
-                    dailyMissionInfoList[id],
-                    dailyMissionRewardList[id]
+                    id
                 ).trueRun { DailyGui().openGui(player, 0f) }
             }
         }

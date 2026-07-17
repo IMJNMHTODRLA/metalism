@@ -75,7 +75,7 @@ fun updateAllUserShopData(
 ) {
     transaction(userShopDB) {
         val targetIds = data.filter {
-            it.isPurchase
+            it.isPurchase ||
             it.isDelete
         }.map { it.id }
 
@@ -84,9 +84,21 @@ fun updateAllUserShopData(
         val values = newData.values.flatten()
         if (values.isEmpty()) return@transaction
 
+        val maxId = UserShopStats
+            .select(UserShopStats.id)
+            .orderBy(UserShopStats.id to SortOrder.DESC)
+            .limit(1)
+            .map { it[UserShopStats.id] }
+            .singleOrNull() ?: 0
+
+        // 3. 변수를 하나 만들어서 데이터를 넣을 때마다 1씩 증가시킵니다.
+        var nextId = maxId + 1
+
         UserShopStats.batchInsert(values) { entry ->
             val info = entry.info
             val detail = entry.detail
+
+            this[UserShopStats.id] = nextId++
 
             this[UserShopStats.uuid] = info.uuid.toString()
 

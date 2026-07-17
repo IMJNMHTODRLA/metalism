@@ -7,7 +7,7 @@ import _RedGold__.main.functions.NumberFormat.toFormat
 import org.bukkit.inventory.ItemStack
 import java.util.*
 
-internal object GoldConst {
+object GoldConst {
     val getFormatRanking = { n: Int ->
         when(n) {
             0 -> Triple("&a&l", "1위!", true)

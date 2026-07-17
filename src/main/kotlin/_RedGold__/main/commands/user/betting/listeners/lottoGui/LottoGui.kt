@@ -1,14 +1,13 @@
 package _RedGold__.main.commands.user.betting.listeners.lottoGui
 
-import _RedGold__.main.functions.EasyEnchant.enchant
+import _RedGold__.main.functions.FastGui.enchantEffect
 import _RedGold__.main.functions.FastGui.item
 import _RedGold__.main.functions.Gui.getItem
+import _RedGold__.main.functions.modify
 import _RedGold__.main.managers.playerData.BACKGROUND
 import org.bukkit.Material
 import org.bukkit.Sound
-import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
-import org.bukkit.inventory.ItemFlag
 
 class LottoGui {
     fun openGui(player: Player) {
@@ -41,10 +40,7 @@ class LottoGui {
                 "&f&l5등 &7&l- &f&l2,500 골드&7&l(2자리)",
                 "&8&l낙첨... &7&l- &f&l0 골드&7&l(0~1자리)",
             )
-        ).apply {
-            addItemFlags(ItemFlag.HIDE_ENCHANTS)
-            enchant[Enchantment.LUCK_OF_THE_SEA] = 1
-        }
+        ).modify { enchantEffect() }
 
         player.openInventory(gui)
         player.playSound(player.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f)

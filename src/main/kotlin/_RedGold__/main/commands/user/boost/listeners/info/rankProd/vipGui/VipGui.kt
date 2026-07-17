@@ -35,7 +35,7 @@ class VipGui {
                 "&7&l  - &e&l/showitem(sitem) 명령어로 들고 있는 아이템의 정보를 전체 채팅에 전송합니다.",
                 "&7&l  - &e&lGG 메시지 색깔/공격 파티클/점프 파티클 변경 가능",
                 "&7&l  - &e&l/skin(스킨) 명령어로 스킨 변경 가능(PVP 중 사용 불가)",
-                "&7&l  - &e&l/enderchest(ec, 엔더 상자, 엔상) 명령어로 엔더상자 열기 가능(PVP 중 사용 가능)", //TODO: 아직 못 만듬
+                "&7&l  - &e&l/enderchest(ec, 엔더 상자, 엔상) 명령어로 엔더상자 열기 가능(PVP 중 사용 가능)", //TODO: 나중에 PvpManager랑 연동
                 "",
                 "&6&l[ +보너스 ]",
                 "&7&l  - &6&l${VipConst.BONUS_GOLD.toFormat()} 골드 지급",

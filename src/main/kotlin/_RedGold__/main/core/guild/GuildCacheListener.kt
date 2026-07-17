@@ -5,7 +5,6 @@ import _RedGold__.main.loads.RequireListener
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
-import org.bukkit.event.player.PlayerQuitEvent
 
 @RequireListener
 class GuildCacheListener : Listener {
@@ -17,10 +16,5 @@ class GuildCacheListener : Listener {
                 getGuildId2Member(uuid)
                     ?.also { joinedGuildCache[uuid] = it }
         }
-    }
-
-    @EventHandler
-    fun onPlayerQuit(event: PlayerQuitEvent) {
-        joinedGuildCache.remove(event.player.uniqueId)
     }
 }

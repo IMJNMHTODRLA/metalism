@@ -6,6 +6,7 @@ import _RedGold__.main.core.guild.getGuildId2Member
 import _RedGold__.main.core.guild.getGuildStats
 import _RedGold__.main.core.guild.playerCooldownMsg
 import _RedGold__.main.core.guild.sendNotGuildJoinMsg
+import _RedGold__.main.core.guild.shareChestManager.getShareChest
 import _RedGold__.main.core.guild.shareChestManager.shareChestData
 import _RedGold__.main.functions.Color.fail
 import _RedGold__.main.functions.Gui.inv
@@ -33,9 +34,16 @@ object ShareChestInvGui {
                 return@taskAsync
             }
 
+            val contents = shareChestData[id]
+                ?.let { emptyArray() }
+                ?: getShareChest(id, size)
+
             task {
                 val gui = shareChestData.getOrPut(id) {
-                    ShareChestInvHolder(size).inventory
+                    val gui = ShareChestInvHolder(size).inventory
+                    gui.contents = contents
+
+                    gui
                 }
 
                 player.inv + gui

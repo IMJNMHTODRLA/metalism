@@ -5,11 +5,14 @@ import _RedGold__.main.commands.user.boost.listeners.info.crystalProd.crystalPro
 import _RedGold__.main.functions.Color.fail
 import _RedGold__.main.functions.FastGui.item
 import _RedGold__.main.functions.Gui.getItem
+import _RedGold__.main.functions.Gui.sendSound
+import _RedGold__.main.functions.NumberFormat.toFormat
 import _RedGold__.main.functions.PlusMath.pow
 import _RedGold__.main.functions.task
 import _RedGold__.main.loads.RequireListener
 import _RedGold__.main.managers.playerData.data
 import org.bukkit.Material
+import org.bukkit.Sound
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -51,8 +54,8 @@ class AlwaysListener : Listener {
 
             in 18..26 -> {
                 val change = when(slot) {
-                    in 18..21 -> -(AlwaysConst.DEFAULT_CRYSTAL * 10.pow(48 - slot)) // 차감은 음수로
-                    in 23..26 -> AlwaysConst.DEFAULT_CRYSTAL * 10.pow(slot - 50) // 추가는 양수로
+                    in 18..21 -> -(AlwaysConst.DEFAULT_CRYSTAL * 10.pow(21 - slot)) // 차감은 음수로
+                    in 23..26 -> AlwaysConst.DEFAULT_CRYSTAL * 10.pow(slot - 23) // 추가는 양수로
                     else -> return
                 }
                 val newAmount = holder.addCrystal + change
@@ -71,18 +74,21 @@ class AlwaysListener : Listener {
 
                 gui.item[22] = getItem(
                     Material.GRAY_STAINED_GLASS_PANE,
-                    "&b&l구매 할 크리스탈&f: &b&l${holder.addCrystal} 크리스탈"
+                    "&b&l구매 할 크리스탈&f: &b&l${holder.addCrystal.toFormat()} 크리스탈"
                 )
 
                 gui.item[13] = getItem(
                     Material.DIAMOND,
                     "&e&l클릭하여 상시 크리스탈 구매하기",
-                    listOf("",
-                        "&f&l구매가: &4&l${holder.getTotalPrice} 루비",
-                        "",
-                        "&8&o* 구매 제한 없음"
-                    )
+                    "",
+                    "&b&l구매 할 크리스탈&f: &b&l${holder.addCrystal.toFormat()} 크리스탈",
+                    "&f&l구매가: &4&l${holder.getTotalPrice.toFormat()} 루비",
+                    "",
+                    "&8&o* 구매 제한 없음"
                 )
+
+                if (change < 0) player.sendSound(Sound.ENTITY_ENDERMAN_TELEPORT, 0.5f)
+                else player.sendSound(Sound.ENTITY_EXPERIENCE_ORB_PICKUP)
             }
         }
     }

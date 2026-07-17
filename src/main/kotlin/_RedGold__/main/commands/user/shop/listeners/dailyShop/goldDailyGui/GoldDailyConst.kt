@@ -13,7 +13,7 @@ import _RedGold__.main.managers.playerData.BACKGROUND
 import _RedGold__.main.managers.playerData.PREFIX
 import _RedGold__.main.managers.playerData.data
 import _RedGold__.main.managers.playerData.variableManager.DailyEnum
-import _RedGold__.main.core.gacha.item.skill.reinforceManager.ReinforceItemList
+import _RedGold__.main.core.cartridge.upgradeItem.skill.reinforce.reinforceItemList
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
@@ -30,14 +30,14 @@ object GoldDailyConst {
         GlobalConst.ShopItem(Material.BONE_BLOCK, "뼈 블록", 12_000),
         GlobalConst.ShopItem(Material.WIND_CHARGE, "돌풍구", 8_000),
 
-        ReinforceItemList[getSkillItem(enhanceBase, 0)].let {
-            GlobalConst.ShopItem(it.material, "${it.import.displayName} 강화 아이템(${it.type.displayName})", 8_000)
+        reinforceItemList[getSkillItem(enhanceBase, 0)].let {
+            GlobalConst.ShopItem(Material.PAPER, "${it.import.displayName} 강화 아이템(${it.type.displayName})", 8_000)
         },
-        ReinforceItemList[getSkillItem(enhanceBase, 1)].let {
-            GlobalConst.ShopItem(it.material, "${it.import.displayName} 강화 아이템(${it.type.displayName})", 12_000)
+        reinforceItemList[getSkillItem(enhanceBase, 1)].let {
+            GlobalConst.ShopItem(Material.PAPER, "${it.import.displayName} 강화 아이템(${it.type.displayName})", 12_000)
         },
-        ReinforceItemList[getSkillItem(enhanceBase, 2)].let {
-            GlobalConst.ShopItem(it.material, "${it.import.displayName} 강화 아이템(${it.type.displayName})", 24_000)
+        reinforceItemList[getSkillItem(enhanceBase, 2)].let {
+            GlobalConst.ShopItem(Material.PAPER, "${it.import.displayName} 강화 아이템(${it.type.displayName})", 24_000)
         }
     )
 
@@ -66,7 +66,7 @@ object GoldDailyConst {
 
         if (shopId in isReinforceItemMap.keys) {
             val skillItem = getSkillItem(enhanceBase, isReinforceItemMap[shopId]?: return)
-            player.inv += ReinforceItemList[skillItem].item
+            player.inv += reinforceItemList[skillItem].item()
         } else player.inv += ItemStack(item.id)
 
         DailyConst.mission(player, 1)
@@ -84,6 +84,7 @@ object GoldDailyConst {
             listOf(
                 "",
                 PREFIX,
+                "",
                 "&a&l[구매(좌클릭)] &f&l구매가: ${item.buy.toFormat()} 골드",
                 "",
             )

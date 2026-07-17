@@ -2,7 +2,7 @@ package _RedGold__.main.commands.admin.ban
 
 import _RedGold__.main.functions.Color.gc
 import _RedGold__.main.functions.Color.sendMsg
-import _RedGold__.main.functions.NumberFormat.toUUIDOrNull
+import _RedGold__.main.functions.NumberFormat.toUuidOrNull
 import _RedGold__.main.functions.TimeTool.now
 import _RedGold__.main.functions.task
 import _RedGold__.main.functions.taskAsync
@@ -30,7 +30,7 @@ class Ban : CommandExecutor, TabExecutor {
         label: String,
         args: Array<out String>
     ): Boolean {
-        val uuid = args.getOrNull(0).toUUIDOrNull()?: run {
+        val uuid = args.getOrNull(0).toUuidOrNull()?: run {
             sender.sendMsg("&c&lUUID 변환 실패")
             return true
         }

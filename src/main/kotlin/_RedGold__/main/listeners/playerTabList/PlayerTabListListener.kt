@@ -4,16 +4,16 @@ import _RedGold__.main.functions.Color.gc
 import _RedGold__.main.functions.Color.rgb
 import _RedGold__.main.functions.FastReplace.fill
 import _RedGold__.main.functions.NumberFormat.toFormat
-import _RedGold__.main.functions.Scheduler.task
+import _RedGold__.main.functions.task
 import _RedGold__.main.listeners.GlobalConst
-import _RedGold__.main.loads.RequireJavaPlugin
+import _RedGold__.main.loads.SetSlowInit
 import org.bukkit.Bukkit
-import org.bukkit.plugin.java.JavaPlugin
 
-@RequireJavaPlugin
-class PlayerTabListListener(plugin: JavaPlugin) {
-    init {
-        plugin.task(0, 5) {
+@SetSlowInit
+class PlayerTabListListener {
+    @SetSlowInit
+    fun startUpdateTabList() {
+        task(0, 5) {
             val times = PlayerTabListValue.times
             val colorList = GlobalConst.COLOR_LIST
             val max = colorList.size

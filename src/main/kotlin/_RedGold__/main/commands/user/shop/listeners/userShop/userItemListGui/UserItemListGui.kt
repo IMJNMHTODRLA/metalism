@@ -1,6 +1,7 @@
 package _RedGold__.main.commands.user.shop.listeners.userShop.userItemListGui
 
 import _RedGold__.main.commands.user.shop.listeners.userShop.UserGlobalConst
+import _RedGold__.main.functions.FastBoolean.falseRun
 import _RedGold__.main.functions.FastBoolean.trueRun
 import _RedGold__.main.functions.FastGui.enchantEffect
 import _RedGold__.main.functions.FastGui.end
@@ -20,7 +21,7 @@ class UserItemListGui {
     fun openGui(player: Player, page: Int) {
         val gui = UserItemListHolder(page).inventory
 
-        UserGlobalConst::allUserShopData.isInit.trueRun { return }
+        UserGlobalConst::allUserShopData.isInit.falseRun { return }
 
         gui.item[0..44] = BACKGROUND
         gui.item[45..gui.end] = BACKGROUND_1
@@ -49,7 +50,7 @@ class UserItemListGui {
             }
         }
 
-        gui.item[46] = getItem(
+        gui.item[45] = getItem(
             Material.RED_STAINED_GLASS_PANE,
             "&c&l이전 페이지로 이동"
         )

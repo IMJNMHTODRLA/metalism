@@ -11,7 +11,7 @@ import _RedGold__.main.functions.modify
 import _RedGold__.main.managers.playerData.BACKGROUND
 import _RedGold__.main.managers.playerData.BACKGROUND_1
 import _RedGold__.main.managers.playerData.data
-import _RedGold__.main.managers.playerData.variableManager.missionManager.MissionEnum
+import _RedGold__.main.managers.playerData.variableManager.missionManager.MissionEnum.ACHIEVEMENT
 import _RedGold__.main.managers.playerData.variableManager.missionManager.TOTAL_ACHIEVEMENT_MISSION
 import _RedGold__.main.managers.playerData.variableManager.missionManager.missionList.achievementMissionInfoList
 import org.bukkit.Material
@@ -26,11 +26,9 @@ class AchievementGui {
         gui.item[45..gui.end] = BACKGROUND_1
 
         repeat(TOTAL_ACHIEVEMENT_MISSION) { i ->
-            val missionInfo = achievementMissionInfoList[i]
-            val missionData = player.data.missionMap[MissionEnum.ACHIEVEMENT]?.get(i)?: return@repeat
             val slot = GlobalConst.getSlot(i)
 
-            gui.item[slot] = GlobalConst.setMission(missionData, missionInfo)
+            gui.item[slot] = GlobalConst.setMission(player, i, ACHIEVEMENT)
         }
 
         gui.item[48] = getItem(

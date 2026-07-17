@@ -1,5 +1,6 @@
 package _RedGold__.main.core.guild.settings.leader.member.memberDetail
 
+import _RedGold__.main.core.guild.joinedGuildCache
 import _RedGold__.main.core.guild.playerCooldownMsg
 import _RedGold__.main.functions.Color.good
 import _RedGold__.main.functions.TimeTool.now
@@ -45,11 +46,13 @@ private fun removeMemberLogic(id: Int, target: UUID) =
 
 fun kickPlayer(id: Int, target: UUID) =
     transaction(guildDB) {
+        joinedGuildCache.remove(target)
         removeMemberLogic(id, target)
     }
 
 fun blockPlayer(id: Int, target: UUID) =
     transaction(guildDB) {
+        joinedGuildCache.remove(target)
         removeMemberLogic(id, target)
 
         GuildBans.upsert {

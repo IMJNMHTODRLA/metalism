@@ -4,4 +4,4 @@ main: _RedGold__.main.Main
 api-version: '1.21'
 load: STARTUP
 authors: [ _RedGold__ ]
-depend: [ LuckPerms, ProtocolLib ]
+depend: [ LuckPerms ]

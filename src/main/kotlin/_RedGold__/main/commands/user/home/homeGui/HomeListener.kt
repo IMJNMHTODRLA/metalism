@@ -44,6 +44,7 @@ class HomeListener : Listener {
 
                 player.data.homeMap[i]?.let { it.location = null }
                 player.good("&a지정된 홈 삭제가 완료되었습니다.")
+                HomeGui().openGui(player)
                 return
             }
 
@@ -57,21 +58,27 @@ class HomeListener : Listener {
 
                     player.data.gold -= buyAmount
                     player.data.homeMap[i]?.let { it.isUnlocked = true }
+
+                    player.good("&a${i + 1}번 홈을 구매하였습니다.")
+                    HomeGui().openGui(player)
                     return
                 }
 
                 val location = homeData.location
-                if (location.isNull()) {
+                if (location == null) {
                     if (player.world.name != OVER_WORLD) {
-                        player.fail("&c오버월드에서만 지정이 가능합니다.")
+                        player.fail("&c오버월드에서만 위치 지정이 가능합니다.")
                         return
                     }
 
                     player.data.homeMap[i]?.let { it.location = LocationData(player.location) }
+                    player.good("&a${i + 1}번 홈 위치를 지정하였습니다.")
+                    HomeGui().openGui(player)
                     return
                 }
 
                 player.teleportAsync(location())
+
                 player.sendMsg("&a${i + 1}번 홈으로 이동했습니다.")
                 player.sendTitleMsg("&a${i + 1}번 홈으로 이동했습니다.")
                 player.sendSound(Sound.ENTITY_ENDERMAN_TELEPORT)

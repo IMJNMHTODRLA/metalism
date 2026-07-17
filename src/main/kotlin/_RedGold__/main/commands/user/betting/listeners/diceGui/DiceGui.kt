@@ -20,7 +20,7 @@ class DiceGui {
 
         repeat(3) { i ->
             gui.item[19 + i] = DiceConst.ITEM(i)
-            gui.item[25 - i] = DiceConst.ITEM(i)
+            gui.item[23 + i] = DiceConst.ITEM(i + 3)
         }
 
         gui.item[22] = getItem(

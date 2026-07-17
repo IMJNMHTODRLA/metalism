@@ -45,7 +45,9 @@ fun isGuildJoin(target: UUID) =
     } != null
 
 fun sendNotGuildJoinMsg(player: Player) = player.sendMsg("&c당신을 길드에 가입되어 있지 않습니다.")
-/** @return true는 길드 가입, false는 길드 가입X */ fun isGuildJoin(player: Player): Boolean {
+
+/** @return true는 길드 가입, false는 길드 가입X */
+fun isGuildJoin(player: Player): Boolean {
     val result = isGuildJoin(player.uniqueId)
     if (!result) sendNotGuildJoinMsg(player)
 

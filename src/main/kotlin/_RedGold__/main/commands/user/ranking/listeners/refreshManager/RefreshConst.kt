@@ -8,9 +8,12 @@ import _RedGold__.main.managers.rankingManager.getRanking
 import _RedGold__.main.managers.playerData.PlayerManager
 import org.bukkit.Bukkit
 import org.bukkit.Statistic
+import org.bukkit.entity.Player
 import java.util.*
 
-internal object RefreshConst {
+object RefreshConst {
+    lateinit var onlinePlayers: Collection<Player>
+
     private fun <P, T : Comparable<T>, R> updateRank(
         currentKeys: Array<UUID>,
         currentValues: Any,
@@ -24,8 +27,10 @@ internal object RefreshConst {
         currentKeys.forEachIndexed { i, uuid ->
             @Suppress("UNCHECKED_CAST")
             currentMap[uuid] = when (currentValues) {
-                is LongArray -> currentValues[i]; is IntArray -> currentValues[i]
+                is LongArray -> currentValues[i]
+                is IntArray -> currentValues[i]
                 is FloatArray -> currentValues[i]
+
                 else -> throw PluginException("Unsupported array type", ExceptionSeverity.HIGH)
             } as T
         }
@@ -42,7 +47,7 @@ internal object RefreshConst {
         )
     }
 
-    val rankingUpdate = {
+    fun rankingUpdate() {
         val allData = PlayerManager.getAllData()
 
         GlobalValue.goldRank = updateRank(
@@ -59,7 +64,7 @@ internal object RefreshConst {
 
         GlobalValue.playTimeRank = updateRank(
             GlobalValue.playTimeRank.keys, GlobalValue.playTimeRank.values,
-            Bukkit.getOnlinePlayers(), {it.uniqueId}, { it.getStatistic(Statistic.PLAY_ONE_MINUTE) / 1728000.0f },
+            onlinePlayers, {it.uniqueId}, { it.getStatistic(Statistic.PLAY_ONE_MINUTE) / 1728000.0f },
             { keys, values -> GlobalConst.FloatRankingData(keys, values.toFloatArray()) }
         ) //플레이 타임 랭킹
 
@@ -108,7 +113,7 @@ internal object RefreshConst {
         )
     }
 
-    val init = {
+    fun init() {
         val allData = getRanking()
 
         GlobalValue.goldRank = initRank(

@@ -2,8 +2,8 @@ package _RedGold__.main.managers.playerData.variableManager
 
 import _RedGold__.main.functions.TimeTool.now
 import _RedGold__.main.managers.playerData.data
-import _RedGold__.main.core.gacha.item.skill.reinforceManager.ReinforceImportEnum
-import _RedGold__.main.core.gacha.item.skill.reinforceManager.randomReinforceItem
+import _RedGold__.main.core.cartridge.upgradeItem.skill.reinforce.ReinforceImportEnum
+import _RedGold__.main.core.cartridge.upgradeItem.skill.reinforce.randomReinforceItem
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
@@ -25,21 +25,25 @@ sealed class BoostSealed {
         return (remainingPeriod > 0 && isPurMax <= 0)
     }
 
-    data class LimitCrystalPackage(
-        override val max: Int = 5,
-        override val period: Long = 2_592_000,
+    data object LimitCrystalPackage : BoostSealed() {
+        override val getEnum = BoostEnum.LimitCrystalPackage
+
+        override val max: Int = 5
+        override val period: Long = 2_592_000
 
         val giveCrystal: List<Int> = listOf(
-            4800, 4800, 10_800, 10_800, 24_000
-        ),
-    ) : BoostSealed() { override val getEnum = BoostEnum.LimitCrystalPackage }
+            6000, 6000, 12_000, 12_000, 24_000
+        )
+    }
 
-    data class StarterPackage(
-        override val max: Int = 1,
-        override val period: Long = 4005072000, //127년
+    data object StarterPackage : BoostSealed() {
+        override val getEnum = BoostEnum.STARTER_PACKAGE
 
-        val giveGold: Int = 500_000,
-        val giveCrystal: Int = 240,
+        override val max: Int = 1
+        override val period: Long = 4005072000 //127년
+
+        const val GIVE_GOLD: Int = 5_000_000
+        const val GIVE_CRYSTAL: Int = 240
         val giveItem: List<ItemStack> = listOf(
             ItemStack(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE, 2),
             ItemStack(Material.NETHERITE_INGOT, 10),
@@ -49,21 +53,23 @@ sealed class BoostSealed {
             randomReinforceItem(10, ReinforceImportEnum.BEGINNER),
             randomReinforceItem(5, ReinforceImportEnum.INTERMEDIA)
         )
-    ) : BoostSealed() { override val getEnum = BoostEnum.STARTER_PACKAGE }
+    }
 
-    data class MonthlyPackage(
-        override val max: Int = 1,
-        override val period: Long = 2_592_000, //30일
+    data object MonthlyPackage : BoostSealed() {
+        override val getEnum = BoostEnum.MONTHLY_PACKAGE
 
-        val giveCrystal: Int = 120,
-        val dailyCrystal: Int = 40,
+        override val max: Int = 1
+        override val period: Long = 2_592_000 //30일
+
+        const val GIVE_CRYSTAL: Int = 360
+        const val DAILY_CRYSTAL: Int = 40
         val dailyItem: List<ItemStack> = listOf(
-            ItemStack(Material.EXPERIENCE_BOTTLE, 16),
+            ItemStack(Material.EXPERIENCE_BOTTLE, 32),
             randomReinforceItem(1, ReinforceImportEnum.GENERAL),
-        ),
+        )
 
-        val multipleExp: Double = 1.2
-    ) : BoostSealed() { override val getEnum = BoostEnum.MONTHLY_PACKAGE }
+        const val MULTIPLE_EXP: Double = 1.25
+    }
 }
 
 enum class BoostEnum {

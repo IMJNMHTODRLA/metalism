@@ -3,7 +3,7 @@ package _RedGold__.main.listeners.playerScoreboard
 import _RedGold__.main.functions.Color.gc
 import _RedGold__.main.managers.playerData.SERVER_ADDRESS
 
-internal object PlayerScoreboardConst {
+object PlayerScoreboardConst {
     const val PLAYER_TAB_PREFIX = "%style%%rank% %name%"
 
     val SIDEBAR_MSG = listOf(

@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     kotlin("jvm") version "2.0.0"
     id("com.gradleup.shadow") version "8.3.0"
@@ -12,22 +14,13 @@ val projVersion = "1.0.0"
 
 repositories {
     mavenCentral()
-    maven("https://repo.papermc.io/repository/maven-public/") {
-        name = "papermc-repo"
-    }
-    maven {
-        name = "sonatype"
-        url = uri("https://oss.sonatype.org/content/groups/public/")
-    }
-    maven {
-        url = uri("https://repo.aikar.co/content/groups/aikar/")
-    }
-    maven {
-        url = uri("https://repo.maven.apache.org/maven2")
-    }
-    maven { url = uri("https://repo.lucko.me/") }
-    maven { url = uri("https://repo.dmulloy2.net/repository/public/") }
-    maven { url = uri("https://repo.codemc.io/repository/maven-public/") }
+    maven("https://repo.papermc.io/repository/maven-public/")
+    //maven("https://oss.sonatype.org/content/groups/public/")
+    maven("https://repo.aikar.co/content/groups/aikar/")
+    //maven("https://repo.maven.apache.org/maven2")
+    maven("https://repo.lucko.me/")
+    //maven("https://repo.dmulloy2.net/repository/public/")
+    maven("https://repo.codemc.io/repository/maven-public/")
 }
 
 dependencies {
@@ -41,13 +34,13 @@ dependencies {
 
     compileOnly("net.luckperms:api:5.5-SNAPSHOT")
 
-    implementation("com.google.code.gson:gson:2.10.1")//delete
+    //implementation("com.google.code.gson:gson:2.10.1")//delete
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")//delete
+    //implementation("com.squareup.okhttp3:okhttp:4.12.0")//delete
 
-    compileOnly("com.comphenix.protocol:ProtocolLib:5.3.0")//delete
+    //compileOnly("com.comphenix.protocol:ProtocolLib:5.3.0")//delete
 
     implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:2.15.0")
     implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:2.15.0")
@@ -109,4 +102,12 @@ tasks.processResources {
     filesMatching("plugin.yml") {
         expand(props)
     }
+}
+
+tasks.withType<KotlinCompile>().configureEach {
+    // 1. _RedGold__ 내부의 "어떤 위치든" 앞뒤가 _인 폴더 안의 모든 것 제외
+    exclude("_RedGold__/**/_*_/**")
+
+    // 2. _RedGold__ 내부의 "어떤 위치든" 앞뒤가 _인 kt 파일 제외
+    exclude("_RedGold__/**/_*_.kt")
 }

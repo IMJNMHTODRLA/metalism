@@ -1,6 +1,5 @@
 package _RedGold__.main.functions
 
-import _RedGold__.main.functions.EasyEnchant.enchant
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemFlag
@@ -22,9 +21,9 @@ object FastGui {
     }
 
     val Inventory.item get() = FastGuiProxy(this)
-    fun ItemStack.enchantEffect() {
+    fun ItemStack.enchantEffect() = modifyMeta {
         addItemFlags(ItemFlag.HIDE_ENCHANTS)
-        enchant[Enchantment.LURE] = 1
+        addEnchant(Enchantment.LURE, 1, true)
     }
 
     val Inventory.end get() = this.size - 1

@@ -12,7 +12,7 @@ class MonthlyGui {
         val gui = MonthlyHolder().inventory
         gui.item(BACKGROUND)
 
-        MonthlyConst.setShopItem()
+        gui.item[13] = MonthlyConst.setShopItem()
 
         player.inv + gui
         player.sendSound(Sound.UI_BUTTON_CLICK)

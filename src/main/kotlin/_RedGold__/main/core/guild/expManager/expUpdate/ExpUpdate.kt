@@ -7,13 +7,15 @@ import _RedGold__.main.core.guild.expManager.guildLevelCache
 import _RedGold__.main.core.guild.shareChestManager.shareChestUpdate
 import _RedGold__.main.core.guild.updateTick
 import _RedGold__.main.functions.taskAsync
+import _RedGold__.main.loads.SetFinalFlush
 import _RedGold__.main.loads.SetSlowInit
 
 @SetSlowInit
 object ExpUpdate {
     @Volatile private var shareGuildStats = allGetGuildStats()
 
-    init {
+    @SetSlowInit
+    fun startUpdateTask() {
         taskAsync(loop = updateTick) {
             shareGuildStats = allGetGuildStats()
 
@@ -31,6 +33,8 @@ object ExpUpdate {
         }
     }
 
+    /* TODO: 이게 될까? */
+    @SetFinalFlush
     private fun addExpReward() {
         guildDelayAddExp.forEach { (id, amount) ->
             addGuildExp(id, amount)

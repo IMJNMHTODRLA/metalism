@@ -6,12 +6,13 @@ import _RedGold__.main.managers.playerData.data
 import _RedGold__.main.managers.playerData.variableManager.BoostEnum
 import _RedGold__.main.managers.playerData.variableManager.BoostSealed
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerExpChangeEvent
 
 @RequireListener
 class PlayerExpMultipleListener : Listener {
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     fun onExpChange(event: PlayerExpChangeEvent) {
         val player = event.player
         val giveExp = event.amount
@@ -21,7 +22,7 @@ class PlayerExpMultipleListener : Listener {
         val remainingPeriod = expirationAt - now
 
         if (remainingPeriod > 0) event.amount = (
-            giveExp * BoostSealed.MonthlyPackage().multipleExp
+            giveExp * BoostSealed.MonthlyPackage.MULTIPLE_EXP
         ).toInt()
     }
 }

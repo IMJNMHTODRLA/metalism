@@ -15,8 +15,8 @@ data class GuildLevelBenefits(
 fun failDamageDecBenefits(level: Int) = (0.006 * level).coerceAtMost(MAX_DAMAGE_PERCENT)
 fun attackDamageBenefits(level: Int) = (0.003 * level).coerceAtMost(MAX_ATTACK_PERCENT)
 
-fun shareChestSizeBenefits(level: Int) = (level / 2).coerceAtMost(MAX_CHEST_SIZE) //TODO: 이거 만들어야 한다
-fun getMaxMembers(level: Int) = (level / 4).coerceAtMost(MAX_MEMBERS) //TODO: 이거 만들어야 한다
+fun shareChestSizeBenefits(level: Int) = (level / 2).coerceAtMost(MAX_CHEST_SIZE)
+fun getMaxMembers(level: Int) = (level / 4).coerceAtMost(MAX_MEMBERS)
 
 fun killRewardBenefits(level: Int) = (7 * level.toDouble().pow(1.1)).toLong()
 

@@ -53,8 +53,10 @@ object FoodConst {
             listOf(
                 "",
                 PREFIX,
+                "",
                 "&a&l[구매(좌클릭)] &f&l구매가: ${item.buy.toFormat()} 골드",
                 "&8Shift + 좌클릭 시 64개가 구매됩니다.",
+                "",
                 "&c&l[판매 불가]",
                 ""
             )

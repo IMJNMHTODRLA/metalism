@@ -61,6 +61,7 @@ object MonthlyConst {
             listOf(
                 "",
                 PREFIX,
+                "",
                 "&a&l[구매(좌클릭)] &f&l구매가: ${item.buy.toFormat()} 골드",
                 "",
             )

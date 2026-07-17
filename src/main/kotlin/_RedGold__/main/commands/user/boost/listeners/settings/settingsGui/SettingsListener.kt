@@ -1,6 +1,6 @@
 package _RedGold__.main.commands.user.boost.listeners.settings.settingsGui
 
-import _RedGold__.main.commands.user.boost.listeners.info.rankProd.vipGui.VipGui
+import _RedGold__.main.commands.user.boost.listeners.settings.vip.vipGui.VipGui
 import _RedGold__.main.loads.RequireListener
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -21,7 +21,7 @@ class SettingsListener : Listener {
 
         when (event.slot) {
             12 -> VipGui().openGui(player)
-            14 -> { /* TODO: mvpGui 뜨게 만들기 */}
+            14 -> { /* TODO: 추후에 만들기 */ }
         }
     }
 }

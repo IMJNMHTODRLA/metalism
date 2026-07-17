@@ -1,7 +1,7 @@
 package _RedGold__.main.commands.owner.rank
 
 import _RedGold__.main.functions.Color.sendMsg
-import _RedGold__.main.functions.NumberFormat.toUUIDOrNull
+import _RedGold__.main.functions.NumberFormat.toUuidOrNull
 import _RedGold__.main.functions.getTabPlayers
 import _RedGold__.main.functions.task
 import _RedGold__.main.functions.taskAsync
@@ -24,7 +24,7 @@ class Rank : TabExecutor {
         if (args.size < 2) return false
         if (args[1] !in PermissionEnum.entries.map { it.name }) return false
 
-        val targetUUID = args[0].toUUIDOrNull()?: return false
+        val targetUUID = args[0].toUuidOrNull()?: return false
         val targetRank = PermissionEnum[args[1]]?: return false
 
         taskAsync {

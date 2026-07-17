@@ -24,7 +24,7 @@ class CrystalProdListener : Listener {
 
         task {
             if (!player.isOnline) return@task
-            if (!holder.isClose) return@task
+            if (holder.isClose) return@task
 
             InfoGui().openGui(player)
         }
@@ -43,13 +43,13 @@ class CrystalProdListener : Listener {
 
         when (slot) {
             12 -> {
-                LimitGui().openGui(player)
                 holder.isClose = true
+                LimitGui().openGui(player)
             }
 
             14 -> {
-                AlwaysGui().openGui(player)
                 holder.isClose = true
+                AlwaysGui().openGui(player)
             }
         }
     }

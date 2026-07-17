@@ -17,6 +17,6 @@ class PlayerSwapItemListener : Listener {
             event.isCancelled = true
         }
 
-        //TODO: 나중에 그냥 F 할 시 만일 뽑기 아이템이면 뽑기 아이템 스킬 업글 창이나 그런거 뜨게 하기
+        //TODO: 나중에 그냥 F 할 시 만일 카트리지이면 카트리지 스킬 업글 창이나 그런거 뜨게 하기
     }
 }

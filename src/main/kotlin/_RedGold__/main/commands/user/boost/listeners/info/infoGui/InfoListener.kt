@@ -22,7 +22,7 @@ class InfoListener : Listener {
 
         task(1) {
             if (!player.isOnline) return@task
-            if (!holder.isClose) return@task
+            if (holder.isClose) return@task
 
             SelectGui().openGui(player)
         }
@@ -41,16 +41,16 @@ class InfoListener : Listener {
 
         when (slot) {
             11 -> {
-                CrystalProdGui().openGui(player)
                 holder.isClose = true
+                CrystalProdGui().openGui(player)
             }
             13 -> {
-                RankProdGui().openGui(player)
                 holder.isClose = true
+                RankProdGui().openGui(player)
             }
             15 -> {
-                PackageProdGui().openGui(player)
                 holder.isClose = true
+                PackageProdGui().openGui(player)
             }
         }
     }

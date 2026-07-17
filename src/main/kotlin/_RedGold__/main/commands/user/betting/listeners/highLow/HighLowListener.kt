@@ -1,44 +1,41 @@
 package _RedGold__.main.commands.user.betting.listeners.highLow
 
 import _RedGold__.main.commands.user.betting.listeners.GlobalConst
-import _RedGold__.main.functions.Color.gc
-import _RedGold__.main.functions.Gui.getItem
-import _RedGold__.main.functions.Scheduler.task
 import _RedGold__.main.functions.Color.fail
+import _RedGold__.main.functions.Color.gc
 import _RedGold__.main.functions.Color.sendMsg
-import _RedGold__.main.functions.EasyEnchant.enchant
+import _RedGold__.main.functions.FastGui.enchantEffect
 import _RedGold__.main.functions.FastGui.item
 import _RedGold__.main.functions.FastReplace.fill
+import _RedGold__.main.functions.Gui.getItem
 import _RedGold__.main.functions.Gui.sendSound
 import _RedGold__.main.functions.NumberFormat.toFormat
 import _RedGold__.main.functions.PlusMath.pow
-import _RedGold__.main.loads.RequireJavaPlugin
+import _RedGold__.main.functions.launch
+import _RedGold__.main.functions.modify
+import _RedGold__.main.functions.modifyMeta
+import _RedGold__.main.functions.task
 import _RedGold__.main.loads.RequireListener
 import _RedGold__.main.managers.playerData.data
-import com.github.shynixn.mccoroutine.bukkit.launch
 import com.github.shynixn.mccoroutine.bukkit.ticks
 import kotlinx.coroutines.delay
 import org.bukkit.Material
 import org.bukkit.Sound
-import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
-import org.bukkit.inventory.ItemFlag
-import org.bukkit.plugin.java.JavaPlugin
 
 @RequireListener
-@RequireJavaPlugin
-class HighLowListener(private val plugin: JavaPlugin) : Listener {
+class HighLowListener : Listener {
     @EventHandler
     fun onInventoryClose(event: InventoryCloseEvent) {
         val player = event.player as? Player?: return
         val holder = event.inventory.holder as? HighLowHolder?: return
         if (!holder.isStart) return
 
-        plugin.task(1) {
+        task(1) {
             if (!player.isOnline) return@task
             if (!holder.isStart) return@task
 
@@ -58,7 +55,7 @@ class HighLowListener(private val plugin: JavaPlugin) : Listener {
         val player = event.whoClicked as Player
         val slot = event.slot
         val holder = gui.holder as HighLowHolder
-        val secureRandom = GlobalConst.secureRandom
+        val threadLocalRandom = GlobalConst.threadLocalRandom
 
         if (holder.isStart) return
 
@@ -87,9 +84,9 @@ class HighLowListener(private val plugin: JavaPlugin) : Listener {
                 holder.isStart = true
                 player.data.gold -= holder.betGold
 
-                val result = secureRandom.nextInt(100) + 1 //0~100사이
+                val result = threadLocalRandom.nextInt(100) + 1 //0~100사이
 
-                plugin.launch {
+                launch {
                     repeat(60) { i ->
                         gui.item[22] = getItem(
                             HighLowConst.GEN_RANDOM,
@@ -105,14 +102,18 @@ class HighLowListener(private val plugin: JavaPlugin) : Listener {
                     gui.item[22] = getItem(
                         resultDisplay.first,
                         "&f&l결과: &7&l${resultDisplay.second}",
-                    ).apply {
+                    ).modifyMeta { setMaxStackSize(99) }
+                    .modify {
                         amount = result
-                        addItemFlags(ItemFlag.HIDE_ENCHANTS)
-                        enchant[Enchantment.LURE] = 1
+                        enchantEffect()
                     }
+
                     player.sendSound(Sound.ENTITY_PLAYER_LEVELUP)
 
                     delay(20.ticks)
+
+                    holder.isStart = false
+                    player.closeInventory()
 
                     if ((result < 50 && holder.select == 0) || (result > 50 && holder.select == 2)) {
                         val giveGold = (holder.betGold * 1.5).toLong()
@@ -160,9 +161,7 @@ class HighLowListener(private val plugin: JavaPlugin) : Listener {
                     listOf("", "&7&l클릭 시 50 초과로 선택 됩니다.")
                 )
 
-                gui.item[slot] = gui.getItem(slot)?.apply {
-                    enchant[Enchantment.LUCK_OF_THE_SEA] = 5
-                }
+                gui.item[slot] = gui.getItem(slot)?.modify { enchantEffect() }
 
                 holder.select = select
                 player.sendSound(Sound.ENTITY_EXPERIENCE_ORB_PICKUP)

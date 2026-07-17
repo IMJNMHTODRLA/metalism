@@ -47,9 +47,10 @@ data class PlayerData(
         return isEquipped to item
     }
 
+    //TODO: 나중에 val대신 fun으로 만들기
     val equipStyle get() =
-        (getEquipRaw(CosmeticEnum.STYLE) as Pair<Boolean, String>).let {
-            if (it.first) true to "${it.second} "
+        (getEquipRaw(CosmeticEnum.STYLE) as Pair<Boolean, String>).let { (isEquipped, text) ->
+            if (isEquipped && text.isNotBlank()) true to "$text "
             else false to ""
         }
 
@@ -60,7 +61,20 @@ data class PlayerData(
     fun hasEquip(i: Int, type: CosmeticEnum) = cosmeticMap[type]?.get(i)?.isEquip?: false
     fun hasCosmetic(i: Int, type: CosmeticEnum) = cosmeticMap[type]?.get(i) != null
 
-    fun setCosmetic(i: Int, type: CosmeticEnum, value: Boolean) = cosmeticMap[type]?.get(i)?.run { isEquip = value; true } ?: false
-    fun addCosmetic(i: Int, type: CosmeticEnum, value: Boolean) = cosmeticMap.getOrPut(type) { mutableMapOf() }.put(i, CosmeticData(value)) == null
-    fun removeCosmetic(i: Int, type: CosmeticEnum) = cosmeticMap[type]?.remove(i) != null
+    fun setCosmetic(i: Int, type: CosmeticEnum, value: Boolean): Boolean {
+        return cosmeticMap[type]
+            ?.get(i)
+            ?.run { isEquip = value; true }
+            ?: false
+    }
+
+    fun addCosmetic(i: Int, type: CosmeticEnum, equip: Boolean): Boolean {
+        return cosmeticMap
+            .getOrPut(type) { mutableMapOf() }
+            .put(i, CosmeticData(equip)) == null
+    }
+
+    fun removeCosmetic(i: Int, type: CosmeticEnum): Boolean {
+        return cosmeticMap[type]?.remove(i) != null
+    }
 }

@@ -31,7 +31,7 @@ class Boost(private val plugin: JavaPlugin) : CommandExecutor, TabExecutor {
             args.isEmpty() -> SelectGui().openGui(player)
             args[0] == "info" -> InfoGui().openGui(player)
             args[0] == "setting" -> SettingsGui().openGui(player)
-            args[0] == "apply" -> ApplyGui().openGui(player)
+            args[0] == "apply" -> { /*ApplyGui().openGui(player)*/ }
         } //TODO: 만들어야한다
 
         return true

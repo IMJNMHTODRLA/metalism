@@ -1,6 +1,6 @@
 package _RedGold__.main.listeners.playerKill
 
-internal object PlayerKillConst {
+object PlayerKillConst {
     const val GIVE_EXP = 100
     const val GIVE_GOLD = 40000L
 

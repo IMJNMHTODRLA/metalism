@@ -1,12 +1,12 @@
 package _RedGold__.main.managers.logManager
 
 import _RedGold__.main.Main
+import _RedGold__.main.functions.toFormat
 import _RedGold__.main.loads.SetFinalFlush
 import _RedGold__.main.loads.SetSlowInit
 import java.io.File
 import java.time.LocalDateTime
 import java.time.LocalTime
-import java.time.format.DateTimeFormatter
 import kotlin.properties.Delegates
 import kotlin.reflect.KProperty
 
@@ -16,10 +16,15 @@ fun initLog() {
 
     val current = LocalDateTime.now()
 
-    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-    val formatted = current.format(formatter)
+    val datePart = current.toLocalDate()
+    val timePart = current.toLocalTime()
 
-    logFileName = "logma-$formatted"
+    val dateString = datePart.toFormat("yyyy-MM-dd")
+    val timeString = timePart.toFormat("HH시 mm분 ss초")
+
+    data = dateString
+    time = timeString
+
     isInit = true
 }
 
@@ -38,7 +43,13 @@ fun <T> logObserver(
 
 @SetFinalFlush
 fun saveLog() {
+    if (!isInit) initLog()
+
     val plugin = Main.instance
-    val logFile = File(plugin.dataFolder, "logma/$logFileName.log")
+
+    val logDir = File(plugin.dataFolder, "logma/${data}")
+    if (!logDir.exists()) logDir.mkdirs()
+
+    val logFile = File(logDir, "$time.log")
     logFile.writeText(logData.joinToString("\n"))
 }

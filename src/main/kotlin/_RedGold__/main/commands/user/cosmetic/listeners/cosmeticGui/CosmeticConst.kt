@@ -44,6 +44,7 @@ object CosmeticConst {
             listOf(
                 "",
                 PREFIX,
+                "",
                 "&c&l[장착 불가]",
                 "&a&l[우클릭]: &f&l미리보기",
                 "",
@@ -65,6 +66,7 @@ object CosmeticConst {
             listOf(
                 "",
                 PREFIX,
+                "",
                 "&a&l[좌클릭]: &f&l장착",
                 "&a&l[우클릭]: &f&l미리보기",
                 "",

@@ -19,30 +19,26 @@ import org.bukkit.potion.PotionEffectType
 import java.util.*
 
 object Gui {
-    fun getPlayerSkull(uuid: UUID, title: String? = null, description: List<String>? = null, t: Int? = null): ItemStack {
-        return getItem(Material.PLAYER_HEAD, title, description, t)
+    fun getPlayerSkull(uuid: UUID, title: String? = null, description: List<String>? = null, t: Int? = null) =
+        getItem(Material.PLAYER_HEAD, title, description, t)
             .modifyMeta<SkullMeta> {
                 owningPlayer = Bukkit.getOfflinePlayer(uuid)
             }
-    }
 
-    fun getPlayerSkull(
-        uuid: UUID, title: String? = null, vararg description: String = emptyArray(), t: Int? = null
-    ) = getPlayerSkull(uuid, title, description.toList(), t)
+    fun getPlayerSkull(uuid: UUID, title: String? = null, vararg description: String = emptyArray(), t: Int? = null) =
+        getPlayerSkull(uuid, title, description.toList(), t)
 
-    fun getItem(itemId: Material, title: String? = null, description: List<String>? = null, t: Int? = null): ItemStack {
-        return ItemStack(itemId)
+    fun getItem(itemId: Material, title: String? = null, description: List<String>? = null, t: Int? = null) =
+        ItemStack(itemId)
             .modifyMeta {
                 title?.let { setDisplayName(it.gc()) }
                 description?.let {
                     lore = it.map { iit -> iit.gc() }
                 }
             }.modify { t?.let { amount = it } }
-    }
 
-    fun getItem(
-        itemId: Material, title: String? = null, vararg description: String = emptyArray(), t: Int? = null
-    ) = getItem(itemId, title, description.toList(), t)
+    fun getItem(itemId: Material, title: String? = null, vararg description: String = emptyArray(), t: Int? = null) =
+        getItem(itemId, title, description.toList(), t)
 
     @Deprecated("그냥 .modifyMeta<Damageable> 이거 써라ㅇㅇ", ReplaceWith("modifyMeta"), DeprecationLevel.ERROR)
     fun itemDamage(item: ItemMeta, damage: Int): ItemMeta {

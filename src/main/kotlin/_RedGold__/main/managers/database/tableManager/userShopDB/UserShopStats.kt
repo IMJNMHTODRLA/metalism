@@ -5,7 +5,7 @@ import org.bukkit.Material
 import org.jetbrains.exposed.sql.Table
 
 object UserShopStats : Table("user_shop_stats") {
-    val id = integer("id").autoIncrement()
+    val id = integer("id")
     val uuid = varchar("uuid", 36)
 
     val priceType = enumerationByName("price_type", 24, UserShopGoodsEnum::class)

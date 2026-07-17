@@ -24,7 +24,7 @@ class ChestListener : Listener {
         val page = (gui.holder as ChestHolder).page
 
         taskAsync {
-            saveChest(uuid, page * (DEF_CHEST_SLOT + 1), gui.contents)
+            saveChest(uuid, page * DEF_CHEST_SLOT, gui.contents)
 
             task {
                 player.sendSound(Sound.BLOCK_CHEST_CLOSE)

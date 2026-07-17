@@ -1,9 +1,14 @@
 package _RedGold__.main.functions
 
 import _RedGold__.main.Main
+import com.github.shynixn.mccoroutine.bukkit.minecraftDispatcher
+import com.github.shynixn.mccoroutine.bukkit.scope
+import kotlinx.coroutines.*
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitTask
+import java.lang.Runnable
+import kotlin.coroutines.CoroutineContext
 
 object Scheduler {
     @Deprecated("plugin 이거 쓰지마 ㅠㅠㅠ", ReplaceWith("task(delay, loop, work)", "import _RedGold__.main.functions.task"), DeprecationLevel.WARNING)
@@ -33,6 +38,18 @@ object Scheduler {
         bukkitTask = task
         return task
     }
+}
+
+fun launch(
+    context: CoroutineContext = Main.instance.minecraftDispatcher,
+    start: CoroutineStart = CoroutineStart.DEFAULT,
+    block: suspend CoroutineScope.() -> Unit
+): Job {
+    if (!Main.instance.scope.isActive) {
+        return Job()
+    }
+
+    return Main.instance.scope.launch(context, start, block)
 }
 
 fun task(delay: Long? = null, loop: Long? = null, work: BukkitTask.() -> Unit): BukkitTask {

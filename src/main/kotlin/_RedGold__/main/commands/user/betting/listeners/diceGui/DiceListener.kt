@@ -1,6 +1,6 @@
 package _RedGold__.main.commands.user.betting.listeners.diceGui
 
-import _RedGold__.main.commands.user.betting.listeners.GlobalConst
+import _RedGold__.main.commands.user.betting.listeners.*
 import _RedGold__.main.functions.Color.fail
 import _RedGold__.main.functions.Color.gc
 import _RedGold__.main.functions.Color.sendMsg
@@ -11,11 +11,10 @@ import _RedGold__.main.functions.Gui.getItem
 import _RedGold__.main.functions.Gui.sendSound
 import _RedGold__.main.functions.NumberFormat.toFormat
 import _RedGold__.main.functions.PlusMath.pow
+import _RedGold__.main.functions.launch
 import _RedGold__.main.functions.task
-import _RedGold__.main.loads.RequireJavaPlugin
 import _RedGold__.main.loads.RequireListener
 import _RedGold__.main.managers.playerData.data
-import com.github.shynixn.mccoroutine.bukkit.launch
 import com.github.shynixn.mccoroutine.bukkit.ticks
 import kotlinx.coroutines.delay
 import org.bukkit.Material
@@ -25,11 +24,9 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
-import org.bukkit.plugin.java.JavaPlugin
 
 @RequireListener
-@RequireJavaPlugin
-class DiceListener(private val plugin: JavaPlugin) : Listener {
+class DiceListener : Listener {
     @EventHandler
     fun onInventoryClose(event: InventoryCloseEvent) {
         val player = event.player as? Player?: return
@@ -56,9 +53,10 @@ class DiceListener(private val plugin: JavaPlugin) : Listener {
         val player = event.whoClicked as Player
         val slot = event.slot
         val holder = gui.holder as DiceHolder
-        val secureRandom = GlobalConst.secureRandom
+        val threadLocalRandom = GlobalConst.threadLocalRandom
 
         if (holder.isStart) return
+
         when (slot) {
             22 -> {
                 if (holder.betGold <= 0) {
@@ -84,19 +82,43 @@ class DiceListener(private val plugin: JavaPlugin) : Listener {
                 holder.isStart = true
                 player.data.gold -= holder.betGold
 
-                val result = secureRandom.nextInt(6) //0~5사이
+                val result = threadLocalRandom.nextInt(6) //0~5사이
 
-                plugin.launch {
-                    repeat(50) { i ->
+                launch {
+                    repeat(10) { i ->
                         gui.item[22] = getItem(
                             Material.GOLD_NUGGET,
                             "&7&l주사위 굴리는 중${".".repeat((i % 3) + 1)}",
                             null,
-                            secureRandom.nextInt(6)
+                            threadLocalRandom.nextInt(6) + 1
                         )
                         player.sendSound(Sound.BLOCK_BONE_BLOCK_PLACE)
 
-                        delay((1 + i / 3).ticks)
+                        delay(1.ticks)
+                    }
+
+                    repeat(6) { i ->
+                        gui.item[22] = getItem(
+                            Material.GOLD_NUGGET,
+                            "&7&l주사위 굴리는 중${".".repeat((i % 3) + 1)}",
+                            null,
+                            threadLocalRandom.nextInt(6) + 1
+                        )
+                        player.sendSound(Sound.BLOCK_BONE_BLOCK_PLACE)
+
+                        delay(2.ticks)
+                    }
+
+                    repeat(4) { i ->
+                        gui.item[22] = getItem(
+                            Material.GOLD_NUGGET,
+                            "&7&l주사위 굴리는 중${".".repeat((i % 3) + 1)}",
+                            null,
+                            threadLocalRandom.nextInt(6) + 1
+                        )
+                        player.sendSound(Sound.BLOCK_BONE_BLOCK_PLACE)
+
+                        delay(3.ticks)
                     }
 
                     delay(30.ticks)
@@ -131,11 +153,13 @@ class DiceListener(private val plugin: JavaPlugin) : Listener {
             }
 
             in 19..25 -> {
-                val select = slot - 19
+                val select =
+                    if (slot in 19..21) slot - 19
+                    else slot - 20
 
                 repeat(3) { i ->
                     gui.item[19 + i] = DiceConst.ITEM(i)
-                    gui.item[25 - i] = DiceConst.ITEM(i)
+                    gui.item[23 + i] = DiceConst.ITEM(i + 3)
                 }
 
                 gui.item[slot] = DiceConst.ITEM(select).apply {

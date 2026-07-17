@@ -85,6 +85,6 @@ class PlayerKillListener : Listener {
 
         GlobalValue.chatGGTiming[attackerUUID] = victimUUID to now + 120
 
-        //TODO: 뽑기 아이템 드롭 X
+        //TODO: 카트리지 드롭 X
     }
 }

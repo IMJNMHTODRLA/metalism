@@ -3,8 +3,7 @@ package _RedGold__.main.commands.user.boost.listeners.info.rankProd.vipGui
 import _RedGold__.main.commands.user.boost.listeners.info.InfoGlobalConst
 import _RedGold__.main.commands.user.boost.listeners.info.rankProd.rankProdGui.RankProdGui
 import _RedGold__.main.functions.EasyPermission.permission
-import _RedGold__.main.functions.Scheduler.task
-import _RedGold__.main.loads.RequireJavaPlugin
+import _RedGold__.main.functions.task
 import _RedGold__.main.loads.RequireListener
 import _RedGold__.main.managers.playerData.PermissionEnum
 import _RedGold__.main.managers.playerData.data
@@ -13,18 +12,16 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
-import org.bukkit.plugin.java.JavaPlugin
 
 @RequireListener
-@RequireJavaPlugin
-class VipListener(private val plugin: JavaPlugin) : Listener {
+class VipListener : Listener {
     @EventHandler
     fun onCloseInventory(event: InventoryCloseEvent) {
         val gui = event.inventory
         val player = event.player as Player
         if (gui.holder !is VipHolder) return
 
-        plugin.task {
+        task {
             if (!player.isOnline) return@task
             RankProdGui().openGui(player)
         }

@@ -10,7 +10,6 @@ fun databaseDefaultConfig(absolutePath: String, fileName: String): HikariDataSou
 
         // 풀 관리 최적화 (SQLite는 단일 쓰기에 최적화되어 풀이 작을수록 안정적)
         maximumPoolSize = 1
-        minimumIdle = 1
         idleTimeout = 30000
         connectionTimeout = 10000
         leakDetectionThreshold = 2000 // 커넥션 누수 감지 (2초)

@@ -19,7 +19,7 @@ class ChestGui {
     fun openGui(player: Player, page: Int) {
         val uuid = player.uniqueId
 
-        if (isChestSaving.contains(uuid)) {
+        if (uuid in isChestSaving) {
             player.fail("&c창고를 데이터베이스에 저장 중입니다.")
             return
         }
@@ -33,7 +33,7 @@ class ChestGui {
 
         val gui = ChestHolder(page).inventory
         taskAsync {
-            val itemArray = getChest(uuid, page * (DEF_CHEST_SLOT + 1L))
+            val itemArray = getChest(uuid, page * DEF_CHEST_SLOT)
 
             task {
                 if (!player.isOnline) return@task

@@ -41,8 +41,7 @@ class WeeklyListener : Listener {
                 GlobalConst.missionReward(
                     player,
                     MissionEnum.WEEKLY,
-                    weeklyMissionInfoList[id],
-                    weeklyMissionRewardList[id]
+                    id
                 ).trueRun { WeeklyGui().openGui(player, 0f) }
             }
         }

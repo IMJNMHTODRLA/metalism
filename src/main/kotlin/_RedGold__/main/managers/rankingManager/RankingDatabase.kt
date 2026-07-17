@@ -1,34 +1,40 @@
 package _RedGold__.main.managers.rankingManager
 
-import _RedGold__.main.functions.ExceptionSeverity
 import _RedGold__.main.functions.NumberFormat.toUuid
-import _RedGold__.main.functions.catch
 import _RedGold__.main.managers.database.tableManager.playersDB.CombatStats
 import _RedGold__.main.managers.database.tableManager.playersDB.DefaultStats
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
-fun getRanking() = catch("전체 랭킹 데이터 로드 실패", ExceptionSeverity.CRITICAL) {
+fun getRanking() =
     transaction {
-        (DefaultStats innerJoin CombatStats)
+        val defaultList = DefaultStats.selectAll().map { row ->
+            Pair(row[DefaultStats.uuid], row[DefaultStats.gold] to row[DefaultStats.boost])
+        }
+
+        val combatMap = CombatStats
             .select(
-                DefaultStats.uuid,
-                DefaultStats.gold,
-                DefaultStats.boost,
+                CombatStats.uuid,
+
                 CombatStats.kill,
                 CombatStats.killStreak,
                 CombatStats.death,
                 CombatStats.deathStreak
             )
-            .map { row ->
-                RankingData(
-                    row[DefaultStats.uuid].toUuid(),
-                    row[DefaultStats.gold],
-                    row[DefaultStats.boost],
-                    row[CombatStats.kill],
-                    row[CombatStats.killStreak],
-                    row[CombatStats.death],
-                    row[CombatStats.deathStreak],
-                )
-            }
+            .associateBy { it[CombatStats.uuid] }
+
+        defaultList.mapNotNull { (uuid, stats) ->
+            val combatRow = combatMap[uuid]?: return@mapNotNull null
+
+            RankingData(
+                uuid = uuid.toUuid(),
+                gold = stats.first,
+                boost = stats.second,
+
+                kill = combatRow[CombatStats.kill],
+                killStreak = combatRow[CombatStats.killStreak],
+                death = combatRow[CombatStats.death],
+                deathStreak = combatRow[CombatStats.deathStreak]
+            )
+        }
     }
-}

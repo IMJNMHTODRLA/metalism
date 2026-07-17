@@ -20,8 +20,8 @@ object ParameterUtil {
         val linkAnn = owner.findAnnotation<RequireLinkPacketListener>()
         val linked = linkAnn?.listenerClass
 
-        if (linked != null && type == linked) return false
-        if (HelperClassUtil.isManagedClass(type)) return false
+        if (linked != null && type == linked) return type
+        if (HelperClassUtil.isManagedClass(type)) return type
 
         throw IllegalStateException(
             "Cannot resolve dependency ${type.simpleName} in ${owner.simpleName}"

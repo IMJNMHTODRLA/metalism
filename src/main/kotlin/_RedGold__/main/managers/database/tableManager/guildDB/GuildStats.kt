@@ -3,7 +3,7 @@ package _RedGold__.main.managers.database.tableManager.guildDB
 import org.jetbrains.exposed.sql.Table
 
 object GuildStats : Table("guild_stats") {
-    val id = integer("id").autoIncrement()
+    val id = integer("id")
 
     val name = varchar("name", 16).uniqueIndex()
     val leader = uuid("leader").uniqueIndex()

@@ -1,16 +1,18 @@
 package _RedGold__.main
 
+import _RedGold__.main.functions.task
 import _RedGold__.main.loads.FinalFlush
 import _RedGold__.main.loads.PreLoad
 import _RedGold__.main.loads.SlowInit
 import _RedGold__.main.managers.InitManager
 import _RedGold__.main.managers.rebootManager.RebootManager
 import com.github.retrooper.packetevents.PacketEvents
+import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder
 import org.bukkit.plugin.java.JavaPlugin
 import java.time.LocalDateTime
 
 class Main : JavaPlugin() {
-    object Event {
+    /*object Event {
         const val EVENT_NAME = "&b&l대결전(PVE)"
         const val EVENT_CODE = "randomEffect"
         const val EVENT_ITEM = "diamond_sword"
@@ -30,7 +32,7 @@ class Main : JavaPlugin() {
         //    2.0, 2.0, 46.0, 47.0
         //) //패스 가챠 때
         const val GACHA_POINT_TO_GOLD_TIMES = 0L
-    }
+    }*/
 
     companion object {
         private lateinit var rebootManager: RebootManager
@@ -44,8 +46,9 @@ class Main : JavaPlugin() {
 
     //TODO: 모든 Gui 클래스를 object로 변경
 
-    //TODO: 뽑기 아이템에는 대미지 양이 적혀져 있지 않고 그냥 스킬 레벨 그런게 몇렙인지 적혀 있어야 한다ㅇㅇ
+    //TODO: 카트리지에는 대미지 양이 적혀져 있지 않고 그냥 스킬 레벨 그런게 몇렙인지 적혀 있어야 한다ㅇㅇ
     //TODO: 기초 대미지 량이나 그런거는 서버 side로, 그리고 최종 대미지 량도 서버 side ㅇㅇ
+    //TODO: 카트리지 과부화 라는 것을 장착 시 최종 능력치에서 1.2배 곱해짐, 카트리지 과부화는 MVP 랭크만 24000 크리스탈로 장착 가능
 
     //TODO: 플레이어 체력 기본적으로 40으로 설정 할까?
     /*
@@ -54,12 +57,12 @@ class Main : JavaPlugin() {
     *  이름은 QUEUE으로 해야겠다
     *
     * [1. 방어 속성 시스템의 핵심 규칙]
-    * - 유저가 뽑기 아이템(무기)을 인벤토리에 개수 제한 없이 들고 다닐 수 있고, 평소에는 속성이 없는 바닐라 검을 들고 싸울 수 있는 환경을 고려함.
+    * - 유저가 카트리지(무기)을 인벤토리에 개수 제한 없이 들고 다닐 수 있고, 평소에는 속성이 없는 바닐라 검을 들고 싸울 수 있는 환경을 고려함.
     * - 밸런스 붕괴와 실시간 장비 스왑 꼼수를 막기 위해, 플레이어 본체의 방어 속성은 인벤토리 전체가 아니라 '현재 발동되어 쿨타임이 돌아가고 있는 EX 스킬 슬롯(QUEUE, 최대 3개)'에 등록된 아이템들의 속성을 기준으로 결정함.
     *
     * [2. 시간대 적성 시스템 및 등급]
     * - 마인크래프트 시간대에 따라 조간, 주간, 석간, 야간 4가지로 분류함.
-    * - 각 뽑기 아이템마다 특정 시간대에 발동 시 적용되는 적성 등급(S, A, B, C, D)이 존재하며, 보스전의 경우 보스방의 시간대가 특정 시간으로 아예 고정되어 있음.
+    * - 각 카트리지마다 특정 시간대에 발동 시 적용되는 적성 등급(S, A, B, C, D)이 존재하며, 보스전의 경우 보스방의 시간대가 특정 시간으로 아예 고정되어 있음.
     * - 등급별 능력치 스펙:
     *   * S등급: 공격력 130%
     *   * A등급: 공격력 115%
@@ -82,7 +85,13 @@ class Main : JavaPlugin() {
     * TODO: 스킬 업글 관련
     *  Reinforce는 종류가 5가지(그 안에 일반, 하급, 초급, 중급, 고급)
     *  plasmaCore는 종류가 3가지(그 안에 저에너지, 중에너지, 중에너지)
-    *  mystery는 종류가 15가지(그 안에 파괴된, 손실된, 복구된, 온전한)
+    *  mystery는 종류가 10가지(그 안에 파괴된, 손실된, 복구된, 온전한)
+    *  종류 좀 설명하자면
+    *  공허, 심연, 찰나, 망각, 왜곡, 파동, 격류, 잔영, 맹약, 계시, 환상, 비명, 성흔, 금제, 궤적
+    *  공허, 기억, 의지, 파편, 심장, 정수, 혈흔, 눈물, 그림자, 잔향, 금기, 기록, 공명, 침식, 낙인
+    *  이렇게임
+    *  -
+    *  -
     *  1~3스킬:
     *   1레벨:
     *    5,000골드, [일반] xx(회복) 강화 아이템x5, [저에너지] yy(폭팔) 플라즈마 코어x3
@@ -101,9 +110,9 @@ class Main : JavaPlugin() {
     *   8레벨:
     *    1,150,000골드, [중급] xx(회복) 강화 아이템x8, [중에너지] yy(폭팔) 플라즈마 코어x6, 복구된 zz(공허)의 신비x6, 복구된 aa(공허 외)의 신비x4
     *   9레벨:
-    *    2,850,000골드, [고급] xx(회복) 강화 아이템x8, [고에너지] yy(폭팔) 플라즈마 코어x6, 온전한 zz(공허)의 신비x2
+    *    2,850,000골드, [고급] xx(회복) 강화 아이템x8, [고에너지] yy(폭팔) 플라즈마 코어x6, 보존된 zz(공허)의 신비x2
     *   10레벨:
-    *    3,200,000골드, [고급] xx(회복) 강화 아이템x12, [고에너지] yy(폭팔) 플라즈마 코어x12, 온전한 zz(공허)의 신비x4
+    *    3,200,000골드, [고급] xx(회복) 강화 아이템x12, [고에너지] yy(폭팔) 플라즈마 코어x12, 보존된 zz(공허)의 신비x4
     *  EX스킬:
     *   1레벨:
     *    8,000골드, [일반] xx(회복) 강화 아이템x8, [저에너지] yy(폭팔) 플라즈마 코어x4,
@@ -128,11 +137,11 @@ class Main : JavaPlugin() {
     *
     * TODO:
     *  속성 형태:
-    *             [일반]  [폭팔]  [화염]  [마법]
-    *  [일반 저항]  100%   100%   100%    100%
-    *  [중갑 저항]  100%   200%   100%    50%
-    *  [가연 저항]  100%   50%    200%    100%
-    *  [경질 저항]  100%   100%   50%     200%
+    *             [일반]  [폭팔(Explosion)]  [화염(Fire)]  [마법(Magic)]
+    *  [일반 방어]  100%   100%   100%    100%
+    *  [중갑 방어]  100%   200%   100%    50%
+    *  [가연 방어]  100%   50%    200%    100%
+    *  [경질 방어]  100%   100%   50%     200%
     *  처음부터 50%그거 하는게 아니라 업글 형식, 처음에는 저항 그게 100%임, 최대 20레벨임
     *  ----
     *  기본 20체력에서 플레이어가 업글해서 최대 체력 늘릴 수 있음(1레벨당 1체력(0.5칸), 필요 기초 재화: 400,000골드(1.2배씩 증가), MAX 20렙) <- 없앨까 싶음
@@ -142,6 +151,10 @@ class Main : JavaPlugin() {
 
     override fun onLoad() {
         instance = this
+
+        PacketEvents.setAPI(SpigotPacketEventsBuilder.build(this))
+        PacketEvents.getAPI().settings.checkForUpdates(false).bStats(true)
+        PacketEvents.getAPI().load()
     }
 
     override fun onEnable() {

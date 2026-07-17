@@ -1,6 +1,6 @@
 package _RedGold__.main.listeners
 
-internal object GlobalConst {
+object GlobalConst {
     val COLOR_LIST: List<String> = listOf(
         "2444FC",
         "334EFC",

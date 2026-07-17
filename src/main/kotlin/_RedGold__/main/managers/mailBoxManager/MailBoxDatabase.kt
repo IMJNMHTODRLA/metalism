@@ -18,7 +18,18 @@ import java.util.*
 
 fun sendMail(data: MailBoxData) {
     transaction(mailboxDB) {
+        val maxId = MailBox
+            .select(MailBox.id)
+            .orderBy(MailBox.id to SortOrder.DESC)
+            .limit(1)
+            .map { it[MailBox.id] }
+            .singleOrNull() ?: 0
+
+        val nextId = maxId + 1
+
         MailBox.insert {
+            it[id] = nextId
+
             it[uuid] = data.uuid.toString()
 
             it[sender] = data.sender

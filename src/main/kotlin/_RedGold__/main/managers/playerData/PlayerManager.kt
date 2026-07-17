@@ -22,5 +22,6 @@ object PlayerManager {
     fun unload(uuid: UUID) { dataMap.remove(uuid) }
 }
 
-val Player.data: PlayerData get() = PlayerManager[uniqueId]
+val Player.data get() = PlayerManager[uniqueId]
     ?: throw PluginException("${name}의 데이터가 로드되지 않았습니다!", ExceptionSeverity.HIGH)
+    //set(value) = PlayerManager[uniqueId] = value

@@ -3,28 +3,25 @@ package _RedGold__.main.commands.user.boost.listeners.info.rankProd.rankProdGui
 import _RedGold__.main.commands.user.boost.listeners.info.infoGui.InfoGui
 import _RedGold__.main.commands.user.boost.listeners.info.rankProd.mvpGui.MvpGui
 import _RedGold__.main.commands.user.boost.listeners.info.rankProd.vipGui.VipGui
-import _RedGold__.main.functions.Scheduler.task
-import _RedGold__.main.loads.RequireJavaPlugin
+import _RedGold__.main.functions.task
 import _RedGold__.main.loads.RequireListener
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
-import org.bukkit.plugin.java.JavaPlugin
 
 @RequireListener
-@RequireJavaPlugin
-class RankProdListener(private val plugin: JavaPlugin) : Listener {
+class RankProdListener : Listener {
     @EventHandler
     fun onCloseInventory(event: InventoryCloseEvent) {
         val gui = event.inventory
         val player = event.player as Player
         val holder = gui.holder as? RankProdHolder?: return
 
-        plugin.task {
+        task {
             if (!player.isOnline) return@task
-            if (!holder.isClose) return@task
+            if (holder.isClose) return@task
 
             InfoGui().openGui(player)
         }
@@ -43,13 +40,13 @@ class RankProdListener(private val plugin: JavaPlugin) : Listener {
 
         when (slot) {
             12 -> {
-                VipGui().openGui(player)
                 holder.isClose = true
+                VipGui().openGui(player)
             }
 
             14 -> {
-                MvpGui().openGui(player)
                 holder.isClose = true
+                MvpGui().openGui(player)
             }
         }
     }

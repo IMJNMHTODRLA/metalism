@@ -12,7 +12,7 @@ import org.bukkit.Sound
 import org.bukkit.entity.Player
 import java.util.*
 
-internal object PlayerChatConst {
+object PlayerChatConst {
     private val verifyWords = setOf("gg", "l", "ez", "ㅋ", "gl")
 
     fun getGGColor(player: Player, message: String, ggTiming: Pair<UUID, Long>?): String {

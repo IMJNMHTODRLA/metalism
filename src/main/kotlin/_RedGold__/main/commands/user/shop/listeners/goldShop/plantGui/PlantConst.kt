@@ -109,6 +109,7 @@ object PlantConst {
             listOf(
                 "",
                 PREFIX,
+                "",
                 !item.buy.isNull then "&a&l[구매(좌클릭)] &f&l구매가: ${item.buy?.toFormat()} 골드" orElse "&c&l[구매 불가]",
                 !item.buy.isNull then "&8Shift + 좌클릭 시 64개가 구매됩니다." orElse "",
                 !item.buy.isNull then "&b&l[판매(우클릭)] &f&l구매가: ${item.sell?.toFormat()} 골드" orElse "&c&l[판매 불가]",

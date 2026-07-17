@@ -27,8 +27,8 @@ object MemberGui {
                 gui.item[10] = getItem(Material.GOLD_BLOCK, "&a&l[길드 기부] &8&l골드를 기부하여 EXP를 증가시킵니다.")
                 gui.item[11] = getItem(Material.BOOK, "&e&l길드 통계")
                 gui.item[12] = getItem(Material.CHEST, "&e&l길드 공용 창고", "", "&c&l주의: 공용 창고 관련된 로그는 남겨지지 않습니다.")
-                gui.item[13] = getItem(Material.RED_BED, "&e&l길드 홈&8&l(쿨타임 1분)", "", "&c&l길드 가입 72시간 이후에 이동 가능합니다.")
-                gui.item[14] = getItem(Material.BARRIER, "&c&l탈퇴", "", "&c&l길드 가입 12시간 이후에 탈퇴 가능합니다.")
+                gui.item[13] = getItem(Material.RED_BED, "&e&l길드 홈", "", "&e&l클릭 시 길드 홈으로 순간이동 됩니다.")
+                gui.item[14] = getItem(Material.BARRIER, "&c&l탈퇴", "", "&c&l리더는 길드 탈퇴를 못 합니다.")
 
                 player.inv + gui
                 player.sendSound(Sound.UI_BUTTON_CLICK)

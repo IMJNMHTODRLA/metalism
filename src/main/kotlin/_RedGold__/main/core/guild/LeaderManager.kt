@@ -37,7 +37,9 @@ fun isLeader(leader: UUID) =
     } != null
 
 fun sendNotLeaderMsg(player: Player) = player.sendMsg("&c당신을 리더가 아닙니다.")
-/** @return true는 리더다, false는 리더 아니다 */ fun isLeader(player: Player): Boolean {
+
+/** @return true는 리더다, false는 리더 아니다 */
+fun isLeader(player: Player): Boolean {
     val result = isLeader(player.uniqueId)
     if (!result) sendNotLeaderMsg(player)
 

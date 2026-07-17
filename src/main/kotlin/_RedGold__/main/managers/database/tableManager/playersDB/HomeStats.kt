@@ -7,11 +7,11 @@ object HomeStats : Table("home_stats") {
     val index = integer("index")
     val isUnlocked = bool("is_unlocked")
 
-    val x = double("x")
-    val y = double("y")
-    val z = double("z")
-    val yaw = float("yaw")
-    val pitch = float("pitch")
+    val x = double("x").nullable()
+    val y = double("y").nullable()
+    val z = double("z").nullable()
+    val yaw = float("yaw").nullable()
+    val pitch = float("pitch").nullable()
 
     override val primaryKey = PrimaryKey(uuid, index)
 }

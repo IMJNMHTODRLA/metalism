@@ -44,7 +44,7 @@ class CosmeticListener : Listener {
                 val rankPrefix = PermissionEnum[player].prefix
                 val name = player.name
 
-                player.good("$displayName $rankPrefix $name&f: ${messageList.random()}") //TODO: 나중에 이스터 애그나 만들자ㅇㅇ
+                player.good("$displayName $rankPrefix $name&f: ${messageList.random()}")
                 player.closeInventory()
 
                 task(1.seconds) {
@@ -54,6 +54,6 @@ class CosmeticListener : Listener {
             return
         }
 
-        //TODO: 나중에 그거 만들자ㅇㅇ
+        //TODO: 나중에 페이지 이동 만들자
     }
 }

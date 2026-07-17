@@ -4,6 +4,7 @@ import _RedGold__.main.core.guild.expManager.expBenefits.shareChestSizeBenefits
 import _RedGold__.main.core.guild.expManager.guildLevelCache
 import _RedGold__.main.core.guild.shareChestManager.shareChestInv.ShareChestInvHolder
 import _RedGold__.main.functions.task
+import _RedGold__.main.loads.SetFinalFlush
 import org.bukkit.inventory.Inventory
 
 fun shareChestUpdate() {
@@ -28,5 +29,12 @@ fun shareChestUpdate() {
                 it.openInventory(newGui)
             }
         }
+    }
+}
+
+@SetFinalFlush
+fun allSaveShareChest() {
+    shareChestData.forEach { (id, gui) ->
+        saveShareChest(id, gui.contents)
     }
 }

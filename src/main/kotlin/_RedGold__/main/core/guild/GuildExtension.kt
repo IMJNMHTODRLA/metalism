@@ -3,9 +3,8 @@ package _RedGold__.main.core.guild
 import _RedGold__.main.managers.database.tableManager.guildDB.GuildMembers
 import _RedGold__.main.managers.guildDB
 import org.jetbrains.exposed.sql.transactions.transaction
-import java.util.*
 
-fun allGetGuildMembers(): Map<UUID, Int> =
+fun allGetGuildMembers() =
     transaction(guildDB) {
         GuildMembers
             .select(

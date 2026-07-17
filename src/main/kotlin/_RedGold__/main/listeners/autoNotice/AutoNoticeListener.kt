@@ -9,6 +9,8 @@ import org.bukkit.plugin.java.JavaPlugin
 @RequireJavaPlugin
 class AutoNoticeListener(plugin: JavaPlugin) {
     init {
+        println("startAutoNotice")
+
         plugin.task(0, 10.minutes) {
             AutoNoticeConst.NOTICE_MESSAGE[
                 AutoNoticeValue.times % AutoNoticeConst.NOTICE_MESSAGE.size

@@ -15,7 +15,7 @@ class Hello : CommandExecutor {
         label: String,
         args: Array<out String>
     ): Boolean {
-        sender.sendMsg("&a저 말고 주변에 있는 진짜 사람한테 인사해 보세요.")
+        sender.sendMsg("&a왜 거기다 인사하세요.")
         return true
     }
 }

@@ -57,7 +57,7 @@ fun initDatabase(plugin: JavaPlugin) = catch("DB 초기화 실패", ExceptionSev
             CombatStats,
 
             HomeStats,
-            MissionStats,
+            MissionStats, ShopStats,
 
             BoostStats, BoostSettingStats,
             CosmeticStats, EquipCosmeticStats
@@ -72,7 +72,7 @@ fun loadPlayerData(playerUuid: UUID): PlayerData = catch("플레이어 데이터
 
     return transaction {
         val isNotExist = DefaultStats.select(DefaultStats.uuid)
-            .where { BanStats.uuid eq strUUID }
+            .where { DefaultStats.uuid eq strUUID }
             .limit(1)
             .empty()
 
@@ -110,9 +110,19 @@ fun loadPlayerData(playerUuid: UUID): PlayerData = catch("플레이어 데이터
             val yaw = homeRow[HomeStats.yaw]
             val pitch = homeRow[HomeStats.pitch]
 
+            val locationData =
+                if (
+                    x != null && y != null && z != null &&
+                    yaw != null && pitch != null
+                ) {
+                    LocationData(x, y, z, yaw, pitch)
+                } else {
+                    null
+                }
+
             playerData.homeMap[index] = HomeData(
                 homeRow[HomeStats.isUnlocked],
-                LocationData(x, y, z, yaw, pitch)
+                locationData
             )
         }
 
@@ -127,16 +137,18 @@ fun loadPlayerData(playerUuid: UUID): PlayerData = catch("플레이어 데이터
             )
         }
 
-        (CosmeticStats innerJoin EquipCosmeticStats)
-            .selectAll().where { CosmeticStats.uuid eq strUUID }
-            .forEach { cosmeticRow ->
-                val type = cosmeticRow[CosmeticStats.type]
-                val item = cosmeticRow[CosmeticStats.item]
-                val isEquip = (type == cosmeticRow[EquipCosmeticStats.equipType]) &&
-                    item == (cosmeticRow[EquipCosmeticStats.equipItem])
+        CosmeticStats.selectAll().where { CosmeticStats.uuid eq strUUID }.forEach { cosmeticRow ->
+            val type = cosmeticRow[CosmeticStats.type]
+            val item = cosmeticRow[CosmeticStats.item]
+            playerData.cosmeticMap[type]?.put(item, CosmeticData(false))
+        }
 
-                playerData.cosmeticMap[type]?.put(item, CosmeticData(isEquip))
-            }
+        EquipCosmeticStats.selectAll().where { EquipCosmeticStats.uuid eq strUUID }.forEach { equipRow ->
+            val equipType = equipRow[EquipCosmeticStats.equipType]
+            val equipItem = equipRow[EquipCosmeticStats.equipItem]
+
+            playerData.cosmeticMap[equipType]?.get(equipItem)?.isEquip = true
+        }
 
         BoostStats.selectAll()
             .where { BoostStats.uuid eq strUUID }

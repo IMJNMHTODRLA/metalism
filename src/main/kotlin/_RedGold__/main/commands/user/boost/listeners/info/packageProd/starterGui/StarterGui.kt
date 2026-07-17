@@ -30,8 +30,8 @@ class StarterGui {
             "&e&l혜택 정보",
             listOf("",
                 "&a&l[ 구매 시 혜택 ]",
-                "&7&l  - &6&l${StarterConst.pack.giveGold.toFormat()} 골드 지급",
-                "&7&l  - &b&l${StarterConst.pack.giveCrystal.toFormat()} 크리스탈 지급",
+                "&7&l  - &6&l${StarterConst.pack.GIVE_GOLD.toFormat()} 골드 지급",
+                "&7&l  - &b&l${StarterConst.pack.GIVE_CRYSTAL.toFormat()} 크리스탈 지급",
                 "&7&l  - &e&l그 외 각종 유용한 아이템 지급",
             )
         )

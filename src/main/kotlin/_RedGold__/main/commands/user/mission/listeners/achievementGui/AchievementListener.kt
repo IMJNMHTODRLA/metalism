@@ -41,8 +41,7 @@ class AchievementListener : Listener {
                 GlobalConst.missionReward(
                     player,
                     MissionEnum.ACHIEVEMENT,
-                    achievementMissionInfoList[id],
-                    achievementMissionRewardList[id]
+                    id,
                 ).trueRun { AchievementGui().openGui(player, 0f) }
             }
         }

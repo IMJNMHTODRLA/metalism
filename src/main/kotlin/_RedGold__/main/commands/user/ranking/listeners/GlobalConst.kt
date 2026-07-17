@@ -2,10 +2,10 @@ package _RedGold__.main.commands.user.ranking.listeners
 
 import java.util.*
 
-internal object GlobalConst {
-    val getRanking = { page: Int, n: Int -> (page * 16) + n }
-    val getSlot = { n: Int -> (n / 4) * 9 + (n % 4) * 2 + 1 }
-    val getTeleportRanking = { n: Int -> n / 16 }
+object GlobalConst {
+    fun getRanking(page: Int, n: Int) = (page * 16) + n
+    fun getSlot(n: Int) = (n / 4) * 9 + (n % 4) * 2 + 1
+    fun getTeleportRanking(n: Int) = n / 16
 
     abstract class BaseData<T : Comparable<T>>(
         val keys: Array<UUID>,

@@ -26,7 +26,7 @@ class VipGui {
 
         gui.item[14] = getItem(
             Material.BOOK,
-            "&4&l피해 파티클 설정"
+            "&a&l점프 파티클 설정"
         )
 
         player.inv + gui

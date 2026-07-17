@@ -1,20 +1,19 @@
 package _RedGold__.main.commands.user.betting.listeners.coinGui
 
 import _RedGold__.main.commands.user.betting.listeners.GlobalConst
-import _RedGold__.main.functions.Color.gc
-import _RedGold__.main.functions.Gui.getItem
-import _RedGold__.main.functions.Scheduler.task
 import _RedGold__.main.functions.Color.fail
+import _RedGold__.main.functions.Color.gc
 import _RedGold__.main.functions.Color.sendMsg
 import _RedGold__.main.functions.FastGui.item
 import _RedGold__.main.functions.FastReplace.fill
+import _RedGold__.main.functions.Gui.getItem
 import _RedGold__.main.functions.Gui.sendSound
 import _RedGold__.main.functions.NumberFormat.toFormat
 import _RedGold__.main.functions.PlusMath.pow
-import _RedGold__.main.loads.RequireJavaPlugin
+import _RedGold__.main.functions.launch
+import _RedGold__.main.functions.task
 import _RedGold__.main.loads.RequireListener
 import _RedGold__.main.managers.playerData.data
-import com.github.shynixn.mccoroutine.bukkit.launch
 import com.github.shynixn.mccoroutine.bukkit.ticks
 import kotlinx.coroutines.delay
 import org.bukkit.Material
@@ -24,18 +23,16 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
-import org.bukkit.plugin.java.JavaPlugin
 
 @RequireListener
-@RequireJavaPlugin
-class CoinListener(private val plugin: JavaPlugin) : Listener {
+class CoinListener : Listener {
     @EventHandler
     fun onInventoryClose(event: InventoryCloseEvent) {
         val player = event.player as? Player?: return
         val holder = event.inventory.holder as? CoinHolder?: return
         if (!holder.isStart) return
 
-        plugin.task(1) {
+        task(1) {
             if (!player.isOnline) return@task
             if (!holder.isStart) return@task
 
@@ -55,7 +52,7 @@ class CoinListener(private val plugin: JavaPlugin) : Listener {
         val player = event.whoClicked as Player
         val slot = event.slot
         val holder = gui.holder as CoinHolder
-        val secureRandom = GlobalConst.secureRandom
+        val threadLocalRandom = GlobalConst.threadLocalRandom
 
         if (holder.isStart) return
         when (slot) {
@@ -79,9 +76,9 @@ class CoinListener(private val plugin: JavaPlugin) : Listener {
                 holder.isStart = true
 
                 player.data.gold -= holder.betGold
-                val result = secureRandom.nextBoolean() //true == 앞면 //false == 뒷면
+                val result = threadLocalRandom.nextBoolean() //true == 앞면 //false == 뒷면
 
-                plugin.launch {
+                launch {
                     repeat(61) { i ->
                         gui.item[22] = getItem(
                             CoinConst.GEN_RANDOM,

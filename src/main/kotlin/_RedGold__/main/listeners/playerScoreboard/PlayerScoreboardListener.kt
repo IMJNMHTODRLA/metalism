@@ -1,5 +1,6 @@
 package _RedGold__.main.listeners.playerScoreboard
 
+import _RedGold__.main.functions.Color.gc
 import _RedGold__.main.functions.Color.rgb
 import _RedGold__.main.functions.EasyScoreBoard.score
 import _RedGold__.main.functions.FastNumber.seconds
@@ -7,8 +8,10 @@ import _RedGold__.main.functions.FastNumber.ticks
 import _RedGold__.main.functions.FastReplace.fill
 import _RedGold__.main.functions.NumberFormat.toFormat
 import _RedGold__.main.functions.Scheduler.task
+import _RedGold__.main.functions.task
 import _RedGold__.main.listeners.GlobalConst
 import _RedGold__.main.loads.RequireJavaPlugin
+import _RedGold__.main.loads.SetSlowInit
 import _RedGold__.main.managers.playerData.PermissionEnum
 import _RedGold__.main.managers.playerData.data
 import org.bukkit.Bukkit
@@ -18,10 +21,11 @@ import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scoreboard.DisplaySlot
 import org.bukkit.scoreboard.Scoreboard
 
-@RequireJavaPlugin
-class PlayerScoreboardListener(plugin: JavaPlugin) {
-    init {
-        plugin.task(0, 5.ticks) {
+@SetSlowInit
+object PlayerScoreboardListener {
+    @SetSlowInit
+    fun startScoreboard() {
+        task(0, 5.ticks) {
             val times = PlayerScoreboardValue.times
 
             for (player in Bukkit.getOnlinePlayers()) {
@@ -30,7 +34,7 @@ class PlayerScoreboardListener(plugin: JavaPlugin) {
             if (times == 0) PlayerScoreboardValue.times = 7 else PlayerScoreboardValue.times--
         }
 
-        plugin.task(0, 8.seconds) {
+        task(0, 8.seconds) {
             for (player in Bukkit.getOnlinePlayers()) {
                 val board = PlayerScoreboardValue.boards[player.uniqueId]?: continue
                 syncAllTeamTags(board)
@@ -52,7 +56,7 @@ class PlayerScoreboardListener(plugin: JavaPlugin) {
                 "style" to style,
                 "rank" to rankPrefix,
                 "name" to name
-            )
+            ).gc()
 
             if (team.prefix != fullPrefix) {
                 val colorChar = rankPrefix.substring(1, 2)
@@ -78,9 +82,11 @@ class PlayerScoreboardListener(plugin: JavaPlugin) {
         val (_, style) = player.data.equipStyle
 
         val personalBoard = boards.getOrPut(uuid) {
-            val newBoard = Bukkit.getScoreboardManager().newScoreboard
-            player.scoreboard = newBoard
-            newBoard
+            Bukkit.getScoreboardManager().newScoreboard
+        }
+
+        if (player.scoreboard != personalBoard) {
+            player.scoreboard = personalBoard
         }
 
         val sidebar = personalBoard.getObjective("sidebar")?: personalBoard.registerNewObjective("sidebar", "dummy", "")
@@ -101,7 +107,7 @@ class PlayerScoreboardListener(plugin: JavaPlugin) {
             "style" to style,
             "rank" to rank.prefix,
             "name" to player.name
-        )
+        ).gc()
 
         personalBoard.entries.forEach { personalBoard.resetScores(it) }
 
@@ -110,13 +116,12 @@ class PlayerScoreboardListener(plugin: JavaPlugin) {
         sidebar.score[97] = sidebarMsg[2].fill("gold" to player.data.gold.toFormat())
         sidebar.score[96] = sidebarMsg[3].fill("crystal" to player.data.crystal.toFormat())
         sidebar.score[95] = sidebarMsg[4].fill("ruby" to player.data.ruby.toFormat())
-        sidebar.score[94] = sidebarMsg[5]
-        sidebar.score[93] = sidebarMsg[6]
-        sidebar.score[92] = sidebarMsg[7].fill("kill" to player.data.combatData.kill.toFormat())
-        sidebar.score[91] = sidebarMsg[8].fill("death" to player.data.combatData.death.toFormat())
-        sidebar.score[90] = sidebarMsg[9]
-        sidebar.score[89] = sidebarMsg[10]
-        sidebar.score[88] = sidebarMsg[11]
-        sidebar.score[87] = sidebarMsg[12].fill("ping" to player.ping)
+        sidebar.score[93] = sidebarMsg[5]
+        sidebar.score[92] = sidebarMsg[6].fill("kill" to player.data.combatData.kill.toFormat())
+        sidebar.score[91] = sidebarMsg[7].fill("death" to player.data.combatData.death.toFormat())
+        sidebar.score[90] = sidebarMsg[8]
+        sidebar.score[89] = sidebarMsg[9]
+        sidebar.score[88] = sidebarMsg[10]
+        sidebar.score[87] = sidebarMsg[11].fill("ping" to player.ping)
     }
 }

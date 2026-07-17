@@ -1,6 +1,6 @@
 package _RedGold__.main.commands.user.ranking.listeners
 
-internal object GlobalValue {
+object GlobalValue {
     @Volatile var nextUpdate = 0L
 
     @Volatile var goldRank = GlobalConst.LongRankingData() //완

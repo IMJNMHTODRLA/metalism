@@ -3,7 +3,7 @@ package _RedGold__.main.managers.database.tableManager.mailboxDB
 import org.jetbrains.exposed.sql.Table
 
 object MailBox : Table("mail_box") {
-    val id = integer("id").autoIncrement()
+    val id = integer("id")
     val uuid = varchar("uuid", 36)
 
     val sender = text("sender")

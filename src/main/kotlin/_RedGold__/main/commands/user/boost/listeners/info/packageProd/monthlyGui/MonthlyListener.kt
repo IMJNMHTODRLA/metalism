@@ -47,7 +47,7 @@ class MonthlyListener : Listener {
             boostData.amount += 1
             boostData.expirationAt = now + MonthlyConst.pack.period
 
-            data.crystal += MonthlyConst.pack.giveCrystal
+            data.crystal += MonthlyConst.pack.GIVE_CRYSTAL
         }
     }
 }

@@ -11,6 +11,8 @@ import org.bukkit.plugin.java.JavaPlugin
 @RequireJavaPlugin
 class AfkPointListener(plugin: JavaPlugin) {
     init {
+        println("startAfkPoint")
+
         plugin.task(0, 10.minutes) {
             Bukkit.getOnlinePlayers().forEach { player ->
                 player.data.gold += AfkPointConst.AFK_GOLD

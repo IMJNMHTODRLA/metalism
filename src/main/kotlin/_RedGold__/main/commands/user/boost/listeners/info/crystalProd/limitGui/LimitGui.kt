@@ -22,7 +22,7 @@ class LimitGui {
             Material.DIAMOND_BLOCK,
             "&e&l클릭하여 한정 판매 크리스탈 구매하기",
             listOf("",
-                "&f&l구매가: &4&l${LimitConst.price[round]} 루비",
+                "&f&l구매가: &4&l${LimitConst.price[round].toFormat()} 루비",
                 "&f&l다음 회차: &e&l${round + 1}회차",
                 "",
                 "&c&o* 계정당 마지막 구매 이후 30일 마다",
@@ -35,11 +35,11 @@ class LimitGui {
             "&e&l혜택 정보",
             listOf("",
                 "&a&l[ 구매 시 혜택 ]",
-                "&7&l  - &b&l1회차 구매: ${LimitConst.pack.giveCrystal[0]} 크리스탈 지급",
-                "&7&l  - &b&l2회차 구매: ${LimitConst.pack.giveCrystal[1]} 크리스탈 지급",
-                "&7&l  - &b&l3회차 구매: ${LimitConst.pack.giveCrystal[2]} 크리스탈 지급",
-                "&7&l  - &b&l4회차 구매: ${LimitConst.pack.giveCrystal[3]} 크리스탈 지급",
-                "&7&l  - &b&l5회차 구매: ${LimitConst.pack.giveCrystal[4]} 크리스탈 지급",
+                "&7&l  - &b&l1회차 구매: ${LimitConst.pack.giveCrystal[0].toFormat()} 크리스탈 지급",
+                "&7&l  - &b&l2회차 구매: ${LimitConst.pack.giveCrystal[1].toFormat()} 크리스탈 지급",
+                "&7&l  - &b&l3회차 구매: ${LimitConst.pack.giveCrystal[2].toFormat()} 크리스탈 지급",
+                "&7&l  - &b&l4회차 구매: ${LimitConst.pack.giveCrystal[3].toFormat()} 크리스탈 지급",
+                "&7&l  - &b&l5회차 구매: ${LimitConst.pack.giveCrystal[4].toFormat()} 크리스탈 지급",
             )
         )
 

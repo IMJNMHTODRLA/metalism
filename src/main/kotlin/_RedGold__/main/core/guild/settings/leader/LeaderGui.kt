@@ -29,6 +29,7 @@ object LeaderGui {
                 gui.item[12] = getItem(Material.PLAYER_HEAD, "&e&l길드원 설정")
                 gui.item[13] = getItem(Material.RED_CONCRETE, "&c&l길드 삭제", "", "&c&l길드에 리더 한 명만이 남았을 때 길드 삭제가 가능합니다.")
                 gui.item[14] = getItem(Material.RED_BED, "&c&l길드 홈 설정")
+                gui.item[15] = getItem(Material.WHITE_BANNER, "&e&l초대 코드 생성")
 
                 player.inv + gui
                 player.sendSound(Sound.UI_BUTTON_CLICK)

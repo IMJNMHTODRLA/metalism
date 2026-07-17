@@ -2,7 +2,7 @@ package _RedGold__.main.commands.vip.skin
 
 import java.net.URI
 
-internal object SkinConst {
+object SkinConst {
     val SET_NICK_URL = { name: String ->
         URI.create("https://api.mojang.com/users/profiles/minecraft/$name").toURL()
     }

@@ -13,7 +13,7 @@ import _RedGold__.main.managers.playerData.BACKGROUND
 import _RedGold__.main.managers.playerData.PREFIX
 import _RedGold__.main.managers.playerData.data
 import _RedGold__.main.managers.playerData.variableManager.DailyEnum
-import _RedGold__.main.core.gacha.item.skill.reinforceManager.ReinforceItemList
+import _RedGold__.main.core.cartridge.upgradeItem.skill.reinforce.reinforceItemList
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
@@ -29,17 +29,17 @@ object CrystalDailyConst {
         GlobalConst.ShopItem(Material.GOLD_INGOT, "2,000,000 골드", 120),
         GlobalConst.ShopItem(Material.GOLD_BLOCK, "3,000,000 골드", 180),
 
-        ReinforceItemList[getSkillItem(enhanceBase, 0)].let {
-            GlobalConst.ShopItem(it.material, "${it.import.displayName} 강화 아이템(${it.type.displayName})", 15)
+        reinforceItemList[getSkillItem(enhanceBase, 0)].let {
+            GlobalConst.ShopItem(Material.PAPER, "${it.import.displayName} 강화 아이템(${it.type.displayName})", 15)
         },
-        ReinforceItemList[getSkillItem(enhanceBase, 1)].let {
-            GlobalConst.ShopItem(it.material, "${it.import.displayName} 강화 아이템(${it.type.displayName})", 30)
+        reinforceItemList[getSkillItem(enhanceBase, 1)].let {
+            GlobalConst.ShopItem(Material.PAPER, "${it.import.displayName} 강화 아이템(${it.type.displayName})", 30)
         },
-        ReinforceItemList[getSkillItem(enhanceBase, 2)].let {
-            GlobalConst.ShopItem(it.material, "${it.import.displayName} 강화 아이템(${it.type.displayName})", 60)
+        reinforceItemList[getSkillItem(enhanceBase, 2)].let {
+            GlobalConst.ShopItem(Material.PAPER, "${it.import.displayName} 강화 아이템(${it.type.displayName})", 60)
         },
-        ReinforceItemList[getSkillItem(enhanceBase, 3)].let {
-            GlobalConst.ShopItem(it.material, "${it.import.displayName} 강화 아이템(${it.type.displayName})", 120)
+        reinforceItemList[getSkillItem(enhanceBase, 3)].let {
+            GlobalConst.ShopItem(Material.PAPER, "${it.import.displayName} 강화 아이템(${it.type.displayName})", 120)
         }
     )
 
@@ -68,8 +68,16 @@ object CrystalDailyConst {
 
         if (shopId in isReinforceItemMap.keys) {
             val skillItem = getSkillItem(enhanceBase, isReinforceItemMap[shopId]?: return)
-            player.inv += ReinforceItemList[skillItem].item
-        } else player.inv += ItemStack(item.id)
+            player.inv += reinforceItemList[skillItem].item()
+        } else {
+            when (item.id) {
+                Material.GOLD_NUGGET -> player.data.gold += 1_000_000
+                Material.GOLD_INGOT -> player.data.gold += 2_000_000
+                Material.GOLD_BLOCK -> player.data.gold += 3_000_000
+
+                else -> {}
+            }
+        }
 
         DailyConst.mission(player, 1)
         WeeklyConst.mission(player, 1)
@@ -86,6 +94,7 @@ object CrystalDailyConst {
             listOf(
                 "",
                 PREFIX,
+                "",
                 "&a&l[구매(좌클릭)] &f&l구매가: ${item.buy.toFormat()} 크리스탈",
                 "",
             )

@@ -6,8 +6,7 @@ object ProfileGlobalConst {
     val maxRegList = { permission: PermissionEnum ->
         when(permission) {
             PermissionEnum.USER -> 3
-            PermissionEnum.PLUS -> 4
-            PermissionEnum.VIP -> 5
+            PermissionEnum.VIP -> 4
             PermissionEnum.MVP -> 6
 
             else -> 3

@@ -7,7 +7,8 @@ import _RedGold__.main.loads.SetSlowInit
 object GuildUpdate {
     @Volatile private var shareGuildMembers = allGetGuildMembers()
 
-    init {
+    @SetSlowInit
+    fun startUpdateTask() {
         taskAsync(loop = updateTick) {
             shareGuildMembers = allGetGuildMembers()
 

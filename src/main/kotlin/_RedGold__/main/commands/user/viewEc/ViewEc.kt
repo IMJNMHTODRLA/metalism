@@ -2,7 +2,7 @@ package _RedGold__.main.commands.user.viewEc
 
 import _RedGold__.main.commands.user.viewEc.targetGui.TargetGui
 import _RedGold__.main.functions.Color.fail
-import _RedGold__.main.functions.NumberFormat.toUUIDOrNull
+import _RedGold__.main.functions.NumberFormat.toUuidOrNull
 import _RedGold__.main.functions.TimeTool.now
 import _RedGold__.main.loads.RequireCommandExecutor
 import _RedGold__.main.loads.RequireTabExecutor
@@ -28,7 +28,7 @@ class ViewEc : TabExecutor {
         val player = sender as? Player?: return false
         val uuid = player.uniqueId
 
-        val targetUUID = args[0].toUUIDOrNull()?: return false
+        val targetUUID = args[0].toUuidOrNull()?: return false
         val targetPlayer = Bukkit.getPlayer(targetUUID)?: return false
         val noise = args[1].toIntOrNull()?: return false
 

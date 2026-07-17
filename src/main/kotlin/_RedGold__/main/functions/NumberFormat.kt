@@ -20,7 +20,7 @@ object NumberFormat {
         }
     }
 
-    fun String?.toUUIDOrNull(): UUID? {
+    fun String?.toUuidOrNull(): UUID? {
         return try {
             if (this == null) return null
             if (contains("-")) UUID.fromString(this)

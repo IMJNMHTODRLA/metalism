@@ -1,7 +1,8 @@
 package _RedGold__.main.core.guild.settings.leader
 
 import _RedGold__.main.core.guild.settings.leader.delete.DeleteGui
-import _RedGold__.main.core.guild.settings.leader.home.HomeGui
+import _RedGold__.main.core.guild.homeManager.setHome.SetHomeGui
+import _RedGold__.main.core.guild.settings.leader.inviteCode.genInviteCode
 import _RedGold__.main.core.guild.settings.leader.member.MemberGui
 import _RedGold__.main.core.guild.settings.leader.policy.PolicyGui
 import _RedGold__.main.core.guild.settings.leader.whitelist.WhitelistGui
@@ -29,7 +30,8 @@ class LeaderListener : Listener {
             11 -> WhitelistGui.openGui(player)
             12 -> MemberGui.openGui(player)
             13 -> DeleteGui.openGui(player)
-            14 -> HomeGui.openGui(player)
+            14 -> SetHomeGui.openGui(player)
+            15 -> genInviteCode(player)
         }
     }
 }

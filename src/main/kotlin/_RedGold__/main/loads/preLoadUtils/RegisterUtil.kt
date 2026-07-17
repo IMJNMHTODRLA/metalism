@@ -16,29 +16,13 @@ import kotlin.reflect.full.findAnnotation
 import kotlin.reflect.full.hasAnnotation
 
 object RegisterUtil {
-    private fun JavaPlugin.registerCommand(
-        name: String,
-        executor: CommandExecutor,
-        tabExecutor: TabExecutor? = null
-    ): Command {
+    private fun JavaPlugin.createPluginCommand(name: String): PluginCommand {
         val constructor = Class
             .forName("org.bukkit.command.PluginCommand")
             .getDeclaredConstructor(String::class.java, org.bukkit.plugin.Plugin::class.java)
 
         constructor.isAccessible = true
-
-        val cmd = constructor.newInstance(name, this) as PluginCommand
-
-        cmd.setExecutor(executor)
-        if (tabExecutor != null) cmd.tabCompleter = tabExecutor
-
-        val commandMapField = Bukkit.getServer().javaClass.getDeclaredField("commandMap")
-        commandMapField.isAccessible = true
-
-        val commandMap = commandMapField.get(Bukkit.getServer()) as CommandMap
-        commandMap.register(this.name.lowercase(), cmd)
-
-        return cmd
+        return constructor.newInstance(name, this) as PluginCommand
     }
 
     private fun registerCommand(
@@ -49,10 +33,11 @@ object RegisterUtil {
         val annotation = clazz.findAnnotation<RequireCommandExecutor>()!!
         val hasTab = clazz.hasAnnotation<RequireTabExecutor>()
 
-        val cmd = if (hasTab && instance is TabExecutor) {
-            plugin.registerCommand(annotation.commandName, instance, instance)
-        } else {
-            plugin.registerCommand(annotation.commandName, instance)
+        val cmd = plugin.createPluginCommand(annotation.commandName)
+
+        cmd.setExecutor(instance)
+        if (hasTab && instance is TabExecutor) {
+            cmd.tabCompleter = instance
         }
 
         cmd.permission = annotation.permission.node.lowercase()
@@ -64,6 +49,12 @@ object RegisterUtil {
         if (annotation.usage.isNotEmpty()) {
             cmd.usage = annotation.usage.gc()
         }
+
+        val commandMapField = Bukkit.getServer().javaClass.getDeclaredField("commandMap")
+        commandMapField.isAccessible = true
+        val commandMap = commandMapField.get(Bukkit.getServer()) as CommandMap
+
+        commandMap.register(plugin.name.lowercase(), cmd)
     }
 
     fun registerFeatures(

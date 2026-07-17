@@ -3,7 +3,7 @@ package _RedGold__.main.commands.user.betting.listeners.lottoGui
 import _RedGold__.main.functions.Color.rgb
 import org.bukkit.Sound
 
-internal object LottoConst {
+object LottoConst {
     const val AMOUNT = 5000
 
     val WIN_MESSAGE = listOf(

@@ -19,10 +19,12 @@ class LimitListener : Listener {
     fun onCloseInventory(event: InventoryCloseEvent) {
         val gui = event.inventory
         val player = event.player as Player
-        if (gui.holder !is LimitHolder) return
+        val holder = gui.holder as? LimitHolder?: return
 
         task {
             if (!player.isOnline) return@task
+            if (holder.isClose) return@task
+
             CrystalProdGui().openGui(player)
         }
     }
@@ -30,7 +32,7 @@ class LimitListener : Listener {
     @EventHandler
     fun onInventoryClick(event: InventoryClickEvent) {
         val gui = event.view.topInventory
-        if (gui.holder !is LimitHolder) return
+        val holder = gui.holder as? LimitHolder?: return
 
         event.isCancelled = true
         if (event.clickedInventory != gui) return
@@ -43,11 +45,13 @@ class LimitListener : Listener {
             player, "한정 판매 크리스탈", LimitConst.price[round],
             { LimitConst.pack.isLimitReach(player) }
         ) {
+            data.crystal += LimitConst.pack.giveCrystal[round]
+
             val boostData = data.boostMap.getOrPut(LimitConst.enum) { BoostData(0, 0L) }
             boostData.amount += 1
             boostData.expirationAt = now + LimitConst.pack.period
 
-            data.crystal += LimitConst.pack.giveCrystal[round]
+            holder.isClose = true
             LimitGui().openGui(player)
         }
     }

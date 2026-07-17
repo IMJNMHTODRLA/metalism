@@ -3,7 +3,7 @@ package _RedGold__.main.listeners.autoNotice
 import _RedGold__.main.functions.buildSmartMessage
 import _RedGold__.main.managers.playerData.PREFIX
 
-internal object AutoNoticeConst {
+object AutoNoticeConst {
     val NOTICE_MESSAGE = listOf(
         buildSmartMessage {
             text("$PREFIX &f&l서버 규칙 위반 시 &c&l이 서버에서 정지될 수 있습니다&f&l. ")

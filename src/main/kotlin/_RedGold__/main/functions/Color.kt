@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 
 object Color {
-    private val COLOR_CODE_REGEX = Regex("(?<!\\\\)&")
+    //private val COLOR_CODE_REGEX = Regex("(?<!\\\\)&")
 
     fun rgb(rgb: String): String {
         val result = StringBuilder("§x")
@@ -16,19 +16,35 @@ object Color {
         return result.toString()
     }
 
+    @JvmName("amazingRgb")
     fun String.rgb(): String = rgb(this)
 
-    fun gc(msg: String): String = msg.replace(COLOR_CODE_REGEX, "§").replace("\\&", "&")
-    fun String.gc(): String = gc(this)
-    fun Player.sendMsg(msg: String) = sendMessage(gc(msg))
-    fun CommandSender.sendMsg(msg: String) = sendMessage(gc(msg))
-    fun String.broadcast() = Bukkit.broadcastMessage(gc(this))
+    fun gc(msg: String) =
+        buildString(msg.length) {
+            var i = 0
+            while (i < msg.length) {
+                val char = msg[i]
+                if (char == '\\' && msg.getOrNull(i + 1) == '&') {
+                    append('&')
+                    i += 2
+                } else {
+                    append(if (char == '&') '§' else char)
+                    i++
+                }
+            }
+        }
+
+    @JvmName("amazingGc")
+    fun String.gc() = gc(this)
+    fun Player.sendMsg(msg: String) = sendMessage(msg.gc())
+    fun CommandSender.sendMsg(msg: String) = sendMessage(msg.gc())
+    fun String.broadcast() = Bukkit.broadcastMessage(gc())
     fun Component.broadcast() = Bukkit.broadcast(this)
 
-    fun Player.sendAction(msg: String) = sendActionBar(gc(msg))
+    fun Player.sendAction(msg: String) = sendActionBar(msg.gc())
     fun Player.sendTitleMsg(
         main: String, sub: String = "", i: Int = 0, i1: Int = 20, i2: Int = 0
-    ) = sendTitle(gc(main), gc(sub), i, i1, i2)
+    ) = sendTitle(main.gc(), sub.gc(), i, i1, i2)
 
     fun Player.fail(msg: String) {
         sendMsg(msg)

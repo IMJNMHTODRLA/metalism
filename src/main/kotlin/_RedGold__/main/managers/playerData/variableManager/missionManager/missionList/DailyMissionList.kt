@@ -2,8 +2,8 @@ package _RedGold__.main.managers.playerData.variableManager.missionManager.missi
 
 import _RedGold__.main.managers.playerData.variableManager.missionManager.MissionInfoData
 import _RedGold__.main.managers.playerData.variableManager.missionManager.MissionRewardData
-import _RedGold__.main.core.gacha.item.skill.reinforceManager.ReinforceImportEnum
-import _RedGold__.main.core.gacha.item.skill.reinforceManager.randomReinforceItem
+import _RedGold__.main.core.cartridge.upgradeItem.skill.reinforce.ReinforceImportEnum
+import _RedGold__.main.core.cartridge.upgradeItem.skill.reinforce.randomReinforceItem
 
 val dailyMissionInfoList = listOf(
     MissionInfoData("일일 접속", 1, "&6&l5,000 골드 지급"), //완

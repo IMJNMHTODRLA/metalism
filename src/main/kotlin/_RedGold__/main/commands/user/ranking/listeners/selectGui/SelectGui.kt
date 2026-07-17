@@ -1,6 +1,5 @@
 package _RedGold__.main.commands.user.ranking.listeners.selectGui
 
-import _RedGold__.main.functions.Color.rgb
 import _RedGold__.main.functions.FastGui.item
 import _RedGold__.main.functions.Gui.getItem
 import _RedGold__.main.functions.Gui.inv
@@ -8,7 +7,6 @@ import _RedGold__.main.functions.Gui.sendSound
 import _RedGold__.main.managers.playerData.BACKGROUND
 import org.bukkit.Material
 import org.bukkit.Sound
-import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
 
 class SelectGui {

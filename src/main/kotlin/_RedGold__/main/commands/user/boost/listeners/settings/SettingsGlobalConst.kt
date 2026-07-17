@@ -6,6 +6,7 @@ import _RedGold__.main.functions.FastNumber.seconds
 import _RedGold__.main.functions.Gui.getItem
 import _RedGold__.main.functions.Gui.sendSound
 import _RedGold__.main.functions.Scheduler.task
+import _RedGold__.main.functions.task
 import _RedGold__.main.managers.playerData.PermissionEnum
 import _RedGold__.main.managers.playerData.data
 import _RedGold__.main.managers.playerData.variableManager.boostSettingManager.BoostSettingEnum
@@ -38,11 +39,11 @@ object SettingsGlobalConst {
         doneAction()
     }
 
-    fun preview(plugin: JavaPlugin, player: Player, action: Player.() -> Unit, doneAction: () -> Unit) {
+    fun preview(player: Player, action: Player.() -> Unit, doneAction: () -> Unit) {
         player.closeInventory()
 
         player.action()
-        plugin.task(2.seconds) {
+        task(1.seconds) {
             if (!player.isOnline) return@task
             doneAction()
         }
@@ -55,7 +56,7 @@ object SettingsGlobalConst {
         permission: PermissionEnum
     ): ItemStack {
         val material = if (isEquip) Material.WRITABLE_BOOK else Material.BOOK
-        val title = "$rawTitle${if (isEquip) " &8&l[&a&l장착됨&8&l]" else ""}"
+        val title = "$rawTitle${if (isEquip) "&8&l [&a&l장착됨&8&l]" else ""}"
 
         return getItem(
             material,

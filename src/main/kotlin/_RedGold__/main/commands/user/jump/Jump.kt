@@ -15,7 +15,7 @@ class Jump : CommandExecutor {
         label: String,
         args: Array<out String>
     ): Boolean {
-        sender.sendMsg("굳이 명령어로 점프를 해야 할 만큼 스페이스바가 무거우신가요?")
+        sender.sendMsg("&a굳이 명령어로 점프를 해야 할 만큼 스페이스바가 무거우신가요?")
         return true
     }
 }

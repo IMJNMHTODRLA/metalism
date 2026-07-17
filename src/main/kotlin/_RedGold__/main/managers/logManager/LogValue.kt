@@ -1,5 +1,8 @@
 package _RedGold__.main.managers.logManager
 
-val logData = mutableListOf<String>()
+import java.util.concurrent.ConcurrentLinkedQueue
+
+val logData = ConcurrentLinkedQueue<String>()
 var isInit = false
-lateinit var logFileName: String
+lateinit var data: String
+lateinit var time: String

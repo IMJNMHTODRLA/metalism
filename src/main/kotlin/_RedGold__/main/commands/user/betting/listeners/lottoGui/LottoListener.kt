@@ -1,41 +1,37 @@
 package _RedGold__.main.commands.user.betting.listeners.lottoGui
 
 import _RedGold__.main.commands.user.betting.listeners.GlobalConst
-import _RedGold__.main.functions.Gui.getItem
 import _RedGold__.main.functions.Color.fail
 import _RedGold__.main.functions.Color.sendMsg
-import _RedGold__.main.functions.EasyEnchant.enchant
+import _RedGold__.main.functions.FastGui.enchantEffect
 import _RedGold__.main.functions.FastGui.item
+import _RedGold__.main.functions.Gui.getItem
 import _RedGold__.main.functions.Gui.sendSound
 import _RedGold__.main.functions.NumberFormat.toFormat
-import _RedGold__.main.functions.Scheduler.task
-import _RedGold__.main.loads.RequireJavaPlugin
+import _RedGold__.main.functions.launch
+import _RedGold__.main.functions.modify
+import _RedGold__.main.functions.task
 import _RedGold__.main.loads.RequireListener
 import _RedGold__.main.managers.playerData.data
-import com.github.shynixn.mccoroutine.bukkit.launch
 import com.github.shynixn.mccoroutine.bukkit.ticks
 import kotlinx.coroutines.delay
 import org.bukkit.Material
 import org.bukkit.Sound
-import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
-import org.bukkit.inventory.ItemFlag
-import org.bukkit.plugin.java.JavaPlugin
 
 @RequireListener
-@RequireJavaPlugin
-class LottoListener(private val plugin: JavaPlugin) : Listener {
+class LottoListener : Listener {
     @EventHandler
     fun onInventoryClose(event: InventoryCloseEvent) {
         val player = event.player as? Player?: return
         val holder = event.inventory.holder as? LottoHolder?: return
         if (!holder.isStart) return
 
-        plugin.task(1) {
+        task(1) {
             if (!player.isOnline) return@task
             if (!holder.isStart) return@task
 
@@ -55,7 +51,7 @@ class LottoListener(private val plugin: JavaPlugin) : Listener {
         val player = event.whoClicked as Player
         val slot = event.slot
         val holder = gui.holder as LottoHolder
-        val secureRandom = GlobalConst.secureRandom
+        val threadLocalRandom = GlobalConst.threadLocalRandom
 
         if (holder.isStart) return
 
@@ -76,7 +72,7 @@ class LottoListener(private val plugin: JavaPlugin) : Listener {
 
                 if (event.isShiftClick) {
                     val result = (1..45)
-                        .shuffled(secureRandom)
+                        .shuffled(threadLocalRandom)
                         .take(6)
 
                     repeat(6) { i ->
@@ -94,15 +90,15 @@ class LottoListener(private val plugin: JavaPlugin) : Listener {
                 }
 
                 val result = (1..45)
-                    .shuffled(secureRandom)
+                    .shuffled(threadLocalRandom)
                     .take(6)
 
-                plugin.launch {
+                launch {
                     repeat(6) { i ->
                         val changeSlot = if (i in 0..2) 19 + i else 20 + i
 
                         repeat(40) {
-                            val random = secureRandom.nextInt(45) + 1
+                            val random = threadLocalRandom.nextInt(45) + 1
 
                             gui.item[changeSlot] = getItem(
                                 Material.GOLD_NUGGET,
@@ -124,11 +120,11 @@ class LottoListener(private val plugin: JavaPlugin) : Listener {
                             material,
                             "&f&l[ $nameColor${result[i]} &f&l]",
                             listOf("", "&7&l${i + 1}번째 숫자 추첨 완료$descLine"),
-                        ).apply {
+                        ).modify {
                             amount = result[i]
+
                             if (isMatch) {
-                                addItemFlags(ItemFlag.HIDE_ENCHANTS)
-                                enchant[Enchantment.LUCK_OF_THE_SEA] = 5
+                                enchantEffect()
                                 player.sendSound(Sound.ENTITY_PLAYER_LEVELUP)
                             } else {
                                 player.sendSound(Sound.ENTITY_LIGHTNING_BOLT_IMPACT)

@@ -1,5 +1,5 @@
 package _RedGold__.main.listeners.playerTabList
 
-internal object PlayerTabListValue {
+object PlayerTabListValue {
     var times = 0
 }
